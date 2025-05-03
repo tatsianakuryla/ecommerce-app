@@ -3,37 +3,38 @@
 This is a feature-rich eCommerce web application built with React and TypeScript as part of the Rolling Scopes School training program.
 
 ## 📋 Table of Contents
-*Will be supplemented*
 
-1. [🔥 Features](#features)  
-2. [💻 Technologies](#technologies)  
-3. [🎯 Project Goals](#project-goals)  
-4. [📁 Project Structure](#project-structure)  
+_Will be supplemented_
+
+1. [🔥 Features](#features)
+2. [💻 Technologies](#technologies)
+3. [🎯 Project Goals](#project-goals)
+4. [📁 Project Structure](#project-structure)
 
 ---
 
 ## 🔥 Features
 
-- 🛡 **Authentication & Authorization**: Sign up, login, and role-based access (user/admin).  
-- 🛍 **Product Catalog**: Browse, search, filter, and view detailed product pages.  
-- 🛒 **Shopping Cart**: Add/remove items, adjust quantities, and persist cart in local storage.  
-- 🔒 **Protected Routes**: Secure user profile and admin dashboard.  
-- 🌐 **Responsive Design**: Optimized for mobile, tablet, and desktop.  
-- ♿ **Accessibility**: Keyboard navigation, ARIA attributes, and contrast-checked styles.  
-- 🔄 **State Management**: Using React Context and hooks for global state.  
-- 🔧 **Linting & Formatting**: ESLint, Prettier, StyleLint, Husky pre-commit hooks.  
+- 🛡 **Authentication & Authorization**: Sign up, login, and role-based access (user/admin).
+- 🛍 **Product Catalog**: Browse, search, filter, and view detailed product pages.
+- 🛒 **Shopping Cart**: Add/remove items, adjust quantities, and persist cart in local storage.
+- 🔒 **Protected Routes**: Secure user profile and admin dashboard.
+- 🌐 **Responsive Design**: Optimized for mobile, tablet, and desktop.
+- ♿ **Accessibility**: Keyboard navigation, ARIA attributes, and contrast-checked styles.
+- 🔄 **State Management**: Using React Context and hooks for global state.
+- 🔧 **Linting & Formatting**: ESLint, Prettier, StyleLint, Husky pre-commit hooks.
 
 ---
 
 ## 💻 Technologies
 
-- React  
-- TypeScript  
-- CSS Modules  
-- Vite  
-- ESLint & Prettier  
-- Husky  
-- StyleLint  
+- React
+- TypeScript
+- CSS Modules
+- Vite
+- ESLint & Prettier
+- Husky
+- StyleLint
 
 ---
 
@@ -43,6 +44,13 @@ The main goal of this project is to practice building a scalable, maintainable, 
 
 ---
 
-## 📁 Project Structure
+## ⚙️ Installation
 
-*Will be supplemented*
+```bash
+git clone https://github.com/tatsianakuryla/ecommerce-app.git
+cd ecommerce-app
+npm install
+rename .env.example to .env
+add actual client_id and secret to VITE_API_USERNAME and VITE_API_PASSWORD constants in your .env file, you can find client_id and secret in API doc
+npm start
+```
