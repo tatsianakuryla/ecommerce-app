@@ -44,24 +44,9 @@
     "typescript-eslint": "^8.26.1",
     "vite": "^6.3.1"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
-    "*.ts": [
-      "npm run format",
-      "npm run lint"
-    ],
-    "*.tsx": [
-      "npm run format",
-      "npm run lint"
-    
-    ],
-    "*.css": [
-      "npm run stylelint"
-     
-    ]
+    "*.{ts,tsx,json, html, js}": "npm run format",
+    "*.{ts,tsx}": "npm run lint",
+    "*.css": "npm run stylelint"
   }
 }
