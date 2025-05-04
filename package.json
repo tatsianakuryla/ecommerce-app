@@ -60,8 +60,8 @@
     
     ],
     "*.css": [
-      "npm run stylelint",
-      "git add"
+      "npm run stylelint"
+     
     ]
   }
 }
