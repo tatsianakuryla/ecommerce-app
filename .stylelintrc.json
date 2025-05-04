@@ -2,7 +2,6 @@
   "extends": ["stylelint-config-standard", "stylelint-config-clean-order"],
   "ignoreFiles": ["dist/**/*", "node_modules/**/*"],
   "rules": {
-    "block-no-empty": true,
-    "unit-allowed-list": ["em", "rem", "%", "s"]
+    "block-no-empty": true 
   }
 }
