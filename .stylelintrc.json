@@ -6,7 +6,6 @@
   ],
   "ignoreFiles": ["dist/**/*", "node_modules/**/*"],
   "rules": {
-    "block-no-empty": true,
-    "prettier/prettier": true
+    "block-no-empty": true
   }
 }
