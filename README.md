@@ -48,8 +48,9 @@ Users can explore a wide selection of products 📚👗👟, access detailed des
 - Vite
 - ESLint
 - Prettier
-- Husky
 - StyleLint
+- Husky
+- Lint-staged
 
 ---
 
@@ -96,7 +97,7 @@ cd ecommerce-app
 npm install
 rename .env.example to .env
 add actual client_id and secret to VITE_API_USERNAME and VITE_API_PASSWORD constants in your .env file, you can find client_id and secret in API doc
-npm start
+npm run dev
 ```
 ---
 
@@ -112,7 +113,7 @@ npm run prepare
 ```
 **🛠 Development** - Start the project in development mode
 ```bash
-npm start
+npm run dev
 ```
 **📦 Production Build** - Build the project for production
 ```bash
