@@ -20,6 +20,11 @@
     "preview": "vite preview",
     "test": "vitest"
   },
+  "lint-staged": {
+    "*.{ts,tsx,json,html,js}": "npm run format",
+    "*.{ts,tsx}": "npm run lint",
+    "*.css": "npm run stylelint"
+  },
   "dependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -27,8 +32,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
-    "@types/react": "^19.1.2",
-    "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
@@ -51,10 +54,5 @@
     "typescript-eslint": "^8.26.1",
     "vite": "^6.3.1",
     "vitest": "^3.1.2"
-  },
-  "lint-staged": {
-    "*.{ts,tsx,json,html,js}": "npm run format",
-    "*.{ts,tsx}": "npm run lint",
-    "*.css": "npm run stylelint"
   }
 }
