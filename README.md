@@ -43,6 +43,7 @@ Users can explore a wide selection of products 📚👗👟, access detailed des
 ## 💻 Technologies
 
 - React
+- Zustand
 - TypeScript
 - CSS Modules
 - Vite
@@ -83,10 +84,12 @@ E-COMMERCE-APP/
 │   ├── styles/
 │   ├── types/
 │   ├── utils/
+│   ├── store/
 │   ├── App.tsx
 │   └── index.tsx
 └── README.md
 ```
+
 ---
 
 ## ⚙️ Installation
@@ -99,47 +102,65 @@ rename .env.example to .env
 add actual client_id and secret to VITE_API_USERNAME and VITE_API_PASSWORD constants in your .env file, you can find client_id and secret in API doc
 npm run dev
 ```
+
 ---
 
 ## 🚴‍♂️ Running the App Scripts
 
 **📥 Install Dependencies** – Install all project dependencies
+
 ```bash
 npm install
 ```
+
 **🐶 Git Hooks Setup** - Initialize Husky (automatically creates Git hooks)
+
 ```bash
 npm run prepare
 ```
+
 **🛠 Development** - Start the project in development mode
+
 ```bash
 npm run dev
 ```
+
 **📦 Production Build** - Build the project for production
+
 ```bash
 npm run build
 ```
+
 **👀 Preview** - Preview the production build locally
+
 ```bash
 npm run preview
 ```
+
 ---
 
 ## 📜 Code Testing & Formatting Scripts
 
 **🔍 Lint Check (ESLint)** – Run ESLint to check for code issues
+
 ```bash
 npm run lint
 ```
+
 **🎨 Format Code (Prettier)** – Format the code using Prettier
+
 ```bash
 npm run format
 ```
+
 **🧪 Style Check (StyleLint)** – Run StyleLint for styling issues
+
 ```bash
 npm run stylelint
 ```
+
 **🧫 Run Tests** – Execute test suite (if configured)
+
 ```bash
 npm test
 ```
