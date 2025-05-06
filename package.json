@@ -11,12 +11,12 @@
   },
   "homepage": "https://github.com/tatsianakuryla/ecommerce-app#readme",
   "scripts": {
-    "start": "vite",
+    "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "format": "prettier --write .",
     "stylelint": "stylelint \"src/**/*.css\" --fix",
-    "prepare": "husky",
+    "prepare": "husky install",
     "preview": "vite preview",
     "test": "vitest"
   },
