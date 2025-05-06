@@ -40,6 +40,7 @@ export default tseslint.config(
         'error',
         { assertionStyle: 'never' },
       ],
+      '@typescript-eslint/strict-boolean-expressions': 'error',
       '@typescript-eslint/prefer-readonly': 'warn',
       '@typescript-eslint/array-type': ['warn', { default: 'array-simple' }],
       '@typescript-eslint/member-ordering': 'warn',
