@@ -1,4 +1,5 @@
 ## Brief task name
+
 <!-- Example: Create a pull request template -->
 
 ## Description & Motivation
@@ -8,6 +9,7 @@
 <!-- Example: [RSSECOMM-13](https://rssfinalproject.atlassian.net/browse/RSSECOMM-13) -->
 
 ## Type of Change
+
 <!-- Delete those that don't apply -->
 
 - [ ] New feature
@@ -30,6 +32,7 @@
 <!-- Include any output that confirms that the changes do what is expected. This might be test results or a link to a staging environment -->
 
 <!-- Choose if applicable -->
+
 - [ ] Code compiles without errors
 - [ ] Tests added or updated if needed
 - [ ] All tests passed
