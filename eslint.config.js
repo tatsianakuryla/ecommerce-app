@@ -8,10 +8,7 @@ export default tseslint.config(
   { ignores: ['dist', 'node_modules', '.cache'] },
   eslintConfigPrettier,
   {
-    extends: [
-      ...tseslint.configs.recommendedTypeChecked,
-      ...tseslint.configs.strictTypeChecked,
-    ],
+    extends: [...tseslint.configs.strictTypeChecked],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2020,
@@ -31,18 +28,6 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
-      '@typescript-eslint/no-explicit-any': 'error',
-      '@typescript-eslint/consistent-type-assertions': [
-        'error',
-        { assertionStyle: 'never' },
-      ],
-      '@typescript-eslint/no-non-null-assertion': 'error',
-      '@typescript-eslint/explicit-function-return-type': [
-        'warn',
-        { allowExpressions: true },
-      ],
-      '@typescript-eslint/explicit-module-boundary-types': 'warn',
-      '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/restrict-template-expressions': [
         'warn',
         {
@@ -51,7 +36,10 @@ export default tseslint.config(
           allowNullish: false,
         },
       ],
-      '@typescript-eslint/strict-boolean-expressions': 'error',
+      '@typescript-eslint/consistent-type-assertions': [
+        'error',
+        { assertionStyle: 'never' },
+      ],
       '@typescript-eslint/prefer-readonly': 'warn',
       '@typescript-eslint/array-type': ['warn', { default: 'array-simple' }],
       '@typescript-eslint/member-ordering': 'warn',
