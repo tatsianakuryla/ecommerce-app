@@ -1,3 +1,4 @@
+import { Provider } from '@/components/ui/provider'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import React from 'react'
@@ -8,7 +9,9 @@ if (rootElement instanceof HTMLElement) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
     <React.StrictMode>
-      <App />
+      <Provider>
+        <App />
+      </Provider>
     </React.StrictMode>,
   )
 }
