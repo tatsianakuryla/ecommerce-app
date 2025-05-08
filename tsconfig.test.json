@@ -1,0 +1,5 @@
+{
+  "compilerOptions": {
+    "types": ["vitest/globals", "vitest/jsdom", "@testing-library/jest-dom"]
+  }
+}

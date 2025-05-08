@@ -47,6 +47,7 @@ Users can explore a wide selection of products 📚👗👟, access detailed des
 - TypeScript
 - CSS Modules
 - Vite
+- Vitest
 - ESLint
 - Prettier
 - StyleLint
@@ -70,8 +71,11 @@ E-COMMERCE-APP/
 │   │   ├── fonts/
 │   │   └── images/
 │   ├── components/
+│   |   └── component/
+│   |       └──tests/
 │   ├── features/
 │   │   ├── categories/
+|   |   |   └──tests/
 │   │   ├── customers/
 │   │   ├── discounts/
 │   │   ├── orders/
@@ -96,10 +100,21 @@ E-COMMERCE-APP/
 
 ```bash
 git clone https://github.com/tatsianakuryla/ecommerce-app.git
+```
+
+```bash
 cd ecommerce-app
+```
+
+```bash
 npm install
+```
+
 rename .env.example to .env
+
 add actual client_id and secret to VITE_API_USERNAME and VITE_API_PASSWORD constants in your .env file, you can find client_id and secret in API doc
+
+```bash
 npm run dev
 ```
 
@@ -159,7 +174,7 @@ npm run format
 npm run stylelint
 ```
 
-**🧫 Run Tests** – Execute test suite (if configured)
+**🧫 Run Tests** – Execute test suite
 
 ```bash
 npm test
