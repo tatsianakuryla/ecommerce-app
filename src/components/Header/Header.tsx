@@ -1,5 +1,12 @@
 import { NavLink } from 'react-router-dom'
-import { Box, Container, List, Heading, Image } from '@chakra-ui/react'
+import {
+  Box,
+  Container,
+  List,
+  Heading,
+  Image,
+  VisuallyHidden,
+} from '@chakra-ui/react'
 import logo from '../../assets/images/logo-without-bg.png'
 import styles from './header.module.css'
 
@@ -35,8 +42,9 @@ function Header() {
 
   return (
     <Container {...containerStyles}>
-      <Heading as='h1' display='none'></Heading>
-
+      <VisuallyHidden>
+        <Heading as='h1'>E-commerce. Shop smart. Live better.</Heading>
+      </VisuallyHidden>
       <NavLink to='/main'>
         <Image
           src={logo}
