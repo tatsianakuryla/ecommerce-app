@@ -1,5 +1,14 @@
-import { Box, Container, List, Heading, Link, Image } from '@chakra-ui/react'
+import { NavLink } from 'react-router-dom'
+import { Box, Container, List, Heading, Image } from '@chakra-ui/react'
 import logo from '../../assets/images/logo-without-bg.png'
+import styles from './header.module.css'
+
+const navItems = [
+  { label: 'About', to: '/about' },
+  { label: 'Main', to: '/main' },
+  { label: 'Login', to: '/login' },
+  { label: 'Register', to: '/register' },
+]
 
 function Header() {
   const containerStyles = {
@@ -24,43 +33,27 @@ function Header() {
     listStyleType: 'none',
   }
 
-  const linkStyles = {
-    fontSize: { base: 'sm', md: 'md' },
-    fontWeight: 'semibold',
-    color: 'white',
-    bg: 'teal.500',
-    px: '1rem',
-    py: '0.5rem',
-    borderRadius: 'md',
-    _hover: {
-      bg: 'teal.600',
-      textDecoration: 'none',
-    },
-    _focus: {
-      boxShadow: '0 0 0 2px teal.300',
-      outline: 'none',
-    },
-    transition: 'background-color 0.2s ease',
-  }
-
   return (
     <Container {...containerStyles}>
       <Heading as='h1' display='none'></Heading>
 
-      <Image
-        src={logo}
-        height='100px'
-        objectFit='contain'
-        width='auto'
-        alt='Logo of the company E-commerce'
-      />
+      <NavLink to='/main'>
+        <Image
+          src={logo}
+          height='100px'
+          objectFit='contain'
+          width='auto'
+          alt='Logo of the company E-commerce. Shop smart. Live better.'
+        />
+      </NavLink>
+
       <Box as='nav'>
         <List.Root {...listStyles}>
-          {['About', 'Main', 'Login', 'Register'].map((item, index) => (
-            <List.Item key={index}>
-              <Link {...linkStyles} href={`#${item.toLowerCase()}`}>
-                {item}
-              </Link>
+          {navItems.map(({ label, to }) => (
+            <List.Item key={to}>
+              <NavLink className={styles.link} to={to}>
+                {label}
+              </NavLink>
             </List.Item>
           ))}
         </List.Root>

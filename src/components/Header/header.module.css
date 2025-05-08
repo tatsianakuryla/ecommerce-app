@@ -1,0 +1,29 @@
+.link {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  text-decoration: none;
+
+  background-color: #319795;
+
+  transition: background-color 0.2s ease;
+}
+
+.link:hover {
+  text-decoration: none;
+  background-color: #2c7a7b;
+}
+
+.link:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #81e6d9;
+}
+
+@media (width >= 768px) {
+  .link {
+    font-size: 1rem;
+  }
+}

@@ -1,7 +1,12 @@
-import Header from './components/Header/Header'
+import { BrowserRouter } from 'react-router-dom'
+import { AppRoutes } from '@/router/App-routes.tsx'
 
 function App() {
-  return <Header />
+  return (
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
+  )
 }
 
 export default App
