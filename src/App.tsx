@@ -1,12 +1,7 @@
-import { Container, Heading, Spacer } from '@chakra-ui/react'
+import Header from './components/Header/Header'
 
 function App() {
-  return (
-    <Container>
-      <Heading>E-commerce</Heading>
-      <Spacer />
-    </Container>
-  )
+  return <Header />
 }
 
 export default App
