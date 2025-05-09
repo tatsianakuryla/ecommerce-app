@@ -1,11 +1,11 @@
-import { Container, Heading, Spacer } from '@chakra-ui/react'
+import { BrowserRouter } from 'react-router-dom'
+import { AppRoutes } from '@/router/App-routes.tsx'
 
 function App() {
   return (
-    <Container>
-      <Heading>E-commerce</Heading>
-      <Spacer />
-    </Container>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   )
 }
 
