@@ -9,7 +9,7 @@
     "type": "git",
     "url": "git+https://github.com/tatsianakuryla/ecommerce-app.git"
   },
-  "homepage": "https://github.com/tatsianakuryla/ecommerce-app#readme",
+  "homepage": "https://tatsianakuryla.github.io/ecommerce-app/",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -18,7 +18,8 @@
     "stylelint": "stylelint \"src/**/*.css\" --fix",
     "prepare": "husky install",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.17.0",
@@ -45,6 +46,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "eslint-plugin-vitest": "^0.5.4",
+    "gh-pages": "^6.3.0",
     "globals": "^16.0.0",
     "husky": "^9.1.7",
     "jiti": "^2.4.2",

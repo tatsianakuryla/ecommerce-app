@@ -8,6 +8,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react(), tsconfigPaths()],
     define: { __DEV__: !isProd },
+    base: '/ecommerce-app/',
     build: { minify: isProd, sourcemap: !isProd },
     test: {
       globals: true,

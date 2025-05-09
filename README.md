@@ -152,6 +152,12 @@ npm run build
 npm run preview
 ```
 
+**🚀 Deploy** – Deploy the production build to GitHub Pages
+
+```bash
+npm run deploy
+```
+
 ---
 
 ## 📜 Code Testing & Formatting Scripts
