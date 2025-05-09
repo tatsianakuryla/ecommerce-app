@@ -6,9 +6,9 @@ import {
   Heading,
   Image,
   VisuallyHidden,
+  Link as ChakraLink,
 } from '@chakra-ui/react'
 import logo from '../../assets/images/logo-without-bg.png'
-import styles from './header.module.css'
 
 const navItems = [
   { label: 'About', to: '/about' },
@@ -40,6 +40,30 @@ function Header() {
     listStyleType: 'none',
   }
 
+  const linkStyles = {
+    px: '1rem',
+    py: '0.5rem',
+    borderRadius: '0.375rem',
+
+    fontSize: { base: '0.875rem', md: '1rem' },
+    fontWeight: 600,
+    color: 'white',
+    textDecoration: 'none',
+
+    bg: 'teal.500',
+    transition: 'background-color 0.2s ease',
+
+    _hover: {
+      textDecoration: 'none',
+      bg: 'teal.600',
+    },
+
+    _focus: {
+      outline: 'none',
+      boxShadow: '0 0 0 2px teal.300',
+    },
+  }
+
   return (
     <Container {...containerStyles}>
       <VisuallyHidden>
@@ -59,9 +83,9 @@ function Header() {
         <List.Root {...listStyles}>
           {navItems.map(({ label, to }) => (
             <List.Item key={to}>
-              <NavLink className={styles.link} to={to}>
-                {label}
-              </NavLink>
+              <ChakraLink asChild {...linkStyles}>
+                <NavLink to={to}>{label}</NavLink>
+              </ChakraLink>
             </List.Item>
           ))}
         </List.Root>
