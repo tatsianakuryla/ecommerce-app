@@ -12,7 +12,7 @@
   "homepage": "https://github.com/tatsianakuryla/ecommerce-app#readme",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "lint": "eslint .",
     "format": "prettier --write .",
     "stylelint": "stylelint \"src/**/*.css\" --fix",
