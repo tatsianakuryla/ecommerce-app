@@ -17,8 +17,10 @@
       "~api/*": ["src/api/*"],
       "~pages/*": ["src/pages/*"],
       "~layouts/*": ["src/layouts/*"],
+      "~mocks/*": ["src/mocks/*"],
+      "~fixtures/*": ["src/fixtures/*"],
       "~utils/*": ["src/utils/*"]
     }
   },
-  "include": ["vite.config.ts", "vitest.setup.ts", "eslint.config.ts"]
+  "include": ["vite.config.ts", "eslint.config.ts"]
 }

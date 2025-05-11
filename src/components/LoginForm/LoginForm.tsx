@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import { useLogin } from '~/hooks/useLogin'
+import { Spinner } from '@chakra-ui/react'
+import { Alert } from '@chakra-ui/react'
 
 export function LoginForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const { login, authResponse, loading, error } = useLogin()
+  const { login, loading, error } = useLogin()
   const handleLogin = () => {
     void login(email, password)
   }
-
-  console.log('data', authResponse)
 
   return (
     <div>
@@ -28,10 +28,26 @@ export function LoginForm() {
         }}
         placeholder='Password'
       />
-      <button onClick={handleLogin} disabled={loading}>
-        {loading ? 'Logging in...' : 'Login'}
-      </button>
-      {error != null ? <p style={{ color: 'red' }}>{error}</p> : null}
+      {loading ? (
+        <Spinner data-testid='spinner' />
+      ) : (
+        <button onClick={handleLogin} disabled={loading}>
+          Login
+        </button>
+      )}
+
+      {error != null ? (
+        <Alert.Root
+          status='error'
+          data-testid='error-alert'
+          title={error}
+          fontSize='md'
+        >
+          <Alert.Indicator />
+          <Alert.Title />
+          {error} <Alert.Title />
+        </Alert.Root>
+      ) : null}
     </div>
   )
 }

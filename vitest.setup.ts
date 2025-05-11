@@ -1,4 +1,16 @@
+import '@testing-library/jest-dom'
 import { vi } from 'vitest'
+import { server } from '~/mocks/node'
+
+beforeAll(() => {
+  server.listen()
+})
+afterEach(() => {
+  server.resetHandlers()
+})
+afterAll(() => {
+  server.close()
+})
 
 Object.defineProperty(globalThis, 'matchMedia', {
   writable: true,
