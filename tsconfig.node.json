@@ -5,8 +5,19 @@
     "target": "ES2022",
     "lib": ["ES2023"],
     "types": ["node"],
+    "baseUrl": "./",
     "paths": {
-      "@/*": ["./src/*"]
+      "~/*": ["src/*"],
+      "~components/*": ["src/components/*"],
+      "~features/*": ["src/features/*"],
+      "~hooks/*": ["src/hooks/*"],
+      "~types/*": ["src/types/*"],
+      "~constants/*": ["src/constants/*"],
+      "~router/*": ["src/router/*"],
+      "~api/*": ["src/api/*"],
+      "~pages/*": ["src/pages/*"],
+      "~layouts/*": ["src/layouts/*"],
+      "~utils/*": ["src/utils/*"]
     }
   },
   "include": ["vite.config.ts", "vitest.setup.ts", "eslint.config.ts"]

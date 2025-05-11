@@ -112,7 +112,9 @@ npm install
 
 rename .env.example to .env
 
-add actual client_id and secret to VITE_API_USERNAME and VITE_API_PASSWORD constants in your .env file, you can find client_id and secret in API doc
+add actual values to
+VITE_CLIENT_ID, VITE_CLIENT_SECRET, VITE_API_CLIENT_NAME constants.
+Values are in the API doc
 
 ```bash
 npm run dev
