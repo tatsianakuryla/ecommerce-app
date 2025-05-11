@@ -1,0 +1,17 @@
+{
+  "correctUsername": "test@user.com",
+  "correctPassword": "111111",
+
+  "incorrectUsername": "test@shluser.com",
+  "incorrectPassword": "222222",
+
+  "mockResponses": {
+    "successAuth": {
+      "access_token": "mock-token",
+      "expires_in": 172800,
+      "token_type": "Bearer",
+      "scope": "mock-scope",
+      "refresh_token": "mock-refresh-token"
+    }
+  }
+}

@@ -4,12 +4,10 @@ import { useLogin } from '~/hooks/useLogin'
 export function LoginForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const { login, authResponse, loading, error } = useLogin()
+  const { login, loading, error } = useLogin()
   const handleLogin = () => {
     void login(email, password)
   }
-
-  console.log('data', authResponse)
 
   return (
     <div>

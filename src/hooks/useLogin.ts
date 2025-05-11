@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { UserAuthResponseBody } from '~/types/types'
 import {
   isAuthErrorResponseBody,
   isUserAuthResponseBody,
@@ -8,9 +7,6 @@ import { createAuthRequest } from '~api/requests'
 import { useMakeRequest } from './useMakeRequest'
 
 export function useLogin() {
-  const [authResponse, setAuthResponse] = useState<UserAuthResponseBody | null>(
-    null,
-  )
   const [error, setError] = useState<string | null>(null)
   const { makeRequest, loading } = useMakeRequest()
 
@@ -22,7 +18,7 @@ export function useLogin() {
         throw new TypeError('Invalid auth response body from server')
       }
 
-      setAuthResponse(response)
+      localStorage.setItem('access_token', response.access_token)
     } catch (error: unknown) {
       if (isAuthErrorResponseBody(error)) {
         setError(error.error_description)
@@ -34,5 +30,5 @@ export function useLogin() {
     }
   }
 
-  return { login, authResponse, loading, error }
+  return { login, loading, error }
 }

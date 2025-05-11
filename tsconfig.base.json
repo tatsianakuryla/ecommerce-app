@@ -25,6 +25,8 @@
       "~api/*": ["src/api/*"],
       "~pages/*": ["src/pages/*"],
       "~layouts/*": ["src/layouts/*"],
+      "~mocks/*": ["src/mocks/*"],
+      "~fixtures/*": ["src/fixtures/*"],
       "~utils/*": ["src/utils/*"]
     }
   }
