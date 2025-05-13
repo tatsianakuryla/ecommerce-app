@@ -100,9 +100,8 @@ describe('Login API tests', () => {
 })
 
 describe('Login UI tests', () => {
-  it('should log in with correct credentials', async () => {
+  it('should not render error modal after successful login', async () => {
     const { emailInput, passwordInput } = renderComponent(LoginForm)
-
     const loginButton = screen.getByRole('button', { name: 'Login' })
 
     fireEvent.change(emailInput, { target: { value: fixture.correctUsername } })
@@ -110,14 +109,12 @@ describe('Login UI tests', () => {
       target: { value: fixture.correctPassword },
     })
     fireEvent.click(loginButton)
-    const spinner = await screen.findByTestId('spinner')
 
-    expect(spinner).toBeInTheDocument()
-    expect(loginButton).not.toBeInTheDocument()
+    expect(screen.queryByTestId('progress-bar')).toBeInTheDocument()
 
     await waitFor(() => {
-      expect(spinner).not.toBeInTheDocument()
-      expect(screen.getByRole('button', { name: 'Login' })).toBeInTheDocument()
+      expect(screen.queryByTestId('progress-bar')).not.toBeInTheDocument()
+      expect(screen.queryByTestId('error-alert')).not.toBeInTheDocument()
       expect(localStorage.getItem('access_token')).toEqual(
         fixture.mockResponses.successAuth.access_token,
       )
@@ -136,16 +133,12 @@ describe('Login UI tests', () => {
     })
     fireEvent.click(loginButton)
 
-    const spinner = await screen.findByTestId('spinner')
+    expect(screen.queryByTestId('progress-bar')).toBeInTheDocument()
+    expect(await screen.findByTestId('error-alert')).toBeInTheDocument()
 
-    expect(spinner).toBeInTheDocument()
-    expect(loginButton).not.toBeInTheDocument()
-
-    const errorModal = await screen.findByTestId('error-alert')
-    expect(spinner).not.toBeInTheDocument()
-    expect(errorModal).toBeInTheDocument()
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Login' })).toBeInTheDocument()
+      expect(screen.queryByTestId('progress-bar')).not.toBeInTheDocument()
+      expect(screen.queryByTestId('error-alert')).toBeInTheDocument()
       expect(localStorage.getItem('access_token')).toBeNull()
     })
   })

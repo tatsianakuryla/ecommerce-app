@@ -3,7 +3,7 @@ import {
   isAuthErrorResponseBody,
   isUserAuthResponseBody,
 } from '~/utils/typeguards'
-import { createAuthRequest } from '~api/requests'
+import { createUserAuthRequest } from '~api/requests'
 import { useMakeRequest } from './useMakeRequest'
 
 export function useLogin() {
@@ -13,7 +13,9 @@ export function useLogin() {
 
   const login = async (email: string, password: string) => {
     try {
-      const responseBody = await makeRequest(createAuthRequest(email, password))
+      const responseBody = await makeRequest(
+        createUserAuthRequest(email, password),
+      )
       if (isUserAuthResponseBody(responseBody)) {
         setAuthResponseBody(responseBody)
         localStorage.setItem('accessToken', responseBody.access_token)

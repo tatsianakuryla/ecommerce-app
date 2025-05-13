@@ -73,6 +73,7 @@ E-COMMERCE-APP/
 │   ├── components/
 │   |   └── component/
 │   |       └──tests/
+│   |── constants
 │   ├── features/
 │   │   ├── categories/
 |   |   |   └──tests/
@@ -81,6 +82,8 @@ E-COMMERCE-APP/
 │   │   ├── orders/
 │   │   ├── prices/
 │   │   └── products/
+│   |── fixtures
+│   |── mocks
 │   ├── hooks/
 │   ├── layouts/
 │   ├── pages/
