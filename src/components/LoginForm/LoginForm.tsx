@@ -1,47 +1,47 @@
-import { useState, useEffect } from 'react'
-import { useLogin } from '~/hooks/useLogin'
-import { Spinner, Alert, Input, Button, Box } from '@chakra-ui/react'
+import { useState, useEffect } from 'react';
+import { useLogin } from '~/hooks/useLogin';
+import { Spinner, Alert, Input, Button, Box } from '@chakra-ui/react';
 
 export function LoginForm() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [fieldError, setFieldError] = useState({
     email: '',
     password: '',
-  })
+  });
 
-  const { login, loading, error } = useLogin()
+  const { login, loading, error } = useLogin();
 
   useEffect(() => {
-    if (error === null) return
-    const msg = error.toLowerCase()
-    const next = { email: '', password: '' }
-    if (msg.includes('email')) next.email = error
-    if (msg.includes('password')) next.password = error
+    if (error === null) return;
+    const msg = error.toLowerCase();
+    const next = { email: '', password: '' };
+    if (msg.includes('email')) next.email = error;
+    if (msg.includes('password')) next.password = error;
     if (!next.email && !next.password) {
-      next.email = next.password = error
+      next.email = next.password = error;
     }
-    setFieldError(next)
-  }, [error])
+    setFieldError(next);
+  }, [error]);
 
   const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value)
+    setEmail(e.target.value);
     if (fieldError.email) {
-      setFieldError((fieldError) => ({ ...fieldError, email: '' }))
+      setFieldError((fieldError) => ({ ...fieldError, email: '' }));
     }
-  }
+  };
 
   const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value)
+    setPassword(e.target.value);
     if (fieldError.password) {
-      setFieldError((fieldError) => ({ ...fieldError, password: '' }))
+      setFieldError((fieldError) => ({ ...fieldError, password: '' }));
     }
-  }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    void login(email, password)
-  }
+    e.preventDefault();
+    void login(email, password);
+  };
 
   return (
     <Box
@@ -106,5 +106,5 @@ export function LoginForm() {
         </Button>
       )}
     </Box>
-  )
+  );
 }

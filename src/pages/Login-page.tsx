@@ -1,5 +1,5 @@
-import { LoginForm } from '~components/LoginForm/LoginForm'
-import { Container, Heading } from '@chakra-ui/react'
+import { LoginForm } from '~components/LoginForm/LoginForm';
+import { Container, Heading } from '@chakra-ui/react';
 
 export const LoginPage = () => {
   return (
@@ -8,5 +8,5 @@ export const LoginPage = () => {
       <Heading>Login page</Heading>
       <LoginForm></LoginForm>
     </Container>
-  )
-}
+  );
+};

@@ -1,4 +1,4 @@
-import { permissions } from '~constants/permissions'
+import { permissions } from '~constants/permissions';
 
 export enum PermissionLevel {
   FULL = 'all',
@@ -6,27 +6,27 @@ export enum PermissionLevel {
   USER = 'user',
 }
 
-export type Permissions = typeof permissions
+export type Permissions = typeof permissions;
 
 export interface UserAuthResponseBody {
-  access_token: string
-  expires_in: number
-  token_type: string
-  scope: string
-  refresh_token: string
+  access_token: string;
+  expires_in: number;
+  token_type: string;
+  scope: string;
+  refresh_token: string;
 }
 
 interface Error {
-  code: string
-  message: string
+  code: string;
+  message: string;
 }
 
-type ErrorsArray = Error[]
+type ErrorsArray = Error[];
 
 export interface AuthErrorResponseBody {
-  statusCode: number
-  error: string
-  error_description: string
-  message: string
-  errors: ErrorsArray
+  statusCode: number;
+  error: string;
+  error_description: string;
+  message: string;
+  errors: ErrorsArray;
 }

@@ -1,4 +1,4 @@
-import { Container, Heading } from '@chakra-ui/react'
+import { Container, Heading } from '@chakra-ui/react';
 
 export const AboutPage = () => {
   return (
@@ -6,5 +6,5 @@ export const AboutPage = () => {
       {/*для тестов и для скрин-ридеров прошу в случае необходимости не удалять элемент, а обернуть элемент в <VisuallyHidden>*/}
       <Heading>About page</Heading>
     </Container>
-  )
-}
+  );
+};

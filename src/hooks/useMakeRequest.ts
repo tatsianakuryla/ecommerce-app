@@ -1,24 +1,24 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
 export function useMakeRequest() {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const makeRequest = async (request: Request) => {
-    setLoading(true)
+    setLoading(true);
 
     try {
-      const res = await fetch(request)
-      const json: unknown = await res.json()
+      const res = await fetch(request);
+      const json: unknown = await res.json();
 
       if (!res.ok) {
-        throw json
+        throw json;
       }
 
-      return json
+      return json;
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  return { makeRequest, loading }
+  return { makeRequest, loading };
 }

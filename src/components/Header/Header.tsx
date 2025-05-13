@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom';
 import {
   Box,
   Container,
@@ -6,16 +6,21 @@ import {
   Heading,
   Image,
   VisuallyHidden,
-  Link as ChakraLink,
-} from '@chakra-ui/react'
-import logo from '../../assets/images/logo-without-bg.png'
+} from '@chakra-ui/react';
+import logo from '../../assets/images/logo-without-bg.png';
+import Hamburger from 'hamburger-react';
+import { useState } from 'react';
+import NavItem from '~components/Header/Nav-item.tsx';
 
 const navItems = [
   { label: 'About', to: '/about' },
   { label: 'Main', to: '/main' },
+];
+
+const loginRegisterItems = [
   { label: 'Login', to: '/login' },
   { label: 'Register', to: '/register' },
-]
+];
 
 function Header() {
   const containerStyles = {
@@ -31,39 +36,16 @@ function Header() {
     position: 'sticky',
     top: '0',
     zIndex: '1000',
-  }
+  };
 
   const listStyles = {
     display: 'flex',
     flexDirection: 'row',
     gap: { base: '0.5rem', md: '1rem' },
     listStyleType: 'none',
-  }
+  };
 
-  const linkStyles = {
-    px: '1rem',
-    py: '0.5rem',
-    borderRadius: '0.375rem',
-
-    fontSize: { base: '0.875rem', md: '1rem' },
-    fontWeight: 600,
-    color: 'white',
-    textDecoration: 'none',
-
-    bg: 'teal.500',
-    transition: 'background-color 0.2s ease',
-
-    _hover: {
-      textDecoration: 'none',
-      bg: 'teal.600',
-    },
-
-    _focus: {
-      outline: 'none',
-      boxShadow: '0 0 0 2px teal.300',
-    },
-  }
-
+  const [isOpen, setOpen] = useState(false);
   return (
     <Container {...containerStyles}>
       <VisuallyHidden>
@@ -75,23 +57,66 @@ function Header() {
           height='100px'
           objectFit='contain'
           width='auto'
+          min-width='240px'
           alt='Logo of the company E-commerce. Shop smart. Live better.'
         />
       </NavLink>
 
-      <Box as='nav'>
+      <Box
+        as='nav'
+        aria-label='Main navigation'
+        display={{ base: 'none', md: 'flex' }}
+        gap={{ base: '0.5rem', md: '1rem' }}
+      >
         <List.Root {...listStyles}>
-          {navItems.map(({ label, to }) => (
+          {[...navItems, ...loginRegisterItems].map(({ label, to }) => (
             <List.Item key={to}>
-              <ChakraLink asChild {...linkStyles}>
-                <NavLink to={to}>{label}</NavLink>
-              </ChakraLink>
+              <NavItem label={label} to={to} />
             </List.Item>
           ))}
         </List.Root>
       </Box>
+      <Box display={{ base: 'block', md: 'none' }} position='relative'>
+        <Hamburger toggled={isOpen} toggle={setOpen} size={20} />
+
+        {isOpen && (
+          <Box
+            as='nav'
+            aria-label='Mobile navigation'
+            position='absolute'
+            top='calc(100% + 0.5rem)'
+            right='0'
+            bg='white'
+            boxShadow='md'
+            borderRadius='md'
+            px='1rem'
+            py='1rem'
+            zIndex='overlay'
+            w='250px'
+          >
+            <List.Root
+              display='flex'
+              flexDirection='column'
+              gap='0.5rem'
+              listStyleType='none'
+            >
+              {[...navItems, ...loginRegisterItems].map(({ label, to }) => (
+                <List.Item key={to}>
+                  <NavItem
+                    label={label}
+                    to={to}
+                    onClick={() => {
+                      setOpen(false);
+                    }}
+                  />
+                </List.Item>
+              ))}
+            </List.Root>
+          </Box>
+        )}
+      </Box>
     </Container>
-  )
+  );
 }
 
-export default Header
+export default Header;
