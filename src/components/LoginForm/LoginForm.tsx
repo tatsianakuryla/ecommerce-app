@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useLogin } from '~/hooks/useLogin'
 import { Alert, Input, Button, Box, ProgressCircle } from '@chakra-ui/react'
 import { normalizeErrorMessage } from '~/utils/helpers'
-
+import { PasswordInput } from '../InputPassword/InputPassword'
 export function LoginForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -10,6 +10,52 @@ export function LoginForm() {
     email: '',
     password: '',
   })
+
+  const validateEmail = (value: string): boolean => {
+    const trimmedValue = value.trim()
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+
+    if (value !== trimmedValue) {
+      setFieldError((prev) => ({
+        ...prev,
+        email: 'Email must not contain leading or trailing whitespace',
+      }))
+      return false
+    }
+
+    if (!emailRegex.test(value)) {
+      setFieldError((prev) => ({
+        ...prev,
+        email: 'Please enter a valid email address (e.g., user@example.com)',
+      }))
+      return false
+    }
+
+    setFieldError((prev) => ({ ...prev, email: '' }))
+    return true
+  }
+
+  const validatePassword = (value: string): boolean => {
+    const newRequirements = {
+      length: value.length >= 8,
+      upper: /[A-Z]/.test(value),
+      lower: /[a-z]/.test(value),
+      digit: /[0-9]/.test(value),
+      special: /[!@#$%^&*]/.test(value),
+    }
+
+    const isValid = Object.values(newRequirements).every((req) => req)
+    setFieldError((prev) => ({
+      ...prev,
+      password: isValid
+        ? ''
+        : `Password must contain at least 8 characters, 1 number, 1 uppercase letter,
+         1 lowercase letter, 1 special character. No leading/trailing whitespace.`,
+    }))
+
+    return isValid
+  }
 
   const { login, loading, error } = useLogin()
 
@@ -26,6 +72,14 @@ export function LoginForm() {
     }
     setFieldError(next)
   }, [error])
+
+  useEffect(() => {
+    if (email) validateEmail(email)
+  }, [email])
+
+  useEffect(() => {
+    if (password) validatePassword(password)
+  }, [password])
 
   const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value)
@@ -44,6 +98,12 @@ export function LoginForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     void login(email, password)
+    const isEmailValid = validateEmail(email)
+    const isPasswordValid = validatePassword(password)
+
+    if (isEmailValid && isPasswordValid) {
+      console.log('Form submitted:', { email, password })
+    }
   }
 
   return (
@@ -55,7 +115,7 @@ export function LoginForm() {
         style={
           loading
             ? {
-                maxWidth: 320,
+                width: 320,
                 margin: '2rem auto',
                 filter: 'blur(1px)',
               }
@@ -87,12 +147,15 @@ export function LoginForm() {
             <Alert.Title>{fieldError.email}</Alert.Title>
           </Alert.Root>
         )}
-
-        <Input
+        <PasswordInput
+          value={password}
+          placeholder='Password'
+          onChange={onPasswordChange}
+        />
+        {/* <Input
           type='password'
           value={password}
           onChange={onPasswordChange}
-          placeholder='Password'
           style={{
             width: '100%',
             padding: '0.5rem',
@@ -101,7 +164,7 @@ export function LoginForm() {
             borderColor: fieldError.password ? 'red' : '#cbd5e0',
             marginBottom: fieldError.password ? 2 : 12,
           }}
-        />
+        /> */}
         {fieldError.password && (
           <Alert.Root
             status='error'

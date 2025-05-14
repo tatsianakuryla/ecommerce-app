@@ -8,6 +8,7 @@ import { useMakeRequest } from './useMakeRequest'
 
 export function useLogin() {
   const [error, setError] = useState<string | null>(null)
+
   const [authResponseBody, setAuthResponseBody] = useState<unknown>(null)
   const { makeRequest, loading } = useMakeRequest()
 
