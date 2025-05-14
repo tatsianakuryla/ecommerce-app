@@ -1,6 +1,6 @@
 import { DefaultBodyType, http, HttpResponse, StrictRequest } from 'msw';
 import fixture from '~fixtures/fixture.json';
-import { USER_AUTH_URL } from '~/constants/url';
+import { USER_AUTH_URL } from '~/constants/constants';
 
 const checkCredentials = async (request: StrictRequest<DefaultBodyType>) => {
   localStorage.removeItem('access_token');

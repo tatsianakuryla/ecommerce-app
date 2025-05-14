@@ -1,4 +1,4 @@
-import { permissions } from '~constants/permissions';
+import { permissions } from '~constants/constants';
 
 export enum PermissionLevel {
   FULL = 'all',

@@ -1,13 +1,11 @@
-import { PermissionLevel } from '~types/types';
 import { generatePermissions } from '~utils/helpers';
-import { USER_AUTH_URL } from '~/constants/url';
-const { VITE_CLIENT_ID, VITE_CLIENT_SECRET } = import.meta.env;
+import { BASIC_AUTH_HEADER, USER_AUTH_URL } from '~/constants/constants';
 
-export const createAuthRequest = (
+export const createUserAuthRequest = (
   username: string,
   password: string,
 ): Request => {
-  const userPermissions = generatePermissions(PermissionLevel.USER);
+  const userPermissions = generatePermissions();
 
   const body = new URLSearchParams({
     grant_type: 'password',
@@ -20,7 +18,7 @@ export const createAuthRequest = (
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization: 'Basic ' + btoa(`${VITE_CLIENT_ID}:${VITE_CLIENT_SECRET}`),
+      Authorization: BASIC_AUTH_HEADER,
     },
     body,
   });

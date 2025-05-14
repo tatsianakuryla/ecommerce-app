@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLogin } from '~/hooks/useLogin';
-import { Spinner, Alert, Input, Button, Box } from '@chakra-ui/react';
+import { Alert, Input, Button, Box, ProgressCircle } from '@chakra-ui/react';
+import { normalizeErrorMessage } from '~/utils/helpers';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
@@ -17,7 +18,9 @@ export function LoginForm() {
     const msg = error.toLowerCase();
     const next = { email: '', password: '' };
     if (msg.includes('email')) next.email = error;
-    if (msg.includes('password')) next.password = error;
+    if (msg.includes('password')) {
+      next.password = normalizeErrorMessage(error);
+    }
     if (!next.email && !next.password) {
       next.email = next.password = error;
     }
@@ -44,55 +47,75 @@ export function LoginForm() {
   };
 
   return (
-    <Box
-      as='form'
-      onSubmit={handleSubmit}
-      style={{ maxWidth: 320, margin: '2rem auto' }}
-    >
-      <Input
-        value={email}
-        onChange={onEmailChange}
-        placeholder='Email'
-        style={{
-          width: '100%',
-          padding: '0.5rem',
-          borderRadius: 4,
-          border: '1px solid',
-          borderColor: fieldError.email ? 'red' : '#cbd5e0',
-          marginBottom: fieldError.email ? 2 : 12,
-        }}
-      />
-      {fieldError.email && (
-        <Alert.Root status='error' variant='subtle' fontSize='sm' mb={4} px={2}>
-          <Alert.Indicator />
-          <Alert.Title>{fieldError.email}</Alert.Title>
-        </Alert.Root>
-      )}
+    <>
+      <Box
+        as='form'
+        pos='relative'
+        onSubmit={handleSubmit}
+        style={
+          loading
+            ? {
+                maxWidth: 320,
+                margin: '2rem auto',
+                filter: 'blur(1px)',
+              }
+            : { maxWidth: 320, margin: '2rem auto' }
+        }
+      >
+        <Input
+          value={email}
+          onChange={onEmailChange}
+          placeholder='Email'
+          style={{
+            width: '100%',
+            padding: '0.5rem',
+            borderRadius: 4,
+            border: '1px solid',
+            borderColor: fieldError.email ? 'red' : '#cbd5e0',
+            marginBottom: fieldError.email ? 2 : 12,
+          }}
+        />
+        {fieldError.email && (
+          <Alert.Root
+            status='error'
+            variant='subtle'
+            fontSize='sm'
+            mb={4}
+            px={2}
+          >
+            <Alert.Indicator />
+            <Alert.Title>{fieldError.email}</Alert.Title>
+          </Alert.Root>
+        )}
 
-      <Input
-        type='password'
-        value={password}
-        onChange={onPasswordChange}
-        placeholder='Password'
-        style={{
-          width: '100%',
-          padding: '0.5rem',
-          borderRadius: 4,
-          border: '1px solid',
-          borderColor: fieldError.password ? 'red' : '#cbd5e0',
-          marginBottom: fieldError.password ? 2 : 12,
-        }}
-      />
-      {fieldError.password && (
-        <Alert.Root status='error' variant='subtle' fontSize='sm' mb={4} px={2}>
-          <Alert.Indicator />
-          <Alert.Title>{fieldError.password}</Alert.Title>
-        </Alert.Root>
-      )}
+        <Input
+          type='password'
+          value={password}
+          onChange={onPasswordChange}
+          placeholder='Password'
+          style={{
+            width: '100%',
+            padding: '0.5rem',
+            borderRadius: 4,
+            border: '1px solid',
+            borderColor: fieldError.password ? 'red' : '#cbd5e0',
+            marginBottom: fieldError.password ? 2 : 12,
+          }}
+        />
+        {fieldError.password && (
+          <Alert.Root
+            status='error'
+            variant='subtle'
+            fontSize='sm'
+            mb={4}
+            px={2}
+            data-testid='error-alert'
+          >
+            <Alert.Indicator />
+            <Alert.Title>{fieldError.password}</Alert.Title>
+          </Alert.Root>
+        )}
 
-      {loading ? (
-        <Spinner data-testid='spinner' />
-      ) : (
         <Button
           type='submit'
           disabled={loading}
@@ -104,7 +127,19 @@ export function LoginForm() {
         >
           Login
         </Button>
-      )}
-    </Box>
+      </Box>
+      {loading ? (
+        <ProgressCircle.Root
+          value={null}
+          pos='absolute'
+          data-testid='progress-bar'
+        >
+          <ProgressCircle.Circle>
+            <ProgressCircle.Track />
+            <ProgressCircle.Range strokeLinecap='round' />
+          </ProgressCircle.Circle>
+        </ProgressCircle.Root>
+      ) : null}
+    </>
   );
 }
