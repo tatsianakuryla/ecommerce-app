@@ -2,7 +2,7 @@ import { PropsWithChildren, ReactElement } from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import { render } from '@testing-library/react'
 import { RenderResult } from '@testing-library/react'
-import { Provider } from '@/components/ui/provider'
+import { Provider } from '~components/ui/provider'
 
 type Options = { initialEntries?: string[] }
 

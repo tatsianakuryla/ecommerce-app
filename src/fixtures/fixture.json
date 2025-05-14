@@ -1,0 +1,41 @@
+{
+  "correctUsername": "test@user.com",
+  "correctPassword": "111111",
+
+  "incorrectUsername": "test@shluser.com",
+  "incorrectPassword": "222222",
+
+  "mockResponses": {
+    "successAuth": {
+      "access_token": "mock-token",
+      "expires_in": 172800,
+      "token_type": "Bearer",
+      "scope": "mock-scope",
+      "refresh_token": "mock-refresh-token"
+    },
+    "wrongCredentials": {
+      "statusCode": 400,
+      "message": "Customer account with the given credentials not found.",
+      "errors": [
+        {
+          "code": "invalid_customer_account_credentials",
+          "message": "Customer account with the given credentials not found."
+        }
+      ],
+      "error": "invalid_customer_account_credentials",
+      "error_description": "Customer account with the given credentials not found."
+    },
+    "emptyPassword": {
+      "statusCode": 400,
+      "message": "Invalid parameter: password: Must not be empty.",
+      "errors": [
+        {
+          "code": "invalid_request",
+          "message": "Invalid parameter: password: Must not be empty."
+        }
+      ],
+      "error": "invalid_request",
+      "error_description": "Invalid parameter: password: Must not be empty."
+    }
+  }
+}

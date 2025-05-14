@@ -5,7 +5,15 @@ import tseslint from 'typescript-eslint'
 import eslintConfigPrettier from 'eslint-config-prettier/flat'
 
 export default tseslint.config(
-  { ignores: ['dist', 'node_modules', '.cache'] },
+  {
+    ignores: [
+      'dist',
+      'node_modules',
+      '.cache',
+      './src/mocks/**/*.ts',
+      '*.test.{ts,tsx}',
+    ],
+  },
   eslintConfigPrettier,
   {
     extends: [...tseslint.configs.strictTypeChecked],

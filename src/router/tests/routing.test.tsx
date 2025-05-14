@@ -1,8 +1,7 @@
-import { describe, it, expect } from 'vitest'
 import { screen } from '@testing-library/react'
-import { renderWithRouter } from '@/router/tests/helpers/renderWithRouter'
+import { renderWithRouter } from '~router/tests/helpers/renderWithRouter'
 import '@testing-library/jest-dom'
-import { AppRoutes } from '@/router/App-routes.tsx'
+import { AppRoutes } from '~router/App-routes.tsx'
 
 describe('Routing', () => {
   it('redirects / to /main', async () => {
