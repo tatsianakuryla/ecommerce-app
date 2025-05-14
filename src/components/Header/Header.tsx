@@ -11,18 +11,29 @@ import logo from '../../assets/images/logo-without-bg.png';
 import Hamburger from 'hamburger-react';
 import { useState } from 'react';
 import NavItem from '~components/Header/Nav-item.tsx';
+import { useAuth } from '~hooks/useAuth.ts';
+import { MenuItem } from '~types/types';
 
-const navItems = [
+const navItems: MenuItem[] = [
   { label: 'About', to: '/about' },
   { label: 'Main', to: '/main' },
 ];
 
-const loginRegisterItems = [
+const loginRegisterItems: MenuItem[] = [
   { label: 'Login', to: '/login' },
   { label: 'Register', to: '/register' },
 ];
 
 function Header() {
+  const { isAuthenticated, logout } = useAuth();
+
+  const guestItems = [...navItems, ...loginRegisterItems];
+  const authItems = [
+    ...navItems,
+    { label: 'Logout', to: '/login', onClick: logout },
+  ];
+  const itemsToRender = isAuthenticated ? authItems : guestItems;
+
   const containerStyles = {
     maxW: 'container.xl',
     display: 'flex',
@@ -100,13 +111,14 @@ function Header() {
               gap='0.5rem'
               listStyleType='none'
             >
-              {[...navItems, ...loginRegisterItems].map(({ label, to }) => (
-                <List.Item key={to}>
+              {itemsToRender.map(({ label, to, onClick }) => (
+                <List.Item key={label}>
                   <NavItem
                     label={label}
                     to={to}
                     onClick={() => {
                       setOpen(false);
+                      onClick?.();
                     }}
                   />
                 </List.Item>

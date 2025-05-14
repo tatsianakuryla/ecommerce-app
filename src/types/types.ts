@@ -30,3 +30,15 @@ export interface AuthErrorResponseBody {
   message: string;
   errors: ErrorsArray;
 }
+
+export interface AuthContextValue {
+  isAuthenticated: boolean;
+  logout: () => void;
+  checking: boolean;
+}
+
+export interface MenuItem {
+  label: string;
+  to: string;
+  onClick?: () => void;
+}
