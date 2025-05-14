@@ -1,13 +1,11 @@
-import { Container, Heading, Spacer } from '@chakra-ui/react'
-import { LoginForm } from './components/LoginForm/LoginForm'
+import { BrowserRouter } from 'react-router-dom'
+import { AppRoutes } from '~router/App-routes.tsx'
 
 function App() {
   return (
-    <Container>
-      <Heading>E-commerce</Heading>
-      <Spacer />
-      <LoginForm></LoginForm>
-    </Container>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   )
 }
 

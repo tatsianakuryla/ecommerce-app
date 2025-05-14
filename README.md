@@ -23,7 +23,7 @@ Users can explore a wide selection of products 📚👗👟, access detailed des
 
 ## 🚀 Demo
 
-[Click here to view the live demo](https://tatsianakuryla.github.io/ecommerce-app/)
+[Click here to view the live demo](https://jolly-basbousa-43243d.netlify.app/main)
 
 ---
 
@@ -73,6 +73,7 @@ E-COMMERCE-APP/
 │   ├── components/
 │   |   └── component/
 │   |       └──tests/
+│   |── constants
 │   ├── features/
 │   │   ├── categories/
 |   |   |   └──tests/
@@ -81,6 +82,8 @@ E-COMMERCE-APP/
 │   │   ├── orders/
 │   │   ├── prices/
 │   │   └── products/
+│   |── fixtures
+│   |── mocks
 │   ├── hooks/
 │   ├── layouts/
 │   ├── pages/
@@ -112,7 +115,9 @@ npm install
 
 rename .env.example to .env
 
-add actual client_id and secret to VITE_API_USERNAME and VITE_API_PASSWORD constants in your .env file, you can find client_id and secret in API doc
+add actual values to
+VITE_CLIENT_ID, VITE_CLIENT_SECRET, VITE_API_CLIENT_NAME constants.
+Values are in the API doc
 
 ```bash
 npm run dev

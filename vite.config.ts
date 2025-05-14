@@ -1,4 +1,6 @@
-/// <reference types="vitest/config" />
+/// <reference types="vitest" />
+/// <reference types="vite/client" />
+
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tsconfigPaths from 'vite-tsconfig-paths'
@@ -8,17 +10,13 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react(), tsconfigPaths()],
-    define: {
-      __DEV__: !isProd,
-    },
-    build: {
-      minify: isProd,
-      sourcemap: !isProd,
-    },
+    define: { __DEV__: !isProd },
+    build: { minify: isProd, sourcemap: !isProd },
     test: {
       globals: true,
       environment: 'jsdom',
       mockReset: true,
+      setupFiles: './vitest.setup.ts',
     },
   }
 })

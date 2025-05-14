@@ -12,6 +12,22 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+    "baseUrl": "./",
+    "paths": {
+      "~/*": ["src/*"],
+      "~components/*": ["src/components/*"],
+      "~features/*": ["src/features/*"],
+      "~hooks/*": ["src/hooks/*"],
+      "~types/*": ["src/types/*"],
+      "~constants/*": ["src/constants/*"],
+      "~router/*": ["src/router/*"],
+      "~api/*": ["src/api/*"],
+      "~pages/*": ["src/pages/*"],
+      "~layouts/*": ["src/layouts/*"],
+      "~mocks/*": ["src/mocks/*"],
+      "~fixtures/*": ["src/fixtures/*"],
+      "~utils/*": ["src/utils/*"]
+    }
   }
 }
