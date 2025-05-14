@@ -1,20 +1,32 @@
-import { PropsWithChildren, ReactElement } from 'react';
-import { MemoryRouter } from 'react-router-dom';
+import { ReactNode } from 'react';
 import { render } from '@testing-library/react';
-import { RenderResult } from '@testing-library/react';
-import { Provider } from '~components/ui/provider';
+import { MemoryRouter } from 'react-router-dom';
+import { Provider } from '~components/ui/provider'; // ← your Chakra+theme wrapper
+import { AuthContext } from '~/contexts/authContext'; // make sure this matches your file
 
-type Options = { initialEntries?: string[] };
+interface RenderOptions {
+  route?: string;
+  isAuthenticated?: boolean;
+  checking?: boolean;
+}
 
 export function renderWithRouter(
-  element: ReactElement,
-  { initialEntries = ['/'] }: Options = {},
-): RenderResult {
-  const Wrapper = ({ children }: PropsWithChildren) => (
+  ui: ReactNode,
+  {
+    route = '/',
+    isAuthenticated = false,
+    checking = false,
+  }: RenderOptions = {},
+) {
+  return render(
     <Provider>
-      <MemoryRouter initialEntries={initialEntries}>{children}</MemoryRouter>
-    </Provider>
+      {' '}
+      {/* ← now wrap your UI */}
+      <AuthContext.Provider
+        value={{ isAuthenticated, checking, logout: () => {} }}
+      >
+        <MemoryRouter initialEntries={[route]}>{ui}</MemoryRouter>
+      </AuthContext.Provider>
+    </Provider>,
   );
-
-  return render(element, { wrapper: Wrapper });
 }

@@ -5,14 +5,23 @@ import { AppRoutes } from '~router/App-routes.tsx';
 
 describe('Routing', () => {
   it('redirects / to /main', async () => {
-    renderWithRouter(<AppRoutes />, { initialEntries: ['/'] });
+    renderWithRouter(<AppRoutes />, {
+      route: '/',
+      isAuthenticated: false,
+      checking: false,
+    });
+
     expect(
       await screen.findByRole('heading', { level: 2, name: /main page/i }),
     ).toBeInTheDocument();
   });
 
   it('renders 404 page for unknown route', async () => {
-    renderWithRouter(<AppRoutes />, { initialEntries: ['/unknown'] });
+    renderWithRouter(<AppRoutes />, {
+      route: '/unknown',
+      isAuthenticated: false,
+      checking: false,
+    });
 
     expect(
       await screen.findByRole('heading', { level: 2, name: /not found page/i }),
@@ -20,7 +29,11 @@ describe('Routing', () => {
   });
 
   it('renders about page for "/about" route', async () => {
-    renderWithRouter(<AppRoutes />, { initialEntries: ['/about'] });
+    renderWithRouter(<AppRoutes />, {
+      route: '/about',
+      isAuthenticated: false,
+      checking: false,
+    });
 
     expect(
       await screen.findByRole('heading', { level: 2, name: /about page/i }),
@@ -28,7 +41,11 @@ describe('Routing', () => {
   });
 
   it('renders register page for "/register" route', async () => {
-    renderWithRouter(<AppRoutes />, { initialEntries: ['/register'] });
+    renderWithRouter(<AppRoutes />, {
+      route: '/register',
+      isAuthenticated: false,
+      checking: false,
+    });
 
     expect(
       await screen.findByRole('heading', { level: 2, name: /register page/i }),
@@ -36,7 +53,11 @@ describe('Routing', () => {
   });
 
   it('renders register page for "/login" route', async () => {
-    renderWithRouter(<AppRoutes />, { initialEntries: ['/login'] });
+    renderWithRouter(<AppRoutes />, {
+      route: '/login',
+      isAuthenticated: false,
+      checking: false,
+    });
 
     expect(
       await screen.findByRole('heading', { level: 2, name: /login page/i }),
