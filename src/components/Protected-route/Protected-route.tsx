@@ -7,24 +7,6 @@ interface Props {
   children: ReactNode;
 }
 
-// export function RequireAuth({ children }: Props) {
-//   const { isAuthenticated, checking } = useAuth()
-//
-//   if (checking) {
-//     return (
-//       <Center h="100vh">
-//         <Spinner size="xl" />
-//       </Center>
-//     )
-//   }
-//
-//   if (!isAuthenticated) {
-//     return <Navigate to="/login" replace />
-//   }
-//
-//   return <>{children}</>
-// }
-
 export function RedirectIfAuth({ children }: Props) {
   const { isAuthenticated, checking } = useAuth();
 
