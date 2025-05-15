@@ -7,10 +7,10 @@ export function useMakeRequest() {
     setLoading(true);
 
     try {
-      const res = await fetch(request);
-      const json: unknown = await res.json();
+      const response = await fetch(request);
+      const json: unknown = await response.json();
 
-      if (!res.ok) {
+      if (!response.ok) {
         throw json;
       }
 

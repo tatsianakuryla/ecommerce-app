@@ -12,6 +12,7 @@ export default tseslint.config(
       '.cache',
       './src/mocks/**/*.ts',
       '*.test.{ts,tsx}',
+      './src/components/ui/**',
     ],
   },
   eslintConfigPrettier,

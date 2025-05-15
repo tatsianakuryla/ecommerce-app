@@ -1,10 +1,12 @@
-import { ReactNode, useEffect, useState } from 'react';
-import { BASE_API_URL, PROJECT_KEY } from '~constants/constants.ts';
-import { AuthContext } from '~/contexts/authContext.tsx';
+import { useEffect, useState, ReactNode } from 'react';
+import { useMakeRequest } from '~/hooks/useMakeRequest';
+import { createFetchMyProfileRequest } from '~api/createFetchMyProfileRequest.ts';
+import { AuthContext } from './authContext';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setAuthenticated] = useState(false);
   const [checking, setChecking] = useState(true);
+  const { makeRequest } = useMakeRequest();
 
   const logout = () => {
     localStorage.removeItem('accessToken');
@@ -12,36 +14,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    if (token === null) {
-      setChecking(false);
-      return;
-    }
-
-    void (async () => {
+    async function initAuth() {
       try {
-        const response = await fetch(
-          `${BASE_API_URL}/${PROJECT_KEY}/customers/me`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-        if (!response.ok) throw new Error('Not authenticated');
+        await makeRequest(createFetchMyProfileRequest());
         setAuthenticated(true);
       } catch {
         logout();
       } finally {
         setChecking(false);
       }
-    })();
-  }, []);
+    }
+    void initAuth();
+  }, [makeRequest]);
 
   if (checking) return null;
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, logout, checking }}>
+    <AuthContext.Provider value={{ isAuthenticated, checking, logout }}>
       {children}
     </AuthContext.Provider>
   );

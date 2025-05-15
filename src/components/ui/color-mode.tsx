@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-object-type, @typescript-eslint/consistent-type-assertions, react-refresh/only-export-components */
 'use client';
 
 import type { IconButtonProps, SpanProps } from '@chakra-ui/react';

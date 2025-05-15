@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useLogin } from '~/hooks/useLogin';
-import { Alert, Input, Button, Box, ProgressCircle } from '@chakra-ui/react';
+import { Alert, Input, Button, Box } from '@chakra-ui/react';
 import { normalizeErrorMessage } from '~/utils/helpers';
+import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle.tsx';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
@@ -128,18 +129,7 @@ export function LoginForm() {
           Login
         </Button>
       </Box>
-      {loading ? (
-        <ProgressCircle.Root
-          value={null}
-          pos='absolute'
-          data-testid='progress-bar'
-        >
-          <ProgressCircle.Circle>
-            <ProgressCircle.Track />
-            <ProgressCircle.Range strokeLinecap='round' />
-          </ProgressCircle.Circle>
-        </ProgressCircle.Root>
-      ) : null}
+      {loading ? <ProgressCircleElement /> : null}
     </>
   );
 }

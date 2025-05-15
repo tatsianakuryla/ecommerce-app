@@ -35,3 +35,4 @@ export const CLIENT_AUTH_URL = `${BASE_AUTH_URL}${AUTH_TOKEN}`;
 export const USER_AUTH_URL = `${BASE_AUTH_URL}${USER_AUTH_TOKEN}`;
 
 export const PROJECT_KEY = import.meta.env.VITE_API_CLIENT_NAME;
+export const CUSTOMER_ME_ENDPOINT = `${BASE_API_URL}/${PROJECT_KEY}/customers/me`;

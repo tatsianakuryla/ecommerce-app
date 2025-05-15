@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions, react-refresh/only-export-components, react-refresh/only-export-components */
 'use client';
 
 import {
