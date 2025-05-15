@@ -1,17 +1,17 @@
-import { create } from 'zustand'
-import { devtools } from 'zustand/middleware'
+import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
 
 interface Todo {
-  id: number
-  text: string
-  done: boolean
+  id: number;
+  text: string;
+  done: boolean;
 }
 
 interface TodoState {
-  todos: Todo[]
-  addTodo: (text: string) => void
-  toggleTodo: (id: number) => void
-  removeTodo: (id: number) => void
+  todos: Todo[];
+  addTodo: (text: string) => void;
+  toggleTodo: (id: number) => void;
+  removeTodo: (id: number) => void;
 }
 
 export const useTodoStore = create<TodoState>()(
@@ -25,7 +25,7 @@ export const useTodoStore = create<TodoState>()(
           }),
           false,
           'addTodo',
-        )
+        );
       },
       toggleTodo: (id: number) => {
         set(
@@ -36,7 +36,7 @@ export const useTodoStore = create<TodoState>()(
           }),
           false,
           'toggleTodo',
-        )
+        );
       },
       removeTodo: (id: number) => {
         set(
@@ -45,9 +45,9 @@ export const useTodoStore = create<TodoState>()(
           }),
           false,
           'removeTodo',
-        )
+        );
       },
     }),
     { name: 'TodoStore' },
   ),
-)
+);

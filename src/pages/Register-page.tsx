@@ -1,4 +1,4 @@
-import { Container, Heading } from '@chakra-ui/react'
+import { Container, Heading } from '@chakra-ui/react';
 
 export const RegisterPage = () => {
   return (
@@ -6,5 +6,5 @@ export const RegisterPage = () => {
       {/*для тестов и для скрин-ридеров прошу в случае необходимости не удалять элемент, а обернуть элемент в <VisuallyHidden>*/}
       <Heading>Register page</Heading>
     </Container>
-  )
-}
+  );
+};

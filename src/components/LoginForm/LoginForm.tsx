@@ -1,50 +1,51 @@
-import { useEffect, useState } from 'react'
-import { useLogin } from '~/hooks/useLogin'
-import { Alert, Input, Button, Box, ProgressCircle } from '@chakra-ui/react'
-import { normalizeErrorMessage } from '~/utils/helpers'
+import { useEffect, useState } from 'react';
+import { useLogin } from '~/hooks/useLogin';
+import { Alert, Input, Button, Box } from '@chakra-ui/react';
+import { normalizeErrorMessage } from '~/utils/helpers';
+import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle.tsx';
 
 export function LoginForm() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [fieldError, setFieldError] = useState({
     email: '',
     password: '',
-  })
+  });
 
-  const { login, loading, error } = useLogin()
+  const { login, loading, error } = useLogin();
 
   useEffect(() => {
-    if (error === null) return
-    const msg = error.toLowerCase()
-    const next = { email: '', password: '' }
-    if (msg.includes('email')) next.email = error
+    if (error === null) return;
+    const msg = error.toLowerCase();
+    const next = { email: '', password: '' };
+    if (msg.includes('email')) next.email = error;
     if (msg.includes('password')) {
-      next.password = normalizeErrorMessage(error)
+      next.password = normalizeErrorMessage(error);
     }
     if (!next.email && !next.password) {
-      next.email = next.password = error
+      next.email = next.password = error;
     }
-    setFieldError(next)
-  }, [error])
+    setFieldError(next);
+  }, [error]);
 
   const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value)
+    setEmail(e.target.value);
     if (fieldError.email) {
-      setFieldError((fieldError) => ({ ...fieldError, email: '' }))
+      setFieldError((fieldError) => ({ ...fieldError, email: '' }));
     }
-  }
+  };
 
   const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value)
+    setPassword(e.target.value);
     if (fieldError.password) {
-      setFieldError((fieldError) => ({ ...fieldError, password: '' }))
+      setFieldError((fieldError) => ({ ...fieldError, password: '' }));
     }
-  }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    void login(email, password)
-  }
+    e.preventDefault();
+    void login(email, password);
+  };
 
   return (
     <>
@@ -128,18 +129,7 @@ export function LoginForm() {
           Login
         </Button>
       </Box>
-      {loading ? (
-        <ProgressCircle.Root
-          value={null}
-          pos='absolute'
-          data-testid='progress-bar'
-        >
-          <ProgressCircle.Circle>
-            <ProgressCircle.Track />
-            <ProgressCircle.Range strokeLinecap='round' />
-          </ProgressCircle.Circle>
-        </ProgressCircle.Root>
-      ) : null}
+      {loading ? <ProgressCircleElement /> : null}
     </>
-  )
+  );
 }

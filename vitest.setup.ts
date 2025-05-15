@@ -1,16 +1,16 @@
-import '@testing-library/jest-dom'
-import { vi } from 'vitest'
-import { server } from '~/mocks/node'
+import '@testing-library/jest-dom';
+import { vi } from 'vitest';
+import { server } from '~/mocks/node';
 
 beforeAll(() => {
-  server.listen()
-})
+  server.listen();
+});
 afterEach(() => {
-  server.resetHandlers()
-})
+  server.resetHandlers();
+});
 afterAll(() => {
-  server.close()
-})
+  server.close();
+});
 
 Object.defineProperty(globalThis, 'matchMedia', {
   writable: true,
@@ -24,4 +24,4 @@ Object.defineProperty(globalThis, 'matchMedia', {
     removeEventListener: vi.fn(),
     dispatchEvent: vi.fn(),
   }),
-})
+});
