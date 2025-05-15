@@ -1,7 +1,6 @@
 import { screen } from '@testing-library/react';
 import { renderWithRouter } from '~router/tests/helpers/renderWithRouter';
 import '@testing-library/jest-dom';
-import { AppRoutes } from '~router/App-routes.tsx';
 import userEvent from '@testing-library/user-event';
 import { render } from '@testing-library/react';
 import { Provider } from '~components/ui/provider.tsx';
@@ -11,11 +10,10 @@ import Header from '~components/Header/Header.tsx';
 import { vi } from 'vitest';
 
 describe('Routing', () => {
-  it('redirects / to /main', async () => {
-    renderWithRouter(<AppRoutes />, {
-      route: '/',
+  it('should render main', async () => {
+    renderWithRouter('/', {
       isAuthenticated: false,
-      checking: false,
+      loading: false,
     });
 
     expect(
@@ -23,11 +21,10 @@ describe('Routing', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders 404 page for unknown route', async () => {
-    renderWithRouter(<AppRoutes />, {
-      route: '/unknown',
+  it('should render 404', async () => {
+    renderWithRouter('/unknown', {
       isAuthenticated: false,
-      checking: false,
+      loading: false,
     });
 
     expect(
@@ -35,11 +32,10 @@ describe('Routing', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders about page for "/about" route', async () => {
-    renderWithRouter(<AppRoutes />, {
-      route: '/about',
+  it('should render /about', async () => {
+    renderWithRouter('/about', {
       isAuthenticated: false,
-      checking: false,
+      loading: false,
     });
 
     expect(
@@ -47,11 +43,10 @@ describe('Routing', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders register page for "/register" route', async () => {
-    renderWithRouter(<AppRoutes />, {
-      route: '/register',
+  it('should render /register', async () => {
+    renderWithRouter('/register', {
       isAuthenticated: false,
-      checking: false,
+      loading: false,
     });
 
     expect(
@@ -63,11 +58,10 @@ describe('Routing', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders register page for "/login" route', async () => {
-    renderWithRouter(<AppRoutes />, {
-      route: '/login',
+  it('should render /login', async () => {
+    renderWithRouter('/login', {
       isAuthenticated: false,
-      checking: false,
+      loading: false,
     });
 
     expect(
@@ -75,14 +69,21 @@ describe('Routing', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders Logout link for logged-in user', async () => {
+  it('shuld render Logout link for logged-in user', async () => {
     const logoutMock = vi.fn();
     render(
       <Provider>
         <AuthContext.Provider
-          value={{ isAuthenticated: true, checking: false, logout: logoutMock }}
+          value={{
+            isAuthenticated: true,
+            loading: false,
+            logout: logoutMock,
+            login: vi.fn(),
+            error: null,
+            accessToken: '',
+          }}
         >
-          <MemoryRouter initialEntries={['/main']}>
+          <MemoryRouter initialEntries={['/']}>
             <Header />
           </MemoryRouter>
         </AuthContext.Provider>
