@@ -2,6 +2,13 @@ import { screen } from '@testing-library/react';
 import { renderWithRouter } from '~router/tests/helpers/renderWithRouter';
 import '@testing-library/jest-dom';
 import { AppRoutes } from '~router/App-routes.tsx';
+import userEvent from '@testing-library/user-event';
+import { render } from '@testing-library/react';
+import { Provider } from '~components/ui/provider.tsx';
+import { AuthContext } from '~/contexts/authContext';
+import { MemoryRouter } from 'react-router-dom';
+import Header from '~components/Header/Header.tsx';
+import { vi } from 'vitest';
 
 describe('Routing', () => {
   it('redirects / to /main', async () => {
@@ -62,5 +69,29 @@ describe('Routing', () => {
     expect(
       await screen.findByRole('heading', { level: 2, name: /login page/i }),
     ).toBeInTheDocument();
+  });
+
+  it('renders Logout link for logged-in user', async () => {
+    const logoutMock = vi.fn();
+    render(
+      <Provider>
+        <AuthContext.Provider
+          value={{ isAuthenticated: true, checking: false, logout: logoutMock }}
+        >
+          <MemoryRouter initialEntries={['/main']}>
+            <Header />
+          </MemoryRouter>
+        </AuthContext.Provider>
+      </Provider>,
+    );
+
+    const logoutLink = screen.getByRole('link', {
+      name: /logout/i,
+      hidden: true,
+    });
+    expect(logoutLink).toBeInTheDocument();
+
+    await userEvent.click(logoutLink);
+    expect(logoutMock).toHaveBeenCalled();
   });
 });

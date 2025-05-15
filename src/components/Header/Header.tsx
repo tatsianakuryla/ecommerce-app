@@ -80,9 +80,9 @@ function Header() {
         gap={{ base: '0.5rem', md: '1rem' }}
       >
         <List.Root {...listStyles}>
-          {[...navItems, ...loginRegisterItems].map(({ label, to }) => (
+          {itemsToRender.map(({ label, to, onClick }) => (
             <List.Item key={to}>
-              <NavItem label={label} to={to} />
+              <NavItem label={label} to={to} onClick={onClick} />
             </List.Item>
           ))}
         </List.Root>

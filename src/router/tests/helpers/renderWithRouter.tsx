@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { Provider } from '~components/ui/provider'; // ← your Chakra+theme wrapper
-import { AuthContext } from '~/contexts/authContext'; // make sure this matches your file
+import { Provider } from '~components/ui/provider';
+import { AuthContext } from '~/contexts/authContext';
 
 interface RenderOptions {
   route?: string;
@@ -21,7 +21,6 @@ export function renderWithRouter(
   return render(
     <Provider>
       {' '}
-      {/* ← now wrap your UI */}
       <AuthContext.Provider
         value={{ isAuthenticated, checking, logout: () => {} }}
       >
