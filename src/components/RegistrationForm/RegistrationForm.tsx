@@ -1,29 +1,9 @@
 import { useState } from 'react';
 import { Form } from '~components/Form/Form';
-import { NavLink } from 'react-router-dom';
-import { Box } from '@chakra-ui/react';
-import { Link as ChakraLink } from '@chakra-ui/react';
+import RedirectionLink from '~components/RedirectionLink/RedirectionLink.tsx';
 import { FiLogIn } from 'react-icons/fi';
 
 export function RegistrationForm() {
-  const loginLinkStyle = {
-    textDecoration: 'none',
-    _hover: {
-      textDecoration: 'none',
-      boxShadow: '0 0 0 3px rgba(56, 178, 172, 0.6)',
-    },
-    _focus: {
-      outline: 'none',
-      boxShadow: '0 0 0 3px rgba(56, 178, 172, 0.6)',
-    },
-    _active: {
-      transform: 'scale(0.98)',
-    },
-    transition: 'all 0.2s ease',
-    display: 'inline-flex',
-    alignItems: 'center',
-  };
-
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -108,32 +88,12 @@ export function RegistrationForm() {
         onSubmit={handleSubmit}
         submitLabel='Register'
       />
-      <Box display='flex' justifyContent='center' alignItems='center'>
-        <ChakraLink asChild {...loginLinkStyle}>
-          <NavLink to='/login'>
-            <Box
-              as='span'
-              display='flex'
-              alignItems='center'
-              gap='0.5rem'
-              fontSize='md'
-            >
-              Already have an account?
-              <Box
-                as='span'
-                color='teal.600'
-                fontWeight='semibold'
-                display='flex'
-                alignItems='center'
-                gap='0.25rem'
-              >
-                Login
-                <FiLogIn />
-              </Box>
-            </Box>
-          </NavLink>
-        </ChakraLink>
-      </Box>
+      <RedirectionLink
+        label='Already have an account?'
+        to='/login'
+        icon={<FiLogIn />}
+        link='Login'
+      />
     </>
   );
 }

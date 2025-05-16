@@ -3,6 +3,9 @@ import { useLogin } from '~/hooks/useLogin';
 import { Form } from '~components/Form/Form.tsx';
 import { normalizeErrorMessage } from '~/utils/helpers';
 import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle.tsx';
+import RedirectionLink from '~components/RedirectionLink/RedirectionLink.tsx';
+import { FiUserPlus } from 'react-icons/fi';
+import { Flex } from '@chakra-ui/react';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
@@ -58,14 +61,25 @@ export function LoginForm() {
   ];
 
   return (
-    <>
+    <Flex
+      flexDirection='column'
+      alignItems='center'
+      justifyContent='center'
+      py='1rem'
+    >
       <Form
         fields={fields}
         onSubmit={handleSubmit}
         loading={loading}
         submitLabel='Login'
       />
+      <RedirectionLink
+        label='Don`t have an account?'
+        to='/register'
+        icon={<FiUserPlus />}
+        link='Register'
+      />
       {loading && <ProgressCircleElement />}
-    </>
+    </Flex>
   );
 }

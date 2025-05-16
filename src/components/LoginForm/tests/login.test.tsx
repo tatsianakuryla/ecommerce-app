@@ -11,6 +11,9 @@ import {
 import { useLogin } from '~/hooks/useLogin';
 import { Provider } from '~/components/ui/provider';
 import { MemoryRouter } from 'react-router-dom';
+import { AuthProvider } from '~/contexts/authProvider.tsx';
+import { AppRoutes } from '~router/App-routes.tsx';
+import userEvent from '@testing-library/user-event';
 
 const renderComponent = (Component: React.FC) => {
   render(
@@ -151,5 +154,30 @@ describe('Login UI tests', () => {
       expect(screen.queryByTestId('error-alert-email')).toBeInTheDocument();
       expect(localStorage.getItem('access_token')).toBeNull();
     });
+  });
+
+  it('navigates to register page after clicking register link', async () => {
+    render(
+      <MemoryRouter initialEntries={['/login']}>
+        <Provider>
+          <AuthProvider>
+            <AppRoutes />
+          </AuthProvider>
+        </Provider>
+      </MemoryRouter>,
+    );
+    expect(
+      await screen.findByRole('heading', { name: /login page/i }),
+    ).toBeInTheDocument();
+    const registerLink = screen.getByRole('link', {
+      name: /Don`t have an account\?.*register/i,
+    });
+    await userEvent.click(registerLink);
+    expect(
+      await screen.findByRole('heading', {
+        name: /register page/i,
+        hidden: true,
+      }),
+    ).toBeInTheDocument();
   });
 });
