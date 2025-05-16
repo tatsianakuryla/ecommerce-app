@@ -144,11 +144,11 @@ describe('Login UI tests', () => {
     fireEvent.click(loginButton);
 
     expect(screen.queryByTestId('progress-bar')).toBeInTheDocument();
-    expect(await screen.findByTestId('error-alert')).toBeInTheDocument();
+    expect(await screen.findByTestId('error-alert-email')).toBeInTheDocument();
 
     await waitFor(() => {
       expect(screen.queryByTestId('progress-bar')).not.toBeInTheDocument();
-      expect(screen.queryByTestId('error-alert')).toBeInTheDocument();
+      expect(screen.queryByTestId('error-alert-email')).toBeInTheDocument();
       expect(localStorage.getItem('access_token')).toBeNull();
     });
   });

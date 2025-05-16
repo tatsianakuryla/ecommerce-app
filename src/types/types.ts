@@ -42,3 +42,19 @@ export interface MenuItem {
   to: string;
   onClick?: () => void;
 }
+
+export type FormField = {
+  name: string;
+  type?: string;
+  value: string;
+  placeholder: string;
+  onChange: (value: string) => void;
+  error?: string;
+};
+
+export type FormProps = {
+  fields: FormField[];
+  onSubmit: (e: React.FormEvent) => void;
+  loading?: boolean;
+  submitLabel?: string;
+};
