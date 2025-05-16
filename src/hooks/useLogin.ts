@@ -5,11 +5,13 @@ import {
 } from '~/utils/typeguards';
 import { createUserAuthRequest } from '~api/requests';
 import { useMakeRequest } from './useMakeRequest';
+import { useNavigate } from 'react-router-dom';
 
 export function useLogin() {
   const [error, setError] = useState<string | null>(null);
   const [authResponseBody, setAuthResponseBody] = useState<unknown>(null);
   const { makeRequest, loading } = useMakeRequest();
+  const navigate = useNavigate();
 
   const login = async (email: string, password: string) => {
     try {
@@ -19,6 +21,7 @@ export function useLogin() {
       if (isUserAuthResponseBody(responseBody)) {
         setAuthResponseBody(responseBody);
         localStorage.setItem('accessToken', responseBody.access_token);
+        void navigate('/main');
       }
     } catch (error: unknown) {
       if (isAuthErrorResponseBody(error)) {
