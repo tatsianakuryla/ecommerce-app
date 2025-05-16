@@ -10,13 +10,17 @@ import {
 } from '@testing-library/react';
 import { useLogin } from '~/hooks/useLogin';
 import { Provider } from '~/components/ui/provider';
+import { MemoryRouter } from 'react-router-dom';
 
 const renderComponent = (Component: React.FC) => {
   render(
-    <Provider>
-      <Component />
-    </Provider>,
+    <MemoryRouter>
+      <Provider>
+        <Component />
+      </Provider>
+    </MemoryRouter>,
   );
+
   const emailInput = screen.getByPlaceholderText('Email');
   const passwordInput = screen.getByPlaceholderText('Password');
 
@@ -26,9 +30,13 @@ const renderComponent = (Component: React.FC) => {
   };
 };
 
+const wrapper = ({ children }: { children: React.ReactNode }) => (
+  <MemoryRouter>{children}</MemoryRouter>
+);
+
 describe('Login API tests', () => {
   it('should log in with correct credentials', async () => {
-    const { result } = renderHook(() => useLogin());
+    const { result } = renderHook(() => useLogin(), { wrapper });
 
     await act(async () => {
       await result.current.login(
@@ -60,7 +68,7 @@ describe('Login API tests', () => {
       password: fixture.correctPassword,
     },
   ])('should not log in with $desc', async ({ username, password }) => {
-    const { result } = renderHook(() => useLogin());
+    const { result } = renderHook(() => useLogin(), { wrapper });
 
     await act(async () => {
       await result.current.login(username, password);
@@ -73,7 +81,7 @@ describe('Login API tests', () => {
   });
 
   it('should not log in with empty password', async () => {
-    const { result } = renderHook(() => useLogin());
+    const { result } = renderHook(() => useLogin(), { wrapper });
 
     await act(async () => {
       await result.current.login(fixture.correctUsername, '');
@@ -86,7 +94,7 @@ describe('Login API tests', () => {
   });
 
   it('should not log in with empty email', async () => {
-    const { result } = renderHook(() => useLogin());
+    const { result } = renderHook(() => useLogin(), { wrapper });
 
     await act(async () => {
       await result.current.login('', fixture.correctPassword);
