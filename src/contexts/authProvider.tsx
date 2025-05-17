@@ -3,6 +3,7 @@ import { useMakeRequest } from '~/hooks/useMakeRequest';
 import { AuthContext } from './authContext';
 import { authenticateUser, generateAnonymousToken } from '~/api/requests';
 import { isUserAuthResponseBody } from '~/utils/typeguards';
+import { ProgressCircleElement } from '~/components/Progress-circle/Progress-circle';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -45,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     void fetchAnonymousToken();
   }, [makeRequest]);
 
-  if (loading) return null;
+  if (loading) return <ProgressCircleElement />;
 
   return (
     <AuthContext.Provider
