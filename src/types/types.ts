@@ -30,3 +30,21 @@ export interface AuthErrorResponseBody {
   message: string
   errors: ErrorsArray
 }
+
+export interface EmailInputProps {
+  value: string
+  onChange: (value: string) => void
+  onBlur: () => void
+  error: string
+  isTouched: boolean
+  hasError: boolean
+}
+
+export interface PasswordInputProps {
+  value: string
+  onChange: (value: string) => void
+  onBlur: () => void
+  error: string
+  isTouched: boolean | undefined
+  hasError: boolean
+}

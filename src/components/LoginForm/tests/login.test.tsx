@@ -148,10 +148,6 @@ describe('Login UI tests', () => {
 
 describe('LoginForm validation logic', () => {
   const { result } = renderHook(() => {
-    // const emailTimerRef = useRef<NodeJS.Timeout | null>(null);
-    // const passwordTimerRef = useRef<NodeJS.Timeout | null>(null);
-
-    // Вызываем функции валидации напрямую
     const validateEmail = (value: string) => {
       const trimmedValue = value.trim()
       const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
