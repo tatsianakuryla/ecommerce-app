@@ -1,4 +1,4 @@
-import { AuthErrorResponseBody, UserAuthResponseBody } from '~types/types'
+import { AuthErrorResponseBody, UserAuthResponseBody } from '~types/types';
 
 export function isUserAuthResponseBody(
   data: unknown,
@@ -11,7 +11,7 @@ export function isUserAuthResponseBody(
     'token_type' in data &&
     'scope' in data &&
     'refresh_token' in data
-  )
+  );
 }
 
 export function isAuthErrorResponseBody(
@@ -26,5 +26,5 @@ export function isAuthErrorResponseBody(
     'message' in data &&
     'errors' in data &&
     Array.isArray(data.errors)
-  )
+  );
 }

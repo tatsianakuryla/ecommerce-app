@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { useLogin } from '~/hooks/useLogin'
+
 import {
   Alert,
   Input,
@@ -7,9 +8,11 @@ import {
   Box,
   ProgressCircle,
   Stack,
-  Group,
-} from '@chakra-ui/react'
-import { normalizeErrorMessage } from '~/utils/helpers'
+  Group
+} from "@chakra-ui/react"
+
+import { normalizeErrorMessage } from '~/utils/helpers';
+import { ProgressCircleElement } from '../Progress-circle/Progress-circle';
 
 export function LoginForm() {
   const [email, setEmail] = useState('')
@@ -213,7 +216,8 @@ export function LoginForm() {
               }}
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
-              {showPassword ? '🗨️' : '👁️'}
+           
+        {showPassword ? 'Hide' : 'Show'} 
             </Button>
           </Group>
         </Stack>
@@ -259,6 +263,7 @@ export function LoginForm() {
           </ProgressCircle.Circle>
         </ProgressCircle.Root>
       )}
+        {loading ? <ProgressCircleElement /> : null}
     </>
   )
 }
