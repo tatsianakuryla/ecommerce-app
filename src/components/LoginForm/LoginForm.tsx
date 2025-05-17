@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLogin } from '~/hooks/useLogin';
+import { useAuthContext } from '~/hooks/useAuthContext';
 import { Form } from '~components/Form/Form.tsx';
 import { normalizeErrorMessage } from '~/utils/helpers';
 import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle.tsx';
@@ -12,7 +12,7 @@ export function LoginForm() {
   const [password, setPassword] = useState('');
   const [fieldError, setFieldError] = useState({ email: '', password: '' });
 
-  const { login, loading, error } = useLogin();
+  const { login, error, loading } = useAuthContext();
 
   useEffect(() => {
     if (error === null) return;

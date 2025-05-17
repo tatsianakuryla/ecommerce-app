@@ -1,21 +1,10 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter } from 'react-router-dom';
-import { AppRoutes } from '~router/App-routes';
-import { Provider } from '~components/ui/provider';
-import { AuthProvider } from '~/contexts/authProvider.tsx';
+import { renderWithRouter } from '~/router/tests/helpers/renderWithRouter';
 
 describe('Redirection to Login page from Registration page', () => {
   it('navigates to login page after clicking login link', async () => {
-    render(
-      <MemoryRouter initialEntries={['/register']}>
-        <Provider>
-          <AuthProvider>
-            <AppRoutes />
-          </AuthProvider>
-        </Provider>
-      </MemoryRouter>,
-    );
+    renderWithRouter('/register');
     expect(
       await screen.findByRole('heading', { name: /register page/i }),
     ).toBeInTheDocument();

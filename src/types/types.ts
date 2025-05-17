@@ -4,6 +4,7 @@ export enum PermissionLevel {
   FULL = 'all',
   API = 'api',
   USER = 'user',
+  GEST = 'guest',
 }
 
 export type Permissions = typeof permissions;
@@ -32,9 +33,12 @@ export interface AuthErrorResponseBody {
 }
 
 export interface AuthContextValue {
-  isAuthenticated: boolean;
   logout: () => void;
-  checking: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  error: string | null;
+  accessToken: string | null;
+  loading: boolean;
+  isAuthenticated: boolean;
 }
 
 export interface MenuItem {
@@ -58,3 +62,95 @@ export type FormProps = {
   loading?: boolean;
   submitLabel?: string;
 };
+
+export interface LocalizedString {
+  [locale: string]: string;
+}
+
+export interface Reference {
+  typeId: string;
+  id: string;
+}
+
+export interface Price {
+  id: string;
+  value: {
+    type: string;
+    currencyCode: string;
+    centAmount: number;
+    fractionDigits: number;
+  };
+  key: string;
+  country: string;
+  channel?: Reference;
+}
+
+export interface Image {
+  url: string;
+  dimensions: {
+    w: number;
+    h: number;
+  };
+}
+
+export interface Attribute {
+  name: string;
+  value: LocalizedString | string;
+}
+
+export interface AvailabilityChannel {
+  isOnStock: boolean;
+  availableQuantity: number;
+  version: number;
+  id: string;
+}
+
+export interface Availability {
+  isOnStock: boolean;
+  availableQuantity: number;
+  version: number;
+  id: string;
+  channels: {
+    [channelId: string]: AvailabilityChannel;
+  };
+}
+
+export interface MasterVariant {
+  id: number;
+  sku: string;
+  key: string;
+  prices: Price[];
+  images: Image[];
+  attributes: Attribute[];
+  assets: unknown[];
+  availability: Availability;
+}
+
+export interface Product {
+  id: string;
+  version: number;
+  productType: Reference;
+  name: LocalizedString;
+  description: LocalizedString;
+  categories: Reference[];
+  categoryOrderHints: Record<string, string>;
+  slug: LocalizedString;
+  masterVariant: MasterVariant;
+  variants: unknown[];
+  searchKeywords: Record<string, unknown>;
+  attributes: Attribute[];
+  hasStagedChanges: boolean;
+  published: boolean;
+  key: string;
+  taxCategory: Reference;
+  createdAt: string;
+  lastModifiedAt: string;
+}
+
+export interface ProductsResponseBody {
+  limit: number;
+  offset: number;
+  count: number;
+  total: number;
+  results: Product[];
+}

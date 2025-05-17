@@ -11,12 +11,12 @@ import logo from '../../assets/images/logo-without-bg.png';
 import Hamburger from 'hamburger-react';
 import { useState } from 'react';
 import NavItem from '~components/Header/Nav-item.tsx';
-import { useAuth } from '~hooks/useAuth.ts';
+import { useAuthContext } from '~/hooks/useAuthContext';
 import { MenuItem } from '~types/types';
 
 const navItems: MenuItem[] = [
   { label: 'About', to: '/about' },
-  { label: 'Main', to: '/main' },
+  { label: 'Main', to: '/' },
 ];
 
 const loginRegisterItems: MenuItem[] = [
@@ -25,7 +25,7 @@ const loginRegisterItems: MenuItem[] = [
 ];
 
 function Header() {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout } = useAuthContext();
 
   const guestItems = [...navItems, ...loginRegisterItems];
   const authItems = [

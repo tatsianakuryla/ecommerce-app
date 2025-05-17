@@ -1,36 +1,56 @@
-import { useEffect, useState, ReactNode } from 'react';
+import { useState, ReactNode, useEffect } from 'react';
 import { useMakeRequest } from '~/hooks/useMakeRequest';
-import { createFetchMyProfileRequest } from '~api/createFetchMyProfileRequest.ts';
 import { AuthContext } from './authContext';
+import { authenticateUser, generateAnonymousToken } from '~/api/requests';
+import { isUserAuthResponseBody } from '~/utils/typeguards';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isAuthenticated, setAuthenticated] = useState(false);
-  const [checking, setChecking] = useState(true);
-  const { makeRequest } = useMakeRequest();
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { makeRequest, error, loading } = useMakeRequest();
 
   const logout = () => {
-    localStorage.removeItem('accessToken');
-    setAuthenticated(false);
+    setAccessToken(null);
+    setIsAuthenticated(false);
+  };
+
+  const login = async (email: string, password: string) => {
+    try {
+      const responseBody = await makeRequest(
+        authenticateUser(email, password),
+        isUserAuthResponseBody,
+      );
+      if (responseBody) {
+        setAccessToken(responseBody.access_token);
+        setIsAuthenticated(true);
+      }
+    } catch {
+      throw new Error('Failed to login');
+    }
   };
 
   useEffect(() => {
-    async function initAuth() {
+    async function fetchAnonymousToken() {
       try {
-        await makeRequest(createFetchMyProfileRequest());
-        setAuthenticated(true);
+        const responseBody = await makeRequest(
+          generateAnonymousToken(),
+          isUserAuthResponseBody,
+        );
+        if (responseBody) setAccessToken(responseBody.access_token);
       } catch {
-        logout();
-      } finally {
-        setChecking(false);
+        throw new Error('Failed to fetch anonymous token');
       }
     }
-    void initAuth();
+
+    void fetchAnonymousToken();
   }, [makeRequest]);
 
-  if (checking) return null;
+  if (loading) return null;
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, checking, logout }}>
+    <AuthContext.Provider
+      value={{ logout, login, error, accessToken, loading, isAuthenticated }}
+    >
       {children}
     </AuthContext.Provider>
   );
