@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useLogin } from '~/hooks/useLogin';
-import { Alert, Input, Button, Box } from '@chakra-ui/react';
+import { Form } from '~components/Form/Form.tsx';
 import { normalizeErrorMessage } from '~/utils/helpers';
 import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle.tsx';
+import RedirectionLink from '~components/RedirectionLink/RedirectionLink.tsx';
+import { FiUserPlus } from 'react-icons/fi';
+import { Flex } from '@chakra-ui/react';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [fieldError, setFieldError] = useState({
-    email: '',
-    password: '',
-  });
+  const [fieldError, setFieldError] = useState({ email: '', password: '' });
 
   const { login, loading, error } = useLogin();
 
@@ -19,117 +19,67 @@ export function LoginForm() {
     const msg = error.toLowerCase();
     const next = { email: '', password: '' };
     if (msg.includes('email')) next.email = error;
-    if (msg.includes('password')) {
-      next.password = normalizeErrorMessage(error);
-    }
+    if (msg.includes('password')) next.password = normalizeErrorMessage(error);
     if (!next.email && !next.password) {
       next.email = next.password = error;
     }
     setFieldError(next);
   }, [error]);
 
-  const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-    if (fieldError.email) {
-      setFieldError((fieldError) => ({ ...fieldError, email: '' }));
-    }
-  };
-
-  const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-    if (fieldError.password) {
-      setFieldError((fieldError) => ({ ...fieldError, password: '' }));
-    }
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     void login(email, password);
   };
 
-  return (
-    <>
-      <Box
-        as='form'
-        pos='relative'
-        onSubmit={handleSubmit}
-        style={
-          loading
-            ? {
-                maxWidth: 320,
-                margin: '2rem auto',
-                filter: 'blur(1px)',
-              }
-            : { maxWidth: 320, margin: '2rem auto' }
+  const fields = [
+    {
+      name: 'email',
+      type: 'text',
+      value: email,
+      placeholder: 'Email',
+      onChange: (value: string) => {
+        setEmail(value);
+        if (fieldError.email) {
+          setFieldError((err) => ({ ...err, email: '' }));
         }
-      >
-        <Input
-          value={email}
-          onChange={onEmailChange}
-          placeholder='Email'
-          style={{
-            width: '100%',
-            padding: '0.5rem',
-            borderRadius: 4,
-            border: '1px solid',
-            borderColor: fieldError.email ? 'red' : '#cbd5e0',
-            marginBottom: fieldError.email ? 2 : 12,
-          }}
-        />
-        {fieldError.email && (
-          <Alert.Root
-            status='error'
-            variant='subtle'
-            fontSize='sm'
-            mb={4}
-            px={2}
-          >
-            <Alert.Indicator />
-            <Alert.Title>{fieldError.email}</Alert.Title>
-          </Alert.Root>
-        )}
+      },
+      error: fieldError.email,
+    },
+    {
+      name: 'password',
+      type: 'password',
+      value: password,
+      placeholder: 'Password',
+      onChange: (value: string) => {
+        setPassword(value);
+        if (fieldError.password) {
+          setFieldError((err) => ({ ...err, password: '' }));
+        }
+      },
+      error: fieldError.password,
+    },
+  ];
 
-        <Input
-          type='password'
-          value={password}
-          onChange={onPasswordChange}
-          placeholder='Password'
-          style={{
-            width: '100%',
-            padding: '0.5rem',
-            borderRadius: 4,
-            border: '1px solid',
-            borderColor: fieldError.password ? 'red' : '#cbd5e0',
-            marginBottom: fieldError.password ? 2 : 12,
-          }}
-        />
-        {fieldError.password && (
-          <Alert.Root
-            status='error'
-            variant='subtle'
-            fontSize='sm'
-            mb={4}
-            px={2}
-            data-testid='error-alert'
-          >
-            <Alert.Indicator />
-            <Alert.Title>{fieldError.password}</Alert.Title>
-          </Alert.Root>
-        )}
-
-        <Button
-          type='submit'
-          disabled={loading}
-          style={{
-            width: '100%',
-            padding: '0.5rem',
-          }}
-          data-testid='login-button'
-        >
-          Login
-        </Button>
-      </Box>
-      {loading ? <ProgressCircleElement /> : null}
-    </>
+  return (
+    <Flex
+      flexDirection='column'
+      alignItems='center'
+      justifyContent='center'
+      py='1rem'
+    >
+      <Form
+        fields={fields}
+        onSubmit={handleSubmit}
+        loading={loading}
+        submitLabel='Login'
+      />
+      <RedirectionLink
+        label='Don`t have an account?'
+        to='/register'
+        icon={<FiUserPlus />}
+        link='Register'
+      />
+      {loading && <ProgressCircleElement />}
+    </Flex>
   );
 }

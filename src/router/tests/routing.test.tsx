@@ -55,7 +55,11 @@ describe('Routing', () => {
     });
 
     expect(
-      await screen.findByRole('heading', { level: 2, name: /register page/i }),
+      await screen.findByRole('heading', {
+        level: 2,
+        name: /register page/i,
+        hidden: true,
+      }),
     ).toBeInTheDocument();
   });
 

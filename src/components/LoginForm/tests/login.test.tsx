@@ -10,13 +10,20 @@ import {
 } from '@testing-library/react';
 import { useLogin } from '~/hooks/useLogin';
 import { Provider } from '~/components/ui/provider';
+import { MemoryRouter } from 'react-router-dom';
+import { AuthProvider } from '~/contexts/authProvider.tsx';
+import { AppRoutes } from '~router/App-routes.tsx';
+import userEvent from '@testing-library/user-event';
 
 const renderComponent = (Component: React.FC) => {
   render(
-    <Provider>
-      <Component />
-    </Provider>,
+    <MemoryRouter>
+      <Provider>
+        <Component />
+      </Provider>
+    </MemoryRouter>,
   );
+
   const emailInput = screen.getByPlaceholderText('Email');
   const passwordInput = screen.getByPlaceholderText('Password');
 
@@ -26,9 +33,13 @@ const renderComponent = (Component: React.FC) => {
   };
 };
 
+const wrapper = ({ children }: { children: React.ReactNode }) => (
+  <MemoryRouter>{children}</MemoryRouter>
+);
+
 describe('Login API tests', () => {
   it('should log in with correct credentials', async () => {
-    const { result } = renderHook(() => useLogin());
+    const { result } = renderHook(() => useLogin(), { wrapper });
 
     await act(async () => {
       await result.current.login(
@@ -60,7 +71,7 @@ describe('Login API tests', () => {
       password: fixture.correctPassword,
     },
   ])('should not log in with $desc', async ({ username, password }) => {
-    const { result } = renderHook(() => useLogin());
+    const { result } = renderHook(() => useLogin(), { wrapper });
 
     await act(async () => {
       await result.current.login(username, password);
@@ -73,7 +84,7 @@ describe('Login API tests', () => {
   });
 
   it('should not log in with empty password', async () => {
-    const { result } = renderHook(() => useLogin());
+    const { result } = renderHook(() => useLogin(), { wrapper });
 
     await act(async () => {
       await result.current.login(fixture.correctUsername, '');
@@ -86,7 +97,7 @@ describe('Login API tests', () => {
   });
 
   it('should not log in with empty email', async () => {
-    const { result } = renderHook(() => useLogin());
+    const { result } = renderHook(() => useLogin(), { wrapper });
 
     await act(async () => {
       await result.current.login('', fixture.correctPassword);
@@ -136,12 +147,37 @@ describe('Login UI tests', () => {
     fireEvent.click(loginButton);
 
     expect(screen.queryByTestId('progress-bar')).toBeInTheDocument();
-    expect(await screen.findByTestId('error-alert')).toBeInTheDocument();
+    expect(await screen.findByTestId('error-alert-email')).toBeInTheDocument();
 
     await waitFor(() => {
       expect(screen.queryByTestId('progress-bar')).not.toBeInTheDocument();
-      expect(screen.queryByTestId('error-alert')).toBeInTheDocument();
+      expect(screen.queryByTestId('error-alert-email')).toBeInTheDocument();
       expect(localStorage.getItem('access_token')).toBeNull();
     });
+  });
+
+  it('navigates to register page after clicking register link', async () => {
+    render(
+      <MemoryRouter initialEntries={['/login']}>
+        <Provider>
+          <AuthProvider>
+            <AppRoutes />
+          </AuthProvider>
+        </Provider>
+      </MemoryRouter>,
+    );
+    expect(
+      await screen.findByRole('heading', { name: /login page/i }),
+    ).toBeInTheDocument();
+    const registerLink = screen.getByRole('link', {
+      name: /Don`t have an account\?.*register/i,
+    });
+    await userEvent.click(registerLink);
+    expect(
+      await screen.findByRole('heading', {
+        name: /register page/i,
+        hidden: true,
+      }),
+    ).toBeInTheDocument();
   });
 });
