@@ -147,7 +147,7 @@ export interface Product {
   lastModifiedAt: string;
 }
 
-export interface ProductsResponse {
+export interface ProductsResponseBody {
   limit: number;
   offset: number;
   count: number;

@@ -148,15 +148,7 @@ describe('Login UI tests', () => {
   });
 
   it('navigates to register page after clicking register link', async () => {
-    render(
-      <MemoryRouter initialEntries={['/login']}>
-        <Provider>
-          <AuthProvider>
-            <AppRoutes />
-          </AuthProvider>
-        </Provider>
-      </MemoryRouter>,
-    );
+    renderWithRouter('/login');
     expect(
       await screen.findByRole('heading', { name: /login page/i }),
     ).toBeInTheDocument();

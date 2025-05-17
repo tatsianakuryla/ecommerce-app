@@ -1,6 +1,6 @@
 import {
   AuthErrorResponseBody,
-  ProductsResponse,
+  ProductsResponseBody,
   UserAuthResponseBody,
 } from '~types/types';
 
@@ -35,7 +35,7 @@ export function isAuthErrorResponseBody(
 
 export function isProductsResponceBody(
   data: unknown,
-): data is ProductsResponse {
+): data is ProductsResponseBody {
   if (typeof data !== 'object' || data === null) {
     return false;
   }

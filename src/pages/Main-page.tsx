@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { getProducts } from '~/api/requests';
 import { useAuthContext } from '~/hooks/useAuthContext';
 import { useMakeRequest } from '~/hooks/useMakeRequest';
-import { Product } from '~/types/types';
+import { Product, ProductsResponseBody } from '~/types/types';
 import { isProductsResponceBody } from '~/utils/typeguards';
 
 export const MainPage = () => {
@@ -18,11 +18,12 @@ export const MainPage = () => {
 
     const startFetching = async () => {
       try {
-        const products = await makeRequest(
+        const products = await makeRequest<ProductsResponseBody>(
           getProducts(accessToken),
           isProductsResponceBody,
         );
-        if (!ignore && products) {
+
+        if (!ignore && products?.results) {
           setProducts(products.results);
         }
       } catch (error) {
@@ -31,6 +32,7 @@ export const MainPage = () => {
     };
 
     void startFetching();
+
     return () => {
       ignore = true;
     };
