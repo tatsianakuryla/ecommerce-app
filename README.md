@@ -23,7 +23,7 @@ Users can explore a wide selection of products 📚👗👟, access detailed des
 
 ## 🚀 Demo
 
-[Click here to view the live demo](https://jolly-basbousa-43243d.netlify.app/main)
+[Click here to view the live demo](https://astounding-truffle-8b1298.netlify.app)
 
 ---
 

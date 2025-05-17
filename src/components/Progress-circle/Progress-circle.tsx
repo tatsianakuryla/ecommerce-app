@@ -1,4 +1,4 @@
-import { ProgressCircle } from '@chakra-ui/react'
+import { ProgressCircle } from '@chakra-ui/react';
 
 export const ProgressCircleElement = () => {
   return (
@@ -8,5 +8,5 @@ export const ProgressCircleElement = () => {
         <ProgressCircle.Range strokeLinecap='round' />
       </ProgressCircle.Circle>
     </ProgressCircle.Root>
-  )
-}
+  );
+};

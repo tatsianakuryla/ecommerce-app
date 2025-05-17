@@ -1,4 +1,6 @@
-import { permissions } from '~constants/constants'
+import { Input } from '@chakra-ui/react';
+import { ComponentProps } from 'react';
+import { permissions } from '~constants/constants';
 
 export enum PermissionLevel {
   FULL = 'all',
@@ -6,45 +8,51 @@ export enum PermissionLevel {
   USER = 'user',
 }
 
-export type Permissions = typeof permissions
+export type Permissions = typeof permissions;
 
 export interface UserAuthResponseBody {
-  access_token: string
-  expires_in: number
-  token_type: string
-  scope: string
-  refresh_token: string
+  access_token: string;
+  expires_in: number;
+  token_type: string;
+  scope: string;
+  refresh_token: string;
 }
 
 interface Error {
-  code: string
-  message: string
+  code: string;
+  message: string;
 }
 
-type ErrorsArray = Error[]
+type ErrorsArray = Error[];
 
 export interface AuthErrorResponseBody {
-  statusCode: number
-  error: string
-  error_description: string
-  message: string
-  errors: ErrorsArray
+  statusCode: number;
+  error: string;
+  error_description: string;
+  message: string;
+  errors: ErrorsArray;
 }
 
-export interface EmailInputProps {
-  value: string
-  onChange: (value: string) => void
-  onBlur: () => void
-  error: string
-  isTouched: boolean
-  hasError: boolean
+export interface AuthContextValue {
+  isAuthenticated: boolean;
+  logout: () => void;
+  checking: boolean;
 }
 
-export interface PasswordInputProps {
-  value: string
-  onChange: (value: string) => void
-  onBlur: () => void
-  error: string
-  isTouched: boolean | undefined
-  hasError: boolean
+export interface MenuItem {
+  label: string;
+  to: string;
+  onClick?: () => void;
 }
+
+export type PasswordInputProps = ComponentProps<typeof Input> & {
+  error?: string;
+  isTouched: boolean | undefined;
+  hasError: boolean;
+};
+
+export type EmailInputProps = ComponentProps<typeof Input> & {
+  error?: string;
+  isTouched: boolean | undefined;
+  hasError: boolean;
+};
