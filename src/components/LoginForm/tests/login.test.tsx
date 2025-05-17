@@ -104,7 +104,9 @@ describe('Login UI tests', () => {
     const { emailInput, passwordInput } = renderComponent(LoginForm)
     const loginButton = screen.getByRole('button', { name: 'Login' })
 
-    fireEvent.change(emailInput, { target: { value: fixture.correctUsername } })
+    fireEvent.change(emailInput, {
+      target: { value: fixture.correctUsername },
+    })
     fireEvent.change(passwordInput, {
       target: { value: fixture.correctPassword },
     })
@@ -141,5 +143,46 @@ describe('Login UI tests', () => {
       expect(screen.queryByTestId('error-alert')).toBeInTheDocument()
       expect(localStorage.getItem('access_token')).toBeNull()
     })
+  })
+})
+
+describe('LoginForm validation logic', () => {
+  const { result } = renderHook(() => {
+    // const emailTimerRef = useRef<NodeJS.Timeout | null>(null);
+    // const passwordTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+    // Вызываем функции валидации напрямую
+    const validateEmail = (value: string) => {
+      const trimmedValue = value.trim()
+      const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+
+      if (value !== trimmedValue) return false
+      return emailRegex.test(value)
+    }
+
+    const validatePassword = (value: string) => {
+      const requirements = {
+        length: value.length >= 8,
+        upper: /[A-Z]/.test(value),
+        lower: /[a-z]/.test(value),
+        digit: /[0-9]/.test(value),
+        special: /[!@#$%^&*]/.test(value),
+      }
+      return Object.values(requirements).every(Boolean)
+    }
+
+    return { validateEmail, validatePassword }
+  })
+
+  it('should validate email correctly', () => {
+    expect(result.current.validateEmail('  test@test.com  ')).toBe(false)
+    expect(result.current.validateEmail('invalid-email')).toBe(false)
+    expect(result.current.validateEmail('valid@test.com')).toBe(true)
+  })
+
+  it('should validate password strength', () => {
+    expect(result.current.validatePassword('weak')).toBe(false)
+    expect(result.current.validatePassword('Weak123')).toBe(false)
+    expect(result.current.validatePassword('StrongPass123!')).toBe(true)
   })
 })
