@@ -6,14 +6,16 @@ export const BASIC_AUTH_HEADER =
 
 // Permissions
 const GUEST_PERMISSIONS = {
-  VIEW_PUBLISHED_PRODUCTS: 'view_published_products',
+  VIEW_PRODUCTS: 'view_products',
   VIEW_CATEGORIES: 'view_categories',
+  MANAGE_CUSTOMERS: 'manage_customers',
+  VIEW_MESSAGES: 'view_messages',
 } as const;
 
 const USER_PERMISSIONS = {
+  ...GUEST_PERMISSIONS,
   MANAGE_MY_ORDERS: 'manage_my_orders',
   MANAGE_MY_PROFILE: 'manage_my_profile',
-  VIEW_PRODUCTS: 'view_products',
 } as const;
 
 const API_PERMISSIONS = {
