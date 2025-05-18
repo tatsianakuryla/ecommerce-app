@@ -7,12 +7,11 @@ import {
   generateAnonymousToken,
 } from '~/api/requests';
 import { isAuthResponse, isCustomerResponse } from '~/utils/typeguards';
-import { ProgressCircleElement } from '~/components/Progress-circle/Progress-circle';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const { makeRequest, error, loading } = useMakeRequest();
+  const { makeRequest, error, loading, clearErrors } = useMakeRequest();
 
   const logout = () => {
     setAccessToken(null);
@@ -84,8 +83,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     void fetchAnonymousToken();
   }, [makeRequest]);
 
-  if (loading) return <ProgressCircleElement />;
-
   return (
     <AuthContext.Provider
       value={{
@@ -96,6 +93,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         accessToken,
         loading,
         isAuthenticated,
+        clearErrors,
       }}
     >
       {children}

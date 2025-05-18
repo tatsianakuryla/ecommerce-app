@@ -4,7 +4,7 @@ export enum PermissionLevel {
   FULL = 'all',
   API = 'api',
   USER = 'user',
-  GEST = 'guest',
+  GUEST = 'guest',
 }
 
 export type Permissions = typeof permissions;
@@ -41,6 +41,7 @@ export interface AuthContextValue {
     firstName: string,
     lastName: string,
   ) => Promise<CustomerResponse | undefined>;
+  clearErrors: () => void;
   error: string | null;
   accessToken: string | null;
   loading: boolean;

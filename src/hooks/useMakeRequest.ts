@@ -40,5 +40,9 @@ export function useMakeRequest() {
     [],
   );
 
-  return { makeRequest, loading, error };
+  const clearErrors = () => {
+    setError(null);
+  };
+
+  return { makeRequest, loading, error, clearErrors };
 }
