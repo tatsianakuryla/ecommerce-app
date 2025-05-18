@@ -184,3 +184,9 @@ npm run stylelint
 ```bash
 npm test
 ```
+
+**🧫 Check test coverage** – To see test coverage
+
+```bash
+npm run coverage
+```

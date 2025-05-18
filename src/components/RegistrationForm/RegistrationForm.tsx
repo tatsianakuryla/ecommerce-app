@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { Form } from '~components/Form/Form';
 import RedirectionLink from '~components/RedirectionLink/RedirectionLink.tsx';
 import { FiLogIn } from 'react-icons/fi';
+import { useAuthContext } from '~/hooks/useAuthContext';
 
 export function RegistrationForm() {
+  const { register } = useAuthContext();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -31,6 +33,8 @@ export function RegistrationForm() {
 
     setFieldError(errors);
     if (Object.keys(errors).length > 0) return;
+
+    void register(email, password, firstName, lastName);
   };
 
   return (
@@ -41,8 +45,8 @@ export function RegistrationForm() {
             name: 'firstName',
             value: firstName,
             placeholder: 'First Name',
-            onChange: (value: string) => {
-              setFirstName(value);
+            onChange: (v) => {
+              setFirstName(v);
             },
             error: fieldError.firstName,
           },
@@ -50,8 +54,8 @@ export function RegistrationForm() {
             name: 'lastName',
             value: lastName,
             placeholder: 'Last Name',
-            onChange: (value: string) => {
-              setLastName(value);
+            onChange: (v) => {
+              setLastName(v);
             },
             error: fieldError.lastName,
           },

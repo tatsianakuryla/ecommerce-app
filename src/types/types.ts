@@ -9,7 +9,7 @@ export enum PermissionLevel {
 
 export type Permissions = typeof permissions;
 
-export interface UserAuthResponseBody {
+export interface AuthResponse {
   access_token: string;
   expires_in: number;
   token_type: string;
@@ -24,7 +24,7 @@ interface Error {
 
 type ErrorsArray = Error[];
 
-export interface AuthErrorResponseBody {
+export interface AuthErrorResponse {
   statusCode: number;
   error: string;
   error_description: string;
@@ -35,6 +35,12 @@ export interface AuthErrorResponseBody {
 export interface AuthContextValue {
   logout: () => void;
   login: (email: string, password: string) => Promise<void>;
+  register: (
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+  ) => Promise<CustomerResponse | undefined>;
   error: string | null;
   accessToken: string | null;
   loading: boolean;
@@ -47,21 +53,26 @@ export interface MenuItem {
   onClick?: () => void;
 }
 
-export type FormField = {
+export interface FormField {
   name: string;
   type?: string;
   value: string;
   placeholder: string;
   onChange: (value: string) => void;
   error?: string;
-};
+}
 
-export type FormProps = {
+export interface FormProps {
   fields: FormField[];
   onSubmit: (e: React.FormEvent) => void;
   loading?: boolean;
   submitLabel?: string;
-};
+}
+
+export interface ErrorAlertProps {
+  name: string;
+  error: string;
+}
 
 export interface LocalizedString {
   [locale: string]: string;
@@ -147,10 +158,42 @@ export interface Product {
   lastModifiedAt: string;
 }
 
-export interface ProductsResponseBody {
+export interface ProductsResponse {
   limit: number;
   offset: number;
   count: number;
   total: number;
   results: Product[];
+}
+
+export interface CustomerResponse {
+  customer: {
+    id: string;
+    version: number;
+    versionModifiedAt: string;
+    lastMessageSequenceNumber: number;
+    createdAt: string;
+    lastModifiedAt: string;
+    lastModifiedBy: {
+      clientId: string;
+      isPlatformClient: boolean;
+      anonymousId: string;
+    };
+    createdBy: {
+      clientId: string;
+      isPlatformClient: boolean;
+      anonymousId: string;
+    };
+    email: string;
+    firstName: string;
+    lastName: string;
+    password: string;
+    addresses: [];
+    shippingAddressIds: string[];
+    billingAddressIds: string[];
+    isEmailVerified: boolean;
+    customerGroupAssignments: [];
+    stores: [];
+    authenticationMode: string;
+  };
 }
