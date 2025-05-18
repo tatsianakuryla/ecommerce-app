@@ -1,22 +1,17 @@
-import { ReactNode } from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '~hooks/useAuth';
+import { Navigate, Outlet } from 'react-router-dom';
+import { useAuthContext } from '~/hooks/useAuthContext';
 import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle.tsx';
 
-interface Props {
-  children: ReactNode;
-}
+export function RedirectIfAuth() {
+  const { isAuthenticated, loading } = useAuthContext();
 
-export function RedirectIfAuth({ children }: Props) {
-  const { isAuthenticated, checking } = useAuth();
-
-  if (checking) {
+  if (loading) {
     return <ProgressCircleElement />;
   }
 
   if (isAuthenticated) {
-    return <Navigate to='/main' replace />;
+    return <Navigate to='/' replace />;
   }
 
-  return <>{children}</>;
+  return <Outlet />;
 }

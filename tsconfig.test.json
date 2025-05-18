@@ -20,6 +20,7 @@
       "~layouts/*": ["src/layouts/*"],
       "~mocks/*": ["src/mocks/*"],
       "~fixtures/*": ["src/fixtures/*"],
+      "~routes/*": ["src/routes/*"],
       "~utils/*": ["src/utils/*"]
     }
   },

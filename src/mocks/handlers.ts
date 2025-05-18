@@ -34,10 +34,6 @@ export const handlers = [
   http.post(USER_AUTH_URL, async ({ request }) => {
     await checkCredentials(request);
 
-    localStorage.setItem(
-      'access_token',
-      fixture.mockResponses.successAuth.access_token,
-    );
     return HttpResponse.json(fixture.mockResponses.successAuth, {
       status: 200,
     });

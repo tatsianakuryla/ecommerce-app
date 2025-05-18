@@ -17,6 +17,11 @@ export default defineConfig(({ mode }) => {
       environment: 'jsdom',
       mockReset: true,
       setupFiles: './vitest.setup.ts',
+      include: ['src/**/*.test.tsx'],
+      coverage: {
+        reporter: ['text', 'html'],
+        reportsDirectory: './coverage',
+      },
     },
   };
 });

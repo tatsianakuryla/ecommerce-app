@@ -1,13 +1,14 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginFormData, loginSchema } from '~/hooks/login-schema';
-import { useLogin } from '~/hooks/useLogin';
+import { useEffect} from 'react';
+import { useAuthContext } from '~/hooks/useAuthContext';
 import { EmailInput } from '../InputEmail/ImputEmail';
 import { PasswordInput } from '../InputPassword/InputPassword';
-import { Alert, Button, ProgressCircle } from '@chakra-ui/react';
+import { Alert, Button, ProgressCircle,  Flex  } from '@chakra-ui/react';
 import { ProgressCircleElement } from '../Progress-circle/Progress-circle';
-import { useEffect } from 'react';
-
+import { FiUserPlus } from 'react-icons/fi';
+import RedirectionLink from '../RedirectionLink/RedirectionLink';
 export function LoginForm() {
   const {
     register,
@@ -24,8 +25,7 @@ export function LoginForm() {
     },
     criteriaMode: 'all',
   });
-
-  const { login, loading, error } = useLogin();
+  const { login, error, loading } = useAuthContext();
 
   useEffect(() => {
     if (error == null) return;
@@ -39,22 +39,30 @@ export function LoginForm() {
     }
   }, [error, setError]);
 
-  const onSubmit = async (data: LoginFormData) => {
-    clearErrors();
-    await login(data.email, data.password);
-  };
-  // console.log(errors.email?.space?.message)
-  console.log(errors.email?.message);
-  // const onSubmit = useCallback(async (data: LoginFormData) => {
+  // const onSubmit = async (data: LoginFormData) => {
   //   clearErrors();
-  //   try {
-  //     await login(data.email, data.password);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // }, [login, clearErrors]);
+  //   await login(data.email, data.password);
+  // };
+
+const onSubmit = async (data: LoginFormData) => {
+  clearErrors();
+  if (typeof login === 'function') {
+    await login(data.email, data.password);
+  } else {
+    console.error('login is not a function');
+    setError('root', { message: 'Login functionality is not available' });
+  }
+};
+
+
   return (
     <>
+        <Flex
+      flexDirection='column'
+      alignItems='center'
+      justifyContent='center'
+      py='1rem'
+    >
       <form
         // pos="relative"
         onSubmit={(e) => {
@@ -139,6 +147,15 @@ export function LoginForm() {
         </ProgressCircle.Root>
       )}
       {isSubmitting && <ProgressCircleElement />}
+
+           <RedirectionLink
+        label='Don`t have an account?'
+        to='/register'
+        icon={<FiUserPlus />}
+        link='Register'
+      />
+      </Flex>
     </>
   );
 }
+

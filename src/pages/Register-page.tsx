@@ -1,10 +1,13 @@
-import { Container, Heading } from '@chakra-ui/react';
+import { Container, Heading, VisuallyHidden } from '@chakra-ui/react';
+import { RegistrationForm } from '~components/RegistrationForm/RegistrationForm.tsx';
 
 export const RegisterPage = () => {
   return (
     <Container py='1rem'>
-      {/*для тестов и для скрин-ридеров прошу в случае необходимости не удалять элемент, а обернуть элемент в <VisuallyHidden>*/}
-      <Heading>Register page</Heading>
+      <VisuallyHidden>
+        <Heading>Register page</Heading>
+      </VisuallyHidden>
+      <RegistrationForm />
     </Container>
   );
 };

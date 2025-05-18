@@ -1,31 +1,45 @@
-import { ReactNode } from 'react';
+// test-utils.tsx
 import { render } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import { Provider } from '~components/ui/provider';
+import { createMemoryRouter, RouterProvider } from 'react-router-dom';
+import { routes } from '~/router/router';
 import { AuthContext } from '~/contexts/authContext';
+import { Provider as ChakraProvider } from '~components/ui/provider';
 
 interface RenderOptions {
   route?: string;
   isAuthenticated?: boolean;
-  checking?: boolean;
+  loading?: boolean;
+  logout?: () => void;
+  login?: () => Promise<void>;
 }
 
 export function renderWithRouter(
-  ui: ReactNode,
+  initialRoute: string,
   {
-    route = '/',
+    login = async () => {},
+    logout = () => {},
     isAuthenticated = false,
-    checking = false,
+    loading = false,
   }: RenderOptions = {},
 ) {
+  const router = createMemoryRouter(routes, {
+    initialEntries: [initialRoute],
+  });
+
   return render(
-    <Provider>
-      {' '}
+    <ChakraProvider>
       <AuthContext.Provider
-        value={{ isAuthenticated, checking, logout: () => {} }}
+        value={{
+          isAuthenticated,
+          loading,
+          logout,
+          login,
+          error: null,
+          accessToken: '',
+        }}
       >
-        <MemoryRouter initialEntries={[route]}>{ui}</MemoryRouter>
+        <RouterProvider router={router} />
       </AuthContext.Provider>
-    </Provider>,
+    </ChakraProvider>,
   );
 }
