@@ -3,13 +3,9 @@ import { ProgressCircle } from '@chakra-ui/react';
 export const ProgressCircleElement = () => {
   return (
     <ProgressCircle.Root
-      display='flex'
-      alignItems='center'
-      justifyContent='center'
-      position='fixed'
-      inset='0'
-      zIndex='modal'
+      pos='absolute'
       data-testid='progress-circle'
+      value={null}
     >
       <ProgressCircle.Circle>
         <ProgressCircle.Track />
