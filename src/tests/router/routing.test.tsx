@@ -65,12 +65,18 @@ describe('Routing', () => {
     });
 
     expect(
-      await screen.findByRole('heading', { level: 2, name: /login page/i }),
+      await screen.findByRole('heading', {
+        level: 2,
+        name: /login page/i,
+        hidden: true,
+      }),
     ).toBeInTheDocument();
   });
 
-  it('shuld render Logout link for logged-in user', async () => {
+  it('should render Logout link for logged-in user', async () => {
     const logoutMock = vi.fn();
+    const registerMock = vi.fn();
+    const clearErrorsMock = vi.fn();
     render(
       <Provider>
         <AuthContext.Provider
@@ -78,6 +84,8 @@ describe('Routing', () => {
             isAuthenticated: true,
             loading: false,
             logout: logoutMock,
+            register: registerMock,
+            clearErrors: clearErrorsMock,
             login: vi.fn(),
             error: null,
             accessToken: '',

@@ -10,7 +10,6 @@ export const LoginPage = () => {
         </VisuallyHidden>
         <LoginForm />
       </Flex>
-      {/*для тестов и для скрин-ридеров прошу в случае необходимости не удалять элемент, а обернуть элемент в <VisuallyHidden>*/}
     </Container>
   );
 };

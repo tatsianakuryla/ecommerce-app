@@ -1,9 +1,9 @@
-// test-utils.tsx
 import { render } from '@testing-library/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { routes } from '~router/router.tsx';
 import { AuthContext } from '~/contexts/authContext.tsx';
 import { Provider as ChakraProvider } from '~components/ui/provider.tsx';
+import { CustomerResponse, RegistrationData } from '~types/types.ts';
 
 interface RenderOptions {
   route?: string;
@@ -11,6 +11,8 @@ interface RenderOptions {
   loading?: boolean;
   logout?: () => void;
   login?: () => Promise<void>;
+  register?: (data: RegistrationData) => Promise<CustomerResponse | undefined>;
+  clearErrors?: () => void;
 }
 
 export function renderWithRouter(
@@ -18,6 +20,8 @@ export function renderWithRouter(
   {
     login = async () => {},
     logout = () => {},
+    register = Promise<void>,
+    clearErrors = () => {},
     isAuthenticated = false,
     loading = false,
   }: RenderOptions = {},
@@ -34,6 +38,8 @@ export function renderWithRouter(
           loading,
           logout,
           login,
+          register,
+          clearErrors,
           error: null,
           accessToken: '',
         }}

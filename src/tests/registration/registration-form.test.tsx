@@ -20,7 +20,11 @@ describe('Redirection to Login page from Registration page', () => {
 
     renderWithRouter('/register');
     expect(
-      await screen.findByRole('heading', { name: /register page/i }),
+      await screen.findByRole('heading', {
+        level: 2,
+        name: /register page/i,
+        hidden: true,
+      }),
     ).toBeInTheDocument();
     const loginLink = screen.getByRole('link', {
       name: /already have an account\?.*login/i,
