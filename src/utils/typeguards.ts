@@ -1,6 +1,7 @@
 import {
   AuthErrorResponseBody,
   ProductsResponseBody,
+  User,
   UserAuthResponseBody,
 } from '~types/types';
 
@@ -33,7 +34,7 @@ export function isAuthErrorResponseBody(
   );
 }
 
-export function isProductsResponceBody(
+export function isProductsResponseBody(
   data: unknown,
 ): data is ProductsResponseBody {
   if (typeof data !== 'object' || data === null) {
@@ -78,4 +79,18 @@ export function isProductsResponceBody(
       )
     );
   });
+}
+
+export function isUserProfile(body: unknown): body is User {
+  return (
+    typeof body === 'object' &&
+    body !== null &&
+    'id' in body &&
+    'email' in body &&
+    'firstName' in body &&
+    'lastName' in body &&
+    'isActive' in body &&
+    'permissionLevel' in body &&
+    'scopes' in body
+  );
 }

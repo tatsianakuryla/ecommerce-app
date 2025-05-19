@@ -4,7 +4,7 @@ import { getProducts } from '~/api/requests';
 import { useAuthContext } from '~/hooks/useAuthContext';
 import { useMakeRequest } from '~/hooks/useMakeRequest';
 import { Product, ProductsResponseBody } from '~/types/types';
-import { isProductsResponceBody } from '~/utils/typeguards';
+import { isProductsResponseBody } from '~/utils/typeguards';
 
 export const MainPage = () => {
   const { accessToken } = useAuthContext();
@@ -20,7 +20,7 @@ export const MainPage = () => {
       try {
         const products = await makeRequest<ProductsResponseBody>(
           getProducts(accessToken),
-          isProductsResponceBody,
+          isProductsResponseBody,
         );
 
         if (!ignore && products?.results) {
@@ -46,7 +46,6 @@ export const MainPage = () => {
           <Heading>Main page</Heading>
         </VisuallyHidden>
       </Flex>
-      {/*для тестов и для скрин-ридеров прошу в случае необходимости не удалять элемент, а обернуть элемент в <VisuallyHidden>*/}
     </Container>
   );
 };

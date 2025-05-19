@@ -2,92 +2,185 @@ import { useState } from 'react';
 import { Form } from '~components/Form/Form';
 import RedirectionLink from '~components/RedirectionLink/RedirectionLink.tsx';
 import { FiLogIn } from 'react-icons/fi';
+import { useRegister } from '~/hooks/useRegister';
+import type { FieldKey, FormField, RegistrationData } from '~/types/types';
+import { Alert } from '@chakra-ui/react';
 
 export function RegistrationForm() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [fieldError, setFieldError] = useState<{
-    firstName?: string;
-    lastName?: string;
-    email?: string;
-    password?: string;
-    confirmPassword?: string;
-  }>({});
+  const [fieldError, setFieldError] = useState<
+    Partial<Record<FieldKey, string>>
+  >({});
+  const [data, setData] = useState<RegistrationData>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    dateOfBirth: '',
+    address: {
+      street: '',
+      city: '',
+      postalCode: '',
+      country: '',
+    },
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const { register, loading, error } = useRegister();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const errors: typeof fieldError = {};
+    const errors: Partial<Record<FieldKey, string>> = {};
 
-    if (!firstName.trim()) errors.firstName = 'First name is required';
-    if (!lastName.trim()) errors.lastName = 'Last name is required';
-    if (!email.trim()) errors.email = 'Email is required';
-    if (!password.trim()) errors.password = 'Password is required';
-    if (password !== confirmPassword)
-      errors.confirmPassword = 'Passwords do not match';
+    if (!data.firstName.trim()) errors.firstName = 'First name is required';
+    if (!data.lastName.trim()) errors.lastName = 'Last name is required';
+    if (!data.email.trim()) errors.email = 'Email is required';
+    if (!data.password.trim()) errors.password = 'Password is required';
+    if (data.password !== confirmPassword)
+      errors.confirmPassword = 'Passwords must match';
+    if (!data.dateOfBirth.trim())
+      errors.dateOfBirth = 'Date of birth is required';
+
+    if (!data.address.street.trim()) errors.street = 'Street is required';
+    if (!data.address.city.trim()) errors.city = 'City is required';
+    if (!data.address.postalCode.trim())
+      errors.postalCode = 'Postal code is required';
+    if (!data.address.country.trim()) errors.country = 'Country is required';
 
     setFieldError(errors);
     if (Object.keys(errors).length > 0) return;
+
+    await register(data);
   };
+
+  const fields: FormField[] = [
+    {
+      name: 'firstName',
+      value: data.firstName,
+      placeholder: 'First Name',
+      onChange: (value: string) => {
+        setData({ ...data, firstName: value });
+      },
+      error: fieldError.firstName,
+    },
+    {
+      name: 'lastName',
+      value: data.lastName,
+      placeholder: 'Last Name',
+      onChange: (value: string) => {
+        setData({ ...data, lastName: value });
+      },
+      error: fieldError.lastName,
+    },
+    {
+      name: 'email',
+      type: 'email',
+      value: data.email,
+      placeholder: 'Email',
+      onChange: (value: string) => {
+        setData({ ...data, email: value });
+      },
+      error: fieldError.email,
+    },
+    {
+      name: 'dateOfBirth',
+      type: 'string',
+      value: data.dateOfBirth,
+      placeholder: 'Date of Birth: ',
+      onChange: (value: string) => {
+        setData({ ...data, dateOfBirth: value });
+      },
+      error: fieldError.email,
+    },
+    {
+      name: 'password',
+      type: 'password',
+      value: data.password,
+      placeholder: 'Password',
+      onChange: (value: string) => {
+        setData({ ...data, password: value });
+      },
+      error: fieldError.password,
+    },
+    {
+      name: 'confirmPassword',
+      type: 'password',
+      value: confirmPassword,
+      placeholder: 'Confirm Password',
+      onChange: (value: string) => {
+        setConfirmPassword(value);
+      },
+      error: fieldError.confirmPassword,
+    },
+    {
+      name: 'street',
+      value: data.address.street,
+      placeholder: 'Street',
+      onChange: (value: string) => {
+        setData({ ...data, address: { ...data.address, street: value } });
+      },
+      error: fieldError.street,
+    },
+    {
+      name: 'city',
+      value: data.address.city,
+      placeholder: 'City',
+      onChange: (value) => {
+        setData({ ...data, address: { ...data.address, city: value } });
+      },
+      error: fieldError.city,
+    },
+    {
+      name: 'postalCode',
+      value: data.address.postalCode,
+      placeholder: 'Postal Code',
+      onChange: (value) => {
+        setData({
+          ...data,
+          address: { ...data.address, postalCode: value },
+        });
+      },
+      error: fieldError.postalCode,
+    },
+    {
+      name: 'country',
+      value: data.address.country,
+      placeholder: 'Country',
+      onChange: (value) => {
+        setData({
+          ...data,
+          address: { ...data.address, country: value },
+        });
+      },
+      error: fieldError.country,
+    },
+  ];
 
   return (
     <>
       <Form
-        fields={[
-          {
-            name: 'firstName',
-            value: firstName,
-            placeholder: 'First Name',
-            onChange: (value: string) => {
-              setFirstName(value);
-            },
-            error: fieldError.firstName,
-          },
-          {
-            name: 'lastName',
-            value: lastName,
-            placeholder: 'Last Name',
-            onChange: (value: string) => {
-              setLastName(value);
-            },
-            error: fieldError.lastName,
-          },
-          {
-            name: 'email',
-            value: email,
-            placeholder: 'Email',
-            onChange: (v) => {
-              setEmail(v);
-            },
-            error: fieldError.email,
-          },
-          {
-            name: 'password',
-            type: 'password',
-            value: password,
-            placeholder: 'Password',
-            onChange: (v) => {
-              setPassword(v);
-            },
-            error: fieldError.password,
-          },
-          {
-            name: 'confirmPassword',
-            type: 'password',
-            value: confirmPassword,
-            placeholder: 'Confirm Password',
-            onChange: (v) => {
-              setConfirmPassword(v);
-            },
-            error: fieldError.confirmPassword,
-          },
-        ]}
-        onSubmit={handleSubmit}
+        fields={fields}
+        onSubmit={(e) => {
+          void handleSubmit(e);
+        }}
+        loading={loading}
         submitLabel='Register'
       />
+      {error != null && (
+        <Alert.Root
+          status='error'
+          variant='subtle'
+          fontSize='sm'
+          mb={4}
+          px={2}
+          display='inline-flex'
+          alignItems='center'
+          justifyContent='center'
+        >
+          <Alert.Indicator />
+          <Alert.Title>{error}</Alert.Title>
+        </Alert.Root>
+      )}
       <RedirectionLink
         label='Already have an account?'
         to='/login'

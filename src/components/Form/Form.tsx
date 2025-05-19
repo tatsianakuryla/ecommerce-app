@@ -50,7 +50,6 @@ export function Form({
                   fontSize='sm'
                   mb={4}
                   px={2}
-                  data-testid={`error-alert-${name}`}
                 >
                   <Alert.Indicator />
                   <Alert.Title>{error}</Alert.Title>

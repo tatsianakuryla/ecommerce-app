@@ -5,8 +5,10 @@ import {
   USER_AUTH_URL,
   PUBLISHED_PRODUCTS,
   GUEST_AUTH_TOKEN,
+  BASE_API_URL,
+  PROJECT_KEY,
 } from '~/constants/constants';
-import { PermissionLevel } from '~/types/types';
+import { PermissionLevel, RegistrationData } from '~/types/types';
 
 const userPermissions = generatePermissions(PermissionLevel.USER);
 const guestPermissions = generatePermissions();
@@ -56,3 +58,25 @@ export const generateAnonymousToken = (): Request => {
     body,
   });
 };
+
+export function createUserRegistrationRequest(data: RegistrationData): Request {
+  return new Request(`${BASE_API_URL}/${PROJECT_KEY}/customers`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+}
+
+export function createFetchMyProfileRequest(): Request {
+  const token = localStorage.getItem('accessToken');
+
+  if (token == null || token === '') {
+    return new Request(`${BASE_API_URL}/${PROJECT_KEY}/customers/me`);
+  }
+
+  return new Request(`${BASE_API_URL}/${PROJECT_KEY}/customers/me`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}

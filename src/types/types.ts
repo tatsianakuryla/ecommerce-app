@@ -4,10 +4,33 @@ export enum PermissionLevel {
   FULL = 'all',
   API = 'api',
   USER = 'user',
-  GEST = 'guest',
+  GUEST = 'guest',
 }
 
 export type Permissions = typeof permissions;
+
+export interface Address {
+  street: string;
+  city: string;
+  postalCode: string;
+  country: string;
+}
+
+export interface RegistrationData {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  address: Address;
+}
+
+export interface User extends RegistrationData {
+  id: string;
+  isActive: boolean;
+  permissionLevel: PermissionLevel;
+  scopes: Permissions[PermissionLevel];
+}
 
 export interface UserAuthResponseBody {
   access_token: string;
@@ -55,6 +78,14 @@ export type FormField = {
   onChange: (value: string) => void;
   error?: string;
 };
+
+export type FieldKey =
+  | keyof RegistrationData
+  | 'confirmPassword'
+  | 'street'
+  | 'city'
+  | 'postalCode'
+  | 'country';
 
 export type FormProps = {
   fields: FormField[];
