@@ -13,7 +13,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [justRegistered, setJustRegistered] = useState(false);
-  const { makeRequest, error, loading, clearErrors } = useMakeRequest();
+  const { makeRequest, error, loading, setError } = useMakeRequest();
 
   const fetchAnonymousToken = useCallback(async () => {
     try {
@@ -55,7 +55,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const register = async (
     data: RegistrationData,
   ): Promise<CustomerResponse | undefined> => {
-    clearErrors();
     try {
       if (!accessToken) {
         throw new Error('access_token is not provided');
@@ -67,7 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       );
 
       if (!response) {
-        throw new Error('user registration failed');
+        throw new Error('empty registration response');
       }
 
       await login(data.email, data.password);
@@ -92,9 +91,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         accessToken,
         loading,
         isAuthenticated,
-        clearErrors,
         justRegistered,
         setJustRegistered,
+        setError,
       }}
     >
       {children}

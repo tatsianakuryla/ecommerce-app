@@ -1,15 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Form } from '~components/Form/Form';
-import RedirectionLink from '~components/RedirectionLink/RedirectionLink.tsx';
+import RedirectionLink from '~components/RedirectionLink/RedirectionLink';
 import { FiLogIn } from 'react-icons/fi';
 import type { FieldKey, FormField, RegistrationData } from '~/types/types';
-import { useAuth } from '~/contexts/authContext.tsx';
-import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert.tsx';
+import { useAuthContext } from '~hooks/useAuthContext';
+import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert';
 
 export function RegistrationForm() {
+  const { register, error, setError, loading } = useAuthContext();
   const [fieldError, setFieldError] = useState<
     Partial<Record<FieldKey, string>>
   >({});
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [data, setData] = useState<RegistrationData>({
     firstName: '',
     lastName: '',
@@ -24,12 +26,14 @@ export function RegistrationForm() {
     },
   });
 
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const { register, loading, error, clearErrors } = useAuth();
+  useEffect(() => {
+    return () => {
+      setError(null);
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    clearErrors();
     const errors: Partial<Record<FieldKey, string>> = {};
 
     if (!data.firstName.trim()) errors.firstName = 'First name is required';

@@ -1,5 +1,5 @@
 import {
-  AuthErrorResponse,
+  ErrorResponse,
   ProductsResponse,
   AuthResponse,
   CustomerResponse,
@@ -17,15 +17,11 @@ export const isAuthResponse = (data: unknown): data is AuthResponse => {
   );
 };
 
-export const isAuthErrorResponse = (
-  data: unknown,
-): data is AuthErrorResponse => {
+export const isErrorResponse = (data: unknown): data is ErrorResponse => {
   return (
     typeof data === 'object' &&
     data !== null &&
     'statusCode' in data &&
-    'error' in data &&
-    'error_description' in data &&
     'message' in data &&
     'errors' in data &&
     Array.isArray(data.errors)

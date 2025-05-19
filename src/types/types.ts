@@ -38,18 +38,21 @@ interface Error {
   message: string;
 }
 
-type ErrorsArray = Error[];
-
-export interface AuthErrorResponse {
+export interface ErrorResponse {
   statusCode: number;
-  error: string;
-  error_description: string;
   message: string;
-  errors: ErrorsArray;
+  errors: Error[];
 }
 
 export interface AuthContextValue {
   login: (email: string, password: string) => Promise<void>;
+  register: (
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+  ) => Promise<CustomerResponse | undefined>;
+  error: string | null;
   register: (data: RegistrationData) => Promise<CustomerResponse | undefined>;
   logout: () => void;
   clearErrors: () => void;
@@ -60,6 +63,7 @@ export interface AuthContextValue {
   error: string | null;
   justRegistered: boolean;
   setJustRegistered: (v: boolean) => void;
+  setError: (v: string | null) => void;
 }
 
 export interface MenuItem {
@@ -90,11 +94,7 @@ export interface FormProps {
   onSubmit: (e: React.FormEvent) => void;
   loading?: boolean;
   submitLabel?: string;
-}
-
-export interface ErrorAlertProps {
-  name: string;
-  error: string;
+  nonFieldError?: string | null;
 }
 
 export interface LocalizedString {
