@@ -12,6 +12,7 @@ import { CustomerResponse, RegistrationData } from '~types/types.ts';
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [justRegistered, setJustRegistered] = useState(false);
   const { makeRequest, error, loading, clearErrors } = useMakeRequest();
 
   const fetchAnonymousToken = useCallback(async () => {
@@ -29,8 +30,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [makeRequest]);
 
   const logout = () => {
-    setAccessToken(null);
     void fetchAnonymousToken();
+    setIsAuthenticated(false);
   };
 
   const login = async (email: string, password: string) => {
@@ -70,6 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       await login(data.email, data.password);
+      setJustRegistered(true);
       return response;
     } catch (error: unknown) {
       throw new Error('registration failed', { cause: error });
@@ -91,6 +93,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         loading,
         isAuthenticated,
         clearErrors,
+        justRegistered,
+        setJustRegistered,
       }}
     >
       {children}

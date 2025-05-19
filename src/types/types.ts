@@ -58,6 +58,8 @@ export interface AuthContextValue {
   isAuthenticated: boolean;
   loading: boolean;
   error: string | null;
+  justRegistered: boolean;
+  setJustRegistered: (v: boolean) => void;
 }
 
 export interface MenuItem {
