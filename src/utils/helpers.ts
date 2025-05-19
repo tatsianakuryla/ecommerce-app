@@ -1,13 +1,11 @@
-import { permissions } from '~constants/constants';
+import { permissions, PROJECT_KEY } from '~constants/constants';
 import { PermissionLevel } from '~types/types';
-
-const clientName = import.meta.env.VITE_API_CLIENT_NAME;
 
 export const generatePermissions = (
   level: PermissionLevel = PermissionLevel.GUEST,
 ) => {
   return Object.values(permissions[level])
-    .map((permission) => `${permission}:${clientName}`)
+    .map((permission) => `${permission}:${PROJECT_KEY}`)
     .join(' ');
 };
 
