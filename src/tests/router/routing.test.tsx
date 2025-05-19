@@ -1,10 +1,10 @@
 import { screen } from '@testing-library/react';
-import { renderWithRouter } from '~router/tests/helpers/renderWithRouter';
+import { renderWithRouter } from '~/tests/helpers/renderWithRouter.tsx';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { render } from '@testing-library/react';
 import { Provider } from '~components/ui/provider.tsx';
-import { AuthContext } from '~/contexts/authContext';
+import { AuthContext } from '~/contexts/authContext.tsx';
 import { MemoryRouter } from 'react-router-dom';
 import Header from '~components/Header/Header.tsx';
 import { vi } from 'vitest';

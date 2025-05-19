@@ -1,9 +1,9 @@
 // test-utils.tsx
 import { render } from '@testing-library/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
-import { routes } from '~/router/router';
-import { AuthContext } from '~/contexts/authContext';
-import { Provider as ChakraProvider } from '~components/ui/provider';
+import { routes } from '~router/router.tsx';
+import { AuthContext } from '~/contexts/authContext.tsx';
+import { Provider as ChakraProvider } from '~components/ui/provider.tsx';
 
 interface RenderOptions {
   route?: string;

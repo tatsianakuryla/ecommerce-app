@@ -86,7 +86,7 @@ export function RegistrationForm() {
       name: 'dateOfBirth',
       type: 'string',
       value: data.dateOfBirth,
-      placeholder: 'Date of Birth: ',
+      placeholder: 'Date of Birth',
       onChange: (value: string) => {
         setData({ ...data, dateOfBirth: value });
       },

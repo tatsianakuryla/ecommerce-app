@@ -6,12 +6,12 @@ import {
   fireEvent,
   act,
 } from '@testing-library/react';
-import { useAuthContext } from '~/hooks/useAuthContext';
-import { Provider as ChakraProvider } from '~/components/ui/provider';
-import { AuthProvider } from '~/contexts/authProvider';
+import { useAuthContext } from '~hooks/useAuthContext.ts';
+import { Provider as ChakraProvider } from '~components/ui/provider.tsx';
+import { AuthProvider } from '~/contexts/authProvider.tsx';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
-import { renderWithRouter } from '~/router/tests/helpers/renderWithRouter';
+import { renderWithRouter } from '~/tests/helpers/renderWithRouter.tsx';
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <ChakraProvider>
@@ -19,7 +19,7 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
   </ChakraProvider>
 );
 
-describe('Login API tests', () => {
+describe('Login API login', () => {
   it('should log in with correct credentials', async () => {
     const { result } = renderHook(() => useAuthContext(), { wrapper });
 
@@ -87,7 +87,7 @@ describe('Login API tests', () => {
   });
 });
 
-describe('Login UI tests', () => {
+describe('Login UI login', () => {
   it('should call login with correct credentials', async () => {
     const loginMock = vi.fn().mockResolvedValue(undefined);
 
