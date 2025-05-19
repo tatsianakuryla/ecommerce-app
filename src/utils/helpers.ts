@@ -4,7 +4,7 @@ import { PermissionLevel } from '~types/types';
 const clientName = import.meta.env.VITE_API_CLIENT_NAME;
 
 export const generatePermissions = (
-  level: PermissionLevel = PermissionLevel.GEST,
+  level: PermissionLevel = PermissionLevel.GUEST,
 ) => {
   return Object.values(permissions[level])
     .map((permission) => `${permission}:${clientName}`)

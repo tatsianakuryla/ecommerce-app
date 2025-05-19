@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { getProducts } from '~/api/requests';
 import { useAuthContext } from '~/hooks/useAuthContext';
 import { useMakeRequest } from '~/hooks/useMakeRequest';
-import { Product, ProductsResponseBody } from '~/types/types';
-import { isProductsResponceBody } from '~/utils/typeguards';
+import { Product, ProductsResponse } from '~/types/types';
+import { isProductsResponse } from '~/utils/typeguards';
 
 export const MainPage = () => {
   const { accessToken } = useAuthContext();
@@ -18,9 +18,9 @@ export const MainPage = () => {
 
     const startFetching = async () => {
       try {
-        const products = await makeRequest<ProductsResponseBody>(
+        const products = await makeRequest<ProductsResponse>(
           getProducts(accessToken),
-          isProductsResponceBody,
+          isProductsResponse,
         );
 
         if (!ignore && products?.results) {

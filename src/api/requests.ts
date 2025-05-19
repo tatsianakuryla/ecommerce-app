@@ -3,8 +3,9 @@ import { generatePermissions } from '~utils/helpers';
 import {
   BASIC_AUTH_HEADER,
   USER_AUTH_URL,
-  PUBLISHED_PRODUCTS,
-  GUEST_AUTH_TOKEN,
+  PUBLISHED_PRODUCTS_URL,
+  GUEST_AUTH_TOKEN_URL,
+  CUSTOMER_CREATION_URL,
 } from '~/constants/constants';
 import { PermissionLevel } from '~/types/types';
 
@@ -25,7 +26,6 @@ export const authenticateUser = (
   return new Request(USER_AUTH_URL, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: BASIC_AUTH_HEADER,
     },
     body,
@@ -33,7 +33,7 @@ export const authenticateUser = (
 };
 
 export const getProducts = (token: string): Request => {
-  return new Request(PUBLISHED_PRODUCTS, {
+  return new Request(PUBLISHED_PRODUCTS_URL, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -47,11 +47,34 @@ export const generateAnonymousToken = (): Request => {
     anonymous_id: v4(),
   });
 
-  return new Request(GUEST_AUTH_TOKEN, {
+  return new Request(GUEST_AUTH_TOKEN_URL, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: BASIC_AUTH_HEADER,
+    },
+    body,
+  });
+};
+
+export const createUser = (
+  email: string,
+  password: string,
+  firstName: string,
+  lastName: string,
+  accessToken: string,
+): Request => {
+  const body = JSON.stringify({
+    email,
+    firstName,
+    lastName,
+    password,
+  });
+
+  return new Request(CUSTOMER_CREATION_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
     },
     body,
   });

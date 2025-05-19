@@ -30,7 +30,7 @@ function Header() {
   const guestItems = [...navItems, ...loginRegisterItems];
   const authItems = [
     ...navItems,
-    { label: 'Logout', to: '/login', onClick: logout },
+    { label: 'Logout', to: '/', onClick: logout },
   ];
   const itemsToRender = isAuthenticated ? authItems : guestItems;
 
