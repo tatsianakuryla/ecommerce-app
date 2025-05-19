@@ -58,12 +58,7 @@ export interface AuthErrorResponse {
 export interface AuthContextValue {
   logout: () => void;
   login: (email: string, password: string) => Promise<void>;
-  register: (
-    email: string,
-    password: string,
-    firstName: string,
-    lastName: string,
-  ) => Promise<CustomerResponse | undefined>;
+  register: (data: RegistrationData) => Promise<CustomerResponse | undefined>;
   clearErrors: () => void;
   error: string | null;
   accessToken: string | null;

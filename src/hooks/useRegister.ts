@@ -6,8 +6,8 @@ import {
   createUser,
 } from '~/api/requests';
 import {
-  isAuthErrorResponseBody,
-  isUserAuthResponseBody,
+  isAuthErrorResponse,
+  isAuthResponse,
   isUserProfile,
 } from '~/utils/typeguards';
 import type { RegistrationData, User } from '~/types/types';
@@ -25,7 +25,7 @@ export function useRegister() {
 
       const loginBody = await makeRequest(
         authenticateUser(data.email, data.password),
-        isUserAuthResponseBody,
+        isAuthResponse,
       );
       if (!loginBody) throw new Error('Login failed');
 
@@ -37,7 +37,7 @@ export function useRegister() {
 
       return profile;
     } catch (err: unknown) {
-      if (isAuthErrorResponseBody(err)) {
+      if (isAuthErrorResponse(err)) {
         setError(err.message);
       } else if (err instanceof Error) {
         setError(err.message);

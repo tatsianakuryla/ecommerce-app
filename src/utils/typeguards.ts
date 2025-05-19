@@ -6,7 +6,7 @@ import {
   CustomerResponse,
 } from '~types/types';
 
-export function isUserAuthResponseBody(data: unknown): data is AuthResponse {
+export const isAuthResponse = (data: unknown): data is AuthResponse => {
   return (
     typeof data === 'object' &&
     data !== null &&
@@ -16,11 +16,11 @@ export function isUserAuthResponseBody(data: unknown): data is AuthResponse {
     'scope' in data &&
     'refresh_token' in data
   );
-}
+};
 
-export function isAuthErrorResponseBody(
+export const isAuthErrorResponse = (
   data: unknown,
-): data is AuthErrorResponse {
+): data is AuthErrorResponse => {
   return (
     typeof data === 'object' &&
     data !== null &&
@@ -31,7 +31,7 @@ export function isAuthErrorResponseBody(
     'errors' in data &&
     Array.isArray(data.errors)
   );
-}
+};
 
 export const isProductsResponse = (data: unknown): data is ProductsResponse => {
   if (typeof data !== 'object' || data === null) {

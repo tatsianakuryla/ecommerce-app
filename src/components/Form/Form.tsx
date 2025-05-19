@@ -1,5 +1,6 @@
-import { Input, Button, Box, Alert } from '@chakra-ui/react';
+import { Input, Button, Box } from '@chakra-ui/react';
 import { FormProps } from '~types/types';
+import { ErrorAlert } from '../ErrorAlert/ErrorAlert';
 
 export function Form({
   fields,
@@ -43,18 +44,7 @@ export function Form({
                   borderColor: showError ? 'red' : '#cbd5e0',
                 }}
               />
-              {showError && (
-                <Alert.Root
-                  status='error'
-                  variant='subtle'
-                  fontSize='sm'
-                  mb={4}
-                  px={2}
-                >
-                  <Alert.Indicator />
-                  <Alert.Title>{error}</Alert.Title>
-                </Alert.Root>
-              )}
+              {showError && <ErrorAlert name={name} error={error} />}
             </Box>
           );
         },

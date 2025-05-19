@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { isAuthErrorResponseBody } from '~/utils/typeguards';
+import { isAuthErrorResponse } from '~/utils/typeguards';
 
 export function useMakeRequest() {
   const [loading, setLoading] = useState(false);
@@ -8,7 +8,7 @@ export function useMakeRequest() {
   const makeRequest = useCallback(
     async <T>(
       request: Request,
-      validateResponseBody: (body: unknown) => body is T,
+      validateResponse: (body: unknown) => body is T,
     ) => {
       setLoading(true);
       setError(null);
@@ -21,22 +21,17 @@ export function useMakeRequest() {
           throw json;
         }
 
-        if (!validateResponseBody(json)) {
-          throw new TypeError('Invalid response body');
+        if (validateResponse(json)) {
+          return json;
         }
-
-        return json;
       } catch (error: unknown) {
-        if (error instanceof DOMException && error.name === 'AbortError') {
-          console.log('Fetch aborted');
-        } else if (isAuthErrorResponseBody(error)) {
-          setError(error.message);
-        } else if (error instanceof TypeError) {
+        if (isAuthErrorResponse(error)) {
           setError(error.message);
         } else if (error instanceof Error) {
-          setError(error.message);
+          setError('Ooops, something went wrong');
+          throw error;
         } else {
-          setError('Unknown error occurred');
+          throw error;
         }
       } finally {
         setLoading(false);
@@ -45,5 +40,9 @@ export function useMakeRequest() {
     [],
   );
 
-  return { makeRequest, loading, error };
+  const clearErrors = () => {
+    setError(null);
+  };
+
+  return { makeRequest, loading, error, clearErrors };
 }

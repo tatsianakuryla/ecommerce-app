@@ -26,7 +26,6 @@ export const authenticateUser = (
   return new Request(USER_AUTH_URL, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: BASIC_AUTH_HEADER,
     },
     body,
@@ -51,7 +50,6 @@ export const generateAnonymousToken = (): Request => {
   return new Request(GUEST_AUTH_TOKEN_URL, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: BASIC_AUTH_HEADER,
     },
     body,

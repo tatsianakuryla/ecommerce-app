@@ -12,7 +12,7 @@ export function LoginForm() {
   const [password, setPassword] = useState('');
   const [fieldError, setFieldError] = useState({ email: '', password: '' });
 
-  const { login, error, loading } = useAuthContext();
+  const { login, error, loading, clearErrors } = useAuthContext();
 
   useEffect(() => {
     if (error === null) return;
@@ -25,6 +25,12 @@ export function LoginForm() {
     }
     setFieldError(next);
   }, [error]);
+
+  useEffect(() => {
+    return () => {
+      clearErrors();
+    };
+  }, [clearErrors]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
