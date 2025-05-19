@@ -4,7 +4,7 @@ import { useMakeRequest } from './useMakeRequest';
 import {
   createUserRegistrationRequest,
   authenticateUser,
-  createFetchMyProfileRequest,
+  createUser,
 } from '~/api/requests';
 import {
   isAuthErrorResponseBody,
@@ -32,7 +32,7 @@ export function useRegister() {
       localStorage.setItem('accessToken', loginBody.access_token);
 
       const profile: User | undefined = await makeRequest(
-        createFetchMyProfileRequest(),
+        createUser(),
         isUserProfile,
       );
       if (!profile) throw new Error('Profile fetch failed');

@@ -1,13 +1,12 @@
 import {
-  AuthErrorResponseBody,
-  ProductsResponseBody,
+  AuthErrorResponse,
+  ProductsResponse,
   User,
-  UserAuthResponseBody,
+  AuthResponse,
+  CustomerResponse,
 } from '~types/types';
 
-export function isUserAuthResponseBody(
-  data: unknown,
-): data is UserAuthResponseBody {
+export function isUserAuthResponseBody(data: unknown): data is AuthResponse {
   return (
     typeof data === 'object' &&
     data !== null &&
@@ -21,7 +20,7 @@ export function isUserAuthResponseBody(
 
 export function isAuthErrorResponseBody(
   data: unknown,
-): data is AuthErrorResponseBody {
+): data is AuthErrorResponse {
   return (
     typeof data === 'object' &&
     data !== null &&
@@ -34,9 +33,7 @@ export function isAuthErrorResponseBody(
   );
 }
 
-export function isProductsResponseBody(
-  data: unknown,
-): data is ProductsResponseBody {
+export const isProductsResponse = (data: unknown): data is ProductsResponse => {
   if (typeof data !== 'object' || data === null) {
     return false;
   }
@@ -79,7 +76,7 @@ export function isProductsResponseBody(
       )
     );
   });
-}
+};
 
 export function isUserProfile(body: unknown): body is User {
   return (
@@ -94,3 +91,57 @@ export function isUserProfile(body: unknown): body is User {
     'scopes' in body
   );
 }
+
+export const isCustomerResponse = (obj: unknown): obj is CustomerResponse => {
+  if (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'customer' in obj &&
+    typeof obj.customer === 'object' &&
+    obj.customer !== null
+  ) {
+    const c = obj.customer;
+    return (
+      'id' in c &&
+      'version' in c &&
+      'versionModifiedAt' in c &&
+      'lastMessageSequenceNumber' in c &&
+      'createdAt' in c &&
+      'lastModifiedAt' in c &&
+      'lastModifiedBy' in c &&
+      'lastModifiedBy' in c &&
+      'lastModifiedBy' in c &&
+      'lastModifiedBy' in c &&
+      'createdBy' in c &&
+      'createdBy' in c &&
+      'createdBy' in c &&
+      'createdBy' in c &&
+      'email' in c &&
+      'firstName' in c &&
+      'lastName' in c &&
+      'password' in c &&
+      'addresses' in c &&
+      'shippingAddressIds' in c &&
+      'billingAddressIds' in c &&
+      'authenticationMode' in c &&
+      typeof c.id === 'string' &&
+      typeof c.version === 'number' &&
+      typeof c.versionModifiedAt === 'string' &&
+      typeof c.lastMessageSequenceNumber === 'number' &&
+      typeof c.createdAt === 'string' &&
+      typeof c.lastModifiedAt === 'string' &&
+      typeof c.lastModifiedBy === 'object' &&
+      typeof c.createdBy === 'object' &&
+      typeof c.email === 'string' &&
+      typeof c.firstName === 'string' &&
+      typeof c.lastName === 'string' &&
+      typeof c.password === 'string' &&
+      Array.isArray(c.addresses) &&
+      Array.isArray(c.shippingAddressIds) &&
+      Array.isArray(c.billingAddressIds) &&
+      typeof c.authenticationMode === 'string'
+    );
+  }
+
+  return false;
+};
