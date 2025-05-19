@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useMakeRequest } from './useMakeRequest';
 import {
   createUserRegistrationRequest,
@@ -16,9 +15,10 @@ import type { RegistrationData, User } from '~/types/types';
 export function useRegister() {
   const [error, setError] = useState<string | null>(null);
   const { makeRequest, loading } = useMakeRequest();
-  const navigate = useNavigate();
 
-  const register = async (data: RegistrationData) => {
+  const register = async (
+    data: RegistrationData,
+  ): Promise<User | undefined> => {
     setError(null);
     try {
       await makeRequest(createUserRegistrationRequest(data), isUserProfile);
@@ -29,20 +29,21 @@ export function useRegister() {
       );
       if (!loginBody) throw new Error('Login failed');
 
-      localStorage.setItem('accessToken', loginBody.access_token);
-
-      const profile: User | undefined = await makeRequest(
-        createUser(),
+      const profile = await makeRequest(
+        createUser(data, loginBody.access_token),
         isUserProfile,
       );
       if (!profile) throw new Error('Profile fetch failed');
 
-      void navigate('/');
       return profile;
     } catch (err: unknown) {
-      if (isAuthErrorResponseBody(err)) setError(err.message);
-      else if (err instanceof Error) setError(err.message);
-      else setError('Unknown error');
+      if (isAuthErrorResponseBody(err)) {
+        setError(err.message);
+      } else if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Unknown error');
+      }
     }
   };
 
