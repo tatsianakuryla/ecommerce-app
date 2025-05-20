@@ -27,6 +27,7 @@ export const authenticateUser = (
     method: 'POST',
     headers: {
       Authorization: BASIC_AUTH_HEADER,
+      'Content-Type': 'application/x-www-form-urlencoded',
     },
     body,
   });
