@@ -53,6 +53,7 @@ export function RegistrationForm() {
     await register(data);
   };
 
+  // TODO: use loop to reduce code duplication if it's possible
   const fields: FormField[] = [
     {
       name: 'firstName',
@@ -87,10 +88,16 @@ export function RegistrationForm() {
       type: 'string',
       value: data.dateOfBirth,
       placeholder: 'Date of Birth',
-      onChange: (value: string) => {
-        setData({ ...data, dateOfBirth: value });
+      onChange: () => {
+        // TODO: fix DOB, previous implementation allowed to send incorrect data resultng in
+        // "message": "Request body does not contain valid JSON.",
+        // "detailedErrorMessage": "dateOfBirth: Failed to parse date: 10.10.10
+        setData({
+          ...data,
+          dateOfBirth: new Date().toISOString().split('T')[0],
+        });
       },
-      error: fieldError.email,
+      error: fieldError.dateOfBirth,
     },
     {
       name: 'password',

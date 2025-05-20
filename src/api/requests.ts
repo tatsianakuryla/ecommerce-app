@@ -57,14 +57,6 @@ export const generateAnonymousToken = (): Request => {
   });
 };
 
-export function createUserRegistrationRequest(data: RegistrationData): Request {
-  return new Request(CUSTOMER_CREATION_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
-}
-
 export const createUser = (
   data: RegistrationData,
   accessToken: string,

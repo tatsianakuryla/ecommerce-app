@@ -1,18 +1,12 @@
-import { useState, ReactNode, useEffect } from 'react';
+import { useState, ReactNode, useEffect, useCallback } from 'react';
 import { useMakeRequest } from '~/hooks/useMakeRequest';
 import { AuthContext } from './authContext';
 import {
   authenticateUser,
   createUser,
-  createUserRegistrationRequest,
   generateAnonymousToken,
 } from '~/api/requests';
-import {
-  isAuthErrorResponse,
-  isAuthResponse,
-  isCustomerResponse,
-  isUserProfile,
-} from '~/utils/typeguards';
+import { isAuthResponse, isCustomerResponse } from '~/utils/typeguards';
 import { CustomerResponse, RegistrationData } from '~types/types.ts';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -20,9 +14,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { makeRequest, error, loading, clearErrors } = useMakeRequest();
 
+  const fetchAnonymousToken = useCallback(async () => {
+    try {
+      const response = await makeRequest(
+        generateAnonymousToken(),
+        isAuthResponse,
+      );
+      if (response) setAccessToken(response.access_token);
+    } catch (error) {
+      throw new Error('anonymous token fetching failed', {
+        cause: error,
+      });
+    }
+  }, [makeRequest]);
+
   const logout = () => {
     setAccessToken(null);
-    setIsAuthenticated(false);
+    void fetchAnonymousToken();
   };
 
   const login = async (email: string, password: string) => {
@@ -38,10 +46,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       setAccessToken(response.access_token);
       setIsAuthenticated(true);
-
-      return response.access_token;
     } catch (error) {
-      throw new Error('Error during user login:', { cause: error });
+      throw new Error('user login failed', { cause: error });
     }
   };
 
@@ -50,41 +56,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   ): Promise<CustomerResponse | undefined> => {
     clearErrors();
     try {
-      await makeRequest(createUserRegistrationRequest(data), isUserProfile);
+      if (!accessToken) {
+        throw new Error('access_token is not provided');
+      }
 
-      const token = await login(data.email, data.password);
-
-      const profile = await makeRequest(
-        createUser(data, token),
+      const response = await makeRequest(
+        createUser(data, accessToken),
         isCustomerResponse,
       );
 
-      return profile;
-    } catch (err: unknown) {
-      if (isAuthErrorResponse(err)) {
-        throw new Error(err.message);
+      if (!response) {
+        throw new Error('user registration failed');
       }
-      throw new Error('Error during user registration', { cause: err });
+
+      await login(data.email, data.password);
+      return response;
+    } catch (error: unknown) {
+      throw new Error('registration failed', { cause: error });
     }
   };
 
   useEffect(() => {
-    async function fetchAnonymousToken() {
-      try {
-        const response = await makeRequest(
-          generateAnonymousToken(),
-          isAuthResponse,
-        );
-        if (response) setAccessToken(response.access_token);
-      } catch (error) {
-        throw new Error('Error during fetching anonymous token:', {
-          cause: error,
-        });
-      }
-    }
-
     void fetchAnonymousToken();
-  }, [makeRequest]);
+  }, [fetchAnonymousToken]);
 
   return (
     <AuthContext.Provider
