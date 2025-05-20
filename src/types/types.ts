@@ -46,24 +46,15 @@ export interface ErrorResponse {
 
 export interface AuthContextValue {
   login: (email: string, password: string) => Promise<void>;
-  register: (
-    email: string,
-    password: string,
-    firstName: string,
-    lastName: string,
-  ) => Promise<CustomerResponse | undefined>;
-  error: string | null;
   register: (data: RegistrationData) => Promise<CustomerResponse | undefined>;
   logout: () => void;
-  clearErrors: () => void;
-
+  setJustRegistered: (v: boolean) => void;
+  setError: (v: string | null) => void;
   accessToken: string | null;
   isAuthenticated: boolean;
   loading: boolean;
   error: string | null;
   justRegistered: boolean;
-  setJustRegistered: (v: boolean) => void;
-  setError: (v: string | null) => void;
 }
 
 export interface MenuItem {
