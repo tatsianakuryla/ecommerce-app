@@ -6,12 +6,23 @@ import {
   fireEvent,
   act,
 } from '@testing-library/react';
-import { useAuthContext } from '~hooks/useAuthContext.ts';
 import { Provider as ChakraProvider } from '~components/ui/provider.tsx';
 import { AuthProvider } from '~/contexts/authProvider.tsx';
+import { useAuthContext } from '~hooks/useAuthContext.ts';
 import userEvent from '@testing-library/user-event';
-import { vi } from 'vitest';
+import { vi, beforeEach, describe, it, expect } from 'vitest';
 import { renderWithRouter } from '~/tests/helpers/renderWithRouter.tsx';
+
+const makeRequestMock = vi.fn();
+
+vi.mock('~/hooks/useMakeRequest', () => ({
+  useMakeRequest: () => ({
+    makeRequest: makeRequestMock,
+    loading: false,
+    error: null,
+    clearErrors: vi.fn(),
+  }),
+}));
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <ChakraProvider>
@@ -20,17 +31,25 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 describe('Login API login', () => {
+  beforeEach(() => {
+    makeRequestMock.mockReset();
+  });
+
   it('should log in with correct credentials', async () => {
+    makeRequestMock
+
+      .mockResolvedValueOnce({ access_token: 'anon' })
+      .mockResolvedValueOnce({
+        access_token: fixture.mockResponses.successAuth.access_token,
+      });
+
     const { result } = renderHook(() => useAuthContext(), { wrapper });
 
-    await act(async () => {
-      await result.current.login(
-        fixture.correctUsername,
-        fixture.correctPassword,
-      );
-    });
+    await act(() =>
+      result.current.login(fixture.correctUsername, fixture.correctPassword),
+    );
 
-    expect(result.current.accessToken).toEqual(
+    expect(result.current.accessToken).toBe(
       fixture.mockResponses.successAuth.access_token,
     );
     expect(result.current.isAuthenticated).toBe(true);
@@ -48,58 +67,67 @@ describe('Login API login', () => {
       password: fixture.correctPassword,
     },
   ])('should not log in with $desc', async ({ username, password }) => {
+    makeRequestMock
+      .mockResolvedValueOnce({ access_token: 'anon' })
+      .mockResolvedValueOnce({});
+
     const { result } = renderHook(() => useAuthContext(), { wrapper });
 
-    await act(async () => {
-      await result.current.login(username, password);
-    });
+    await expect(
+      act(() => result.current.login(username, password)),
+    ).rejects.toThrow('Error during user login');
 
-    expect(result.current.error).toEqual(
-      fixture.mockResponses.wrongCredentials.message,
-    );
     expect(result.current.isAuthenticated).toBe(false);
   });
 
   it('should not log in with empty password', async () => {
+    makeRequestMock
+      .mockResolvedValueOnce({ access_token: 'anon' })
+      .mockResolvedValueOnce({});
+
     const { result } = renderHook(() => useAuthContext(), { wrapper });
 
-    await act(async () => {
-      await result.current.login(fixture.correctUsername, '');
-    });
+    await expect(
+      act(() => result.current.login(fixture.correctUsername, '')),
+    ).rejects.toThrow('Error during user login');
 
-    expect(result.current.error).toEqual(
-      fixture.mockResponses.emptyPassword.message,
-    );
     expect(result.current.isAuthenticated).toBe(false);
   });
 
   it('should not log in with empty email', async () => {
+    makeRequestMock
+      .mockResolvedValueOnce({ access_token: 'anon' })
+      .mockResolvedValueOnce({});
+
     const { result } = renderHook(() => useAuthContext(), { wrapper });
 
-    await act(async () => {
-      await result.current.login('', fixture.correctPassword);
-    });
+    await expect(
+      act(() => result.current.login('', fixture.correctPassword)),
+    ).rejects.toThrow('Error during user login');
 
-    expect(result.current.error).toEqual(
-      fixture.mockResponses.wrongCredentials.message,
-    );
     expect(result.current.isAuthenticated).toBe(false);
   });
 });
 
 describe('Login UI login', () => {
+  beforeEach(() => {
+    makeRequestMock.mockReset().mockResolvedValue({ access_token: 'anon' });
+  });
+
   it('should call login with correct credentials', async () => {
-    const loginMock = vi.fn().mockResolvedValue(undefined);
+    const loginMock = vi.fn().mockResolvedValue('fake-token');
 
     renderWithRouter('/login', { login: loginMock });
 
-    const emailInput = screen.getByPlaceholderText('Email');
-    const passwordInput = screen.getByPlaceholderText('Password');
-    const loginButton = screen.getByRole('button', { name: /login/i });
-
-    await userEvent.type(emailInput, fixture.correctUsername);
-    await userEvent.type(passwordInput, fixture.correctPassword);
-    await userEvent.click(loginButton);
+    await userEvent.type(
+      screen.getByPlaceholderText('Email'),
+      fixture.correctUsername,
+    );
+    await userEvent.type(
+      screen.getByPlaceholderText('Password'),
+      fixture.correctPassword,
+    );
+    await userEvent.click(screen.getByRole('button', { name: /login/i }));
 
     await waitFor(() => {
       expect(loginMock).toHaveBeenCalledWith(
@@ -111,17 +139,14 @@ describe('Login UI login', () => {
 
   it('should not render error modal after successful login', async () => {
     renderWithRouter('/login');
-    const loginButton = screen.getByRole('button', { name: 'Login' });
-    const emailInput = screen.getByPlaceholderText('Email');
-    const passwordInput = screen.getByPlaceholderText('Password');
 
-    fireEvent.change(emailInput, {
+    fireEvent.change(screen.getByPlaceholderText('Email'), {
       target: { value: fixture.correctUsername },
     });
-    fireEvent.change(passwordInput, {
+    fireEvent.change(screen.getByPlaceholderText('Password'), {
       target: { value: fixture.correctPassword },
     });
-    fireEvent.click(loginButton);
+    fireEvent.click(screen.getByRole('button', { name: 'Login' }));
 
     await waitFor(() => {
       expect(screen.queryByTestId('error-alert')).not.toBeInTheDocument();
@@ -129,33 +154,38 @@ describe('Login UI login', () => {
   });
 
   it('should render error modal after unsuccessful login', async () => {
-    renderWithRouter('/login');
-    const loginButton = screen.getByRole('button', { name: 'Login' });
-    const emailInput = screen.getByPlaceholderText('Email');
-    const passwordInput = screen.getByPlaceholderText('Password');
+    makeRequestMock
+      .mockReset()
+      .mockResolvedValueOnce({ access_token: 'anon' })
+      .mockResolvedValueOnce({});
 
-    fireEvent.change(emailInput, {
+    renderWithRouter('/login');
+
+    fireEvent.change(screen.getByPlaceholderText('Email'), {
       target: { value: fixture.correctUsername },
     });
-    fireEvent.change(passwordInput, {
-      target: { value: fixture.correctPassword },
+    fireEvent.change(screen.getByPlaceholderText('Password'), {
+      target: { value: fixture.incorrectPassword },
     });
-    fireEvent.click(loginButton);
+    fireEvent.click(screen.getByRole('button', { name: 'Login' }));
 
     await waitFor(() => {
-      expect(screen.queryByTestId('error-alert')).not.toBeInTheDocument();
+      expect(screen.getByTestId('error-alert-error')).toBeInTheDocument();
     });
   });
 
   it('navigates to register page after clicking register link', async () => {
     renderWithRouter('/login');
+
     expect(
       await screen.findByRole('heading', { name: /login page/i }),
     ).toBeInTheDocument();
-    const registerLink = screen.getByRole('link', {
-      name: /Don`t have an account\?.*register/i,
-    });
-    await userEvent.click(registerLink);
+
+    await userEvent.click(
+      screen.getByRole('link', {
+        name: /Don`t have an account\?.*register/i,
+      }),
+    );
     expect(
       await screen.findByRole('heading', {
         name: /register page/i,

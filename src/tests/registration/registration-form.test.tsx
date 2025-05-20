@@ -2,23 +2,44 @@ import { screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithRouter } from '~/tests/helpers/renderWithRouter';
 import { describe, it, beforeEach, expect, vi } from 'vitest';
-import { useRegister } from '~/hooks/useRegister';
 
-vi.mock('~/hooks/useRegister', () => ({
-  useRegister: vi.fn(),
-}));
+vi.mock('~/contexts/authContext', async () => {
+  const actual = await vi.importActual<typeof import('~/contexts/authContext')>(
+    '~/contexts/authContext',
+  );
 
-const mockedUseRegister = vi.mocked(useRegister, true);
+  return {
+    ...actual,
+    useAuth: vi.fn(),
+  };
+});
+
+import { useAuth } from '~/contexts/authContext';
+const mockedUseAuth = vi.mocked(useAuth, true);
+
+const makeAuthValue = (overrides: Partial<ReturnType<typeof baseValue>> = {}) =>
+  Object.assign(baseValue(), overrides);
+
+function baseValue() {
+  return {
+    login: vi.fn(),
+    register: vi.fn(),
+    logout: vi.fn(),
+    clearErrors: vi.fn(),
+
+    loading: false,
+    error: '',
+    accessToken: null,
+    isAuthenticated: false,
+  };
+}
 
 describe('Redirection to Login page from Registration page', () => {
   it('navigates to login page after clicking login link', async () => {
-    mockedUseRegister.mockReturnValue({
-      register: vi.fn(),
-      loading: false,
-      error: null,
-    });
+    mockedUseAuth.mockReturnValue(makeAuthValue());
 
     renderWithRouter('/register');
+
     expect(
       await screen.findByRole('heading', {
         level: 2,
@@ -26,10 +47,12 @@ describe('Redirection to Login page from Registration page', () => {
         hidden: true,
       }),
     ).toBeInTheDocument();
+
     const loginLink = screen.getByRole('link', {
       name: /already have an account\?.*login/i,
     });
     await userEvent.click(loginLink);
+
     expect(
       await screen.findByRole('heading', { name: /login page/i }),
     ).toBeInTheDocument();
@@ -40,48 +63,36 @@ describe('Registration Form', () => {
   const registerMock = vi.fn();
 
   beforeEach(() => {
-    mockedUseRegister.mockReturnValue({
-      register: registerMock,
-      loading: false,
-      error: null,
-    });
+    mockedUseAuth.mockReturnValue(
+      makeAuthValue({
+        register: registerMock,
+      }),
+    );
   });
 
   it('calls register with correct data', () => {
     renderWithRouter('/register');
 
-    fireEvent.change(screen.getByPlaceholderText('First Name'), {
-      target: { value: 'John' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Last Name'), {
-      target: { value: 'Doe' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Email'), {
-      target: { value: 'john@doe.com' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Password'), {
-      target: { value: '123456' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Confirm Password'), {
-      target: { value: '123456' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Date of Birth'), {
-      target: { value: '1990-01-01' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Street'), {
-      target: { value: 'Baker St' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('City'), {
-      target: { value: 'London' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Postal Code'), {
-      target: { value: 'NW1' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Country'), {
-      target: { value: 'UK' },
+    const fields = [
+      { placeholder: 'First Name', value: 'John' },
+      { placeholder: 'Last Name', value: 'Doe' },
+      { placeholder: 'Email', value: 'john@doe.com' },
+      { placeholder: 'Password', value: '123456' },
+      { placeholder: 'Confirm Password', value: '123456' },
+      { placeholder: 'Date of Birth', value: '1990-01-01' },
+      { placeholder: 'Street', value: 'Baker St' },
+      { placeholder: 'City', value: 'London' },
+      { placeholder: 'Postal Code', value: 'NW1' },
+      { placeholder: 'Country', value: 'UK' },
+    ];
+
+    fields.forEach(({ placeholder, value }) => {
+      fireEvent.change(screen.getByPlaceholderText(placeholder), {
+        target: { value },
+      });
     });
 
-    fireEvent.click(screen.getByRole('button', { name: /Register/i }));
+    fireEvent.click(screen.getByRole('button', { name: /register/i }));
 
     expect(registerMock).toHaveBeenCalledTimes(1);
     expect(registerMock).toHaveBeenCalledWith({
@@ -100,24 +111,19 @@ describe('Registration Form', () => {
   });
 
   it('disables button when loading', () => {
-    mockedUseRegister.mockReturnValue({
-      register: vi.fn(),
-      loading: true,
-      error: null,
-    });
+    mockedUseAuth.mockReturnValue(
+      makeAuthValue({
+        loading: true,
+      }),
+    );
 
     renderWithRouter('/register');
-    expect(screen.getByRole('button', { name: /Register/i })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /register/i })).toBeDisabled();
   });
 
   it('renders server error', () => {
-    mockedUseRegister.mockReturnValue({
-      register: vi.fn(),
-      loading: false,
-      error: 'Email taken',
-    });
-
+    mockedUseAuth.mockReturnValue(makeAuthValue({ error: 'Email taken' }));
     renderWithRouter('/register');
-    expect(screen.getByText(/Email taken/i)).toBeInTheDocument();
+    expect(screen.getByText(/email taken/i)).toBeInTheDocument();
   });
 });

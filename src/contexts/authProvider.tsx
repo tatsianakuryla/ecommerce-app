@@ -32,15 +32,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isAuthResponse,
       );
 
-      if (response && !response.access_token) {
+      if (!response?.access_token) {
         throw new Error('access_token was not received during login attempt');
       }
 
-      if (response) {
-        setAccessToken(response.access_token);
-        setIsAuthenticated(true);
-        return response.access_token;
-      }
+      setAccessToken(response.access_token);
+      setIsAuthenticated(true);
+
+      return response.access_token;
     } catch (error) {
       throw new Error('Error during user login:', { cause: error });
     }
@@ -54,8 +53,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await makeRequest(createUserRegistrationRequest(data), isUserProfile);
 
       const token = await login(data.email, data.password);
-
-      if (!token) throw new Error('Login failed');
 
       const profile = await makeRequest(
         createUser(data, token),

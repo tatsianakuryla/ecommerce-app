@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { Form } from '~components/Form/Form';
 import RedirectionLink from '~components/RedirectionLink/RedirectionLink.tsx';
 import { FiLogIn } from 'react-icons/fi';
-import { useRegister } from '~/hooks/useRegister';
 import type { FieldKey, FormField, RegistrationData } from '~/types/types';
-import { Alert } from '@chakra-ui/react';
+import { useAuth } from '~/contexts/authContext.tsx';
+import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert.tsx';
 
 export function RegistrationForm() {
   const [fieldError, setFieldError] = useState<
@@ -25,11 +25,11 @@ export function RegistrationForm() {
   });
 
   const [confirmPassword, setConfirmPassword] = useState('');
-  const { register, loading, error } = useRegister();
+  const { register, loading, error, clearErrors } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    clearErrors();
     const errors: Partial<Record<FieldKey, string>> = {};
 
     if (!data.firstName.trim()) errors.firstName = 'First name is required';
@@ -166,21 +166,7 @@ export function RegistrationForm() {
         loading={loading}
         submitLabel='Register'
       />
-      {error != null && (
-        <Alert.Root
-          status='error'
-          variant='subtle'
-          fontSize='sm'
-          mb={4}
-          px={2}
-          display='inline-flex'
-          alignItems='center'
-          justifyContent='center'
-        >
-          <Alert.Indicator />
-          <Alert.Title>{error}</Alert.Title>
-        </Alert.Root>
-      )}
+      {error != null && <ErrorAlert name='error' error={error} />}
       <RedirectionLink
         label='Already have an account?'
         to='/login'

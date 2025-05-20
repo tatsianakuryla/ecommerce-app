@@ -56,14 +56,15 @@ export interface AuthErrorResponse {
 }
 
 export interface AuthContextValue {
-  logout: () => void;
-  login: (email: string, password: string) => Promise<string | undefined>;
+  login: (email: string, password: string) => Promise<string>;
   register: (data: RegistrationData) => Promise<CustomerResponse | undefined>;
+  logout: () => void;
   clearErrors: () => void;
-  error: string | null;
+
   accessToken: string | null;
-  loading: boolean;
   isAuthenticated: boolean;
+  loading: boolean;
+  error: string | null;
 }
 
 export interface MenuItem {
