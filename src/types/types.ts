@@ -25,13 +25,6 @@ export interface RegistrationData {
   address: Address;
 }
 
-export interface User extends RegistrationData {
-  id: string;
-  isActive: boolean;
-  permissionLevel: PermissionLevel;
-  scopes: Permissions[PermissionLevel];
-}
-
 export interface AuthResponse {
   access_token: string;
   expires_in: number;
@@ -56,7 +49,7 @@ export interface AuthErrorResponse {
 }
 
 export interface AuthContextValue {
-  login: (email: string, password: string) => Promise<string>;
+  login: (email: string, password: string) => Promise<void>;
   register: (data: RegistrationData) => Promise<CustomerResponse | undefined>;
   logout: () => void;
   clearErrors: () => void;
