@@ -53,22 +53,38 @@ export function formatDateInput(value: string): string {
 
 export function validateDateOfBirth(dob: string): string {
   if (!dob.trim()) return 'Date of birth is required.';
-  if (dob.length < 10) return '';
-  if (!/^\d{2}\.\d{2}\.\d{4}$/.test(dob)) return 'Invalid date format.';
-  const [dd, mm, yyyy] = dob.split('.');
-  const day = +dd,
-    month = +mm,
-    year = +yyyy;
-  const maxDay = new Date(year, month, 0).getDate();
-  if (month < 1 || month > 12) return 'Invalid month.';
-  if (day < 1 || day > maxDay) return 'Invalid day.';
-  const birth = new Date(year, month - 1, day);
-  if (isNaN(birth.getTime())) return 'Invalid date.';
-  const today = new Date();
-  let age = today.getFullYear() - year;
-  const m = today.getMonth() - (month - 1);
-  if (m < 0 || (m === 0 && today.getDate() < day)) age--;
-  if (age < 13) return 'You must be at least 13 years old.';
+
+  if (dob.length >= 2) {
+    const dayStr = dob.slice(0, 2);
+    if (!/^\d{2}$/.test(dayStr)) return 'Invalid day format.';
+    const day = Number(dayStr);
+    if (day < 1 || day > 31) return 'Invalid day.';
+  }
+
+  if (dob.length >= 5) {
+    const monthStr = dob.slice(3, 5);
+    if (!/^\d{2}$/.test(monthStr)) return 'Invalid month format.';
+    const month = Number(monthStr);
+    if (month < 1 || month > 12) return 'Invalid month.';
+  }
+
+  if (dob.length >= 10) {
+    if (!/^\d{2}\.\d{2}\.\d{4}$/.test(dob)) return 'Invalid date format.';
+    const [dd, mm, yyyy] = dob.split('.');
+    const day = Number(dd);
+    const month = Number(mm);
+    const year = Number(yyyy);
+    const currentYear = new Date().getFullYear();
+    if (year > currentYear) return 'Invalid year.';
+    const maxDay = new Date(year, month, 0).getDate();
+    if (day > maxDay) return 'Invalid day for month.';
+    const today = new Date();
+    let age = today.getFullYear() - year;
+    const m = today.getMonth() - (month - 1);
+    if (m < 0 || (m === 0 && today.getDate() < day)) age--;
+    if (age < 13) return 'You must be at least 13 years old.';
+  }
+
   return '';
 }
 
