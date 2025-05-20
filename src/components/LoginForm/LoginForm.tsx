@@ -7,25 +7,30 @@ import RedirectionLink from '~components/RedirectionLink/RedirectionLink.tsx';
 import { FiUserPlus } from 'react-icons/fi';
 import { Flex } from '@chakra-ui/react';
 import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert.tsx';
+import {
+  validateEmail,
+  validatePassword,
+} from '~components/LoginForm/loginFormValidation.ts';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fieldError, setFieldError] = useState({ email: '', password: '' });
 
-  const { login, error, loading, clearErrors } = useAuthContext();
+  const { login, error: serverError, loading, clearErrors } = useAuthContext();
 
   useEffect(() => {
-    if (error === null) return;
-    const msg = error.toLowerCase();
+    if (serverError === null) return;
+    const msg = serverError.toLowerCase();
     const next = { email: '', password: '' };
-    if (msg.includes('email')) next.email = error;
-    if (msg.includes('password')) next.password = normalizeErrorMessage(error);
+    if (msg.includes('email')) next.email = serverError;
+    if (msg.includes('password'))
+      next.password = normalizeErrorMessage(serverError);
     if (!next.email && !next.password) {
-      next.email = next.password = error;
+      next.email = next.password = serverError;
     }
     setFieldError(next);
-  }, [error]);
+  }, [serverError]);
 
   useEffect(() => {
     return () => {
@@ -35,6 +40,10 @@ export function LoginForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const eErr = validateEmail(email);
+    const pErr = validatePassword(password);
+    setFieldError({ email: eErr, password: pErr });
+    if (eErr || pErr) return;
     void login(email, password);
   };
 
@@ -46,9 +55,8 @@ export function LoginForm() {
       placeholder: 'Email',
       onChange: (value: string) => {
         setEmail(value);
-        if (fieldError.email) {
-          setFieldError((err) => ({ ...err, email: '' }));
-        }
+        const err = validateEmail(value);
+        setFieldError((prev) => ({ ...prev, email: err }));
       },
       error: fieldError.email,
     },
@@ -59,9 +67,8 @@ export function LoginForm() {
       placeholder: 'Password',
       onChange: (value: string) => {
         setPassword(value);
-        if (fieldError.password) {
-          setFieldError((err) => ({ ...err, password: '' }));
-        }
+        const err = validatePassword(value);
+        setFieldError((prev) => ({ ...prev, password: err }));
       },
       error: fieldError.password,
     },
@@ -80,9 +87,11 @@ export function LoginForm() {
         loading={loading}
         submitLabel='Login'
       />
-      {error != null && <ErrorAlert name='error' error={error} />}
+      {serverError && !fieldError.email && !fieldError.password && (
+        <ErrorAlert name='error' error={serverError} />
+      )}
       <RedirectionLink
-        label='Don`t have an account?'
+        label="Don't have an account?"
         to='/register'
         icon={<FiUserPlus />}
         link='Register'
