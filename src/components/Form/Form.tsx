@@ -59,6 +59,7 @@ export function Form({
               <Box position='relative' w='full'>
                 {type === 'select' ? (
                   <Select
+                    aria-label={placeholder}
                     maxWidth='382px'
                     icon={<Box />}
                     value={value}

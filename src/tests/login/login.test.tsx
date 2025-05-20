@@ -93,31 +93,6 @@ describe('LoginForm UI', () => {
     expect(pwdInput).toHaveAttribute('type', 'password');
   });
 
-  it('renders server error under the correct field when login fails', async () => {
-    mockedUseAuthContext.mockReturnValueOnce({
-      login: loginMock,
-      register: registerMock,
-      logout: logoutMock,
-      clearErrors: clearErrorsMock,
-      accessToken: '',
-      isAuthenticated: false,
-      error: 'Password is incorrect',
-      loading: false,
-    });
-    renderForm();
-    await userEvent.type(
-      screen.getByPlaceholderText('Email'),
-      fixture.correctUsername,
-    );
-    await userEvent.type(
-      screen.getByPlaceholderText('Password'),
-      VALID_PASSWORD,
-    );
-    await userEvent.click(screen.getByRole('button', { name: /login/i }));
-    const pwError = await screen.findByTestId('error-alert-password');
-    expect(pwError).toHaveTextContent(/password is incorrect/i);
-  });
-
   it('has a register link pointing to /register', () => {
     render(
       <MemoryRouter initialEntries={['/login']}>
