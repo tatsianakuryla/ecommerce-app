@@ -4,10 +4,16 @@ import { AuthContext } from './authContext';
 import {
   authenticateUser,
   createUser,
+  createUserRegistrationRequest,
   generateAnonymousToken,
 } from '~/api/requests';
-import { isAuthResponse, isCustomerResponse } from '~/utils/typeguards';
-import { RegistrationData } from '~types/types.ts';
+import {
+  isAuthErrorResponse,
+  isAuthResponse,
+  isCustomerResponse,
+  isUserProfile,
+} from '~/utils/typeguards';
+import { CustomerResponse, RegistrationData } from '~types/types.ts';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -33,31 +39,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (response) {
         setAccessToken(response.access_token);
         setIsAuthenticated(true);
+        return response.access_token;
       }
     } catch (error) {
       throw new Error('Error during user login:', { cause: error });
     }
   };
 
-  const register = async (data: RegistrationData) => {
+  const register = async (
+    data: RegistrationData,
+  ): Promise<CustomerResponse | undefined> => {
+    clearErrors();
     try {
-      if (!accessToken) {
-        throw new Error('access_token is not provided');
-      }
+      await makeRequest(createUserRegistrationRequest(data), isUserProfile);
 
-      const response = await makeRequest(
-        createUser(data, accessToken),
+      const token = await login(data.email, data.password);
+
+      if (!token) throw new Error('Login failed');
+
+      const profile = await makeRequest(
+        createUser(data, token),
         isCustomerResponse,
       );
 
-      if (response) {
-        setIsAuthenticated(true);
-        return response;
+      return profile;
+    } catch (err: unknown) {
+      if (isAuthErrorResponse(err)) {
+        throw new Error(err.message);
       }
-    } catch (error) {
-      throw new Error('Error during registration:', {
-        cause: error,
-      });
+      throw new Error('Error during user registration', { cause: err });
     }
   };
 
