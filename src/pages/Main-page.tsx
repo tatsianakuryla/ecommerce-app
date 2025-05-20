@@ -1,13 +1,14 @@
 import { Container, Flex, Heading } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { getProducts } from '~/api/requests';
+import { JustRegisteredDialog } from '~/components/JustRegisteredDialog/JustRegisteredDialog';
 import { useAuthContext } from '~/hooks/useAuthContext';
 import { useMakeRequest } from '~/hooks/useMakeRequest';
 import { Product, ProductsResponse } from '~/types/types';
 import { isProductsResponse } from '~/utils/typeguards';
 
 export const MainPage = () => {
-  const { accessToken } = useAuthContext();
+  const { accessToken, justRegistered, setJustRegistered } = useAuthContext();
   const { makeRequest } = useMakeRequest();
   const [products, setProducts] = useState<Product[]>([]);
 
@@ -37,12 +38,26 @@ export const MainPage = () => {
       ignore = true;
     };
   }, [accessToken, makeRequest]);
+
+  const handleCloseDialog = () => {
+    setJustRegistered(false);
+  };
+
   console.log('Products', products);
 
   return (
     <Container py='1rem'>
       <Flex justifyContent='center' alignItems='center'>
         <Heading>Main page</Heading>
+        {justRegistered && (
+          <JustRegisteredDialog
+            title={'Registration'}
+            description={
+              "Congrats! You've successfully registered and, as you can see, the app has not crashed, which is always a good sign"
+            }
+            handleCloseDialog={handleCloseDialog}
+          />
+        )}
       </Flex>
     </Container>
   );

@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { isAuthErrorResponse } from '~/utils/typeguards';
+import { isErrorResponse } from '~/utils/typeguards';
 
 export function useMakeRequest() {
   const [loading, setLoading] = useState(false);
@@ -25,7 +25,7 @@ export function useMakeRequest() {
           return json;
         }
       } catch (error: unknown) {
-        if (isAuthErrorResponse(error)) {
+        if (isErrorResponse(error)) {
           setError(error.message);
         } else if (error instanceof Error) {
           setError('Ooops, something went wrong');
@@ -40,9 +40,5 @@ export function useMakeRequest() {
     [],
   );
 
-  const clearErrors = () => {
-    setError(null);
-  };
-
-  return { makeRequest, loading, error, clearErrors };
+  return { makeRequest, loading, error, setError };
 }
