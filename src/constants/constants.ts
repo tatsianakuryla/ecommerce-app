@@ -1,7 +1,7 @@
 // Requests related
 export const PROJECT_KEY = 'rssecomm';
-const CLIENT_ID = 'mips3GOYQ_bl_NgtcJSWoQJD';
-const CLIENT_SECRET = 'SUcm5b5LpsmsBU5GCZzaNXdEwcFiw0bT';
+const CLIENT_ID = 'VSoSJL93ehdNSp2ILY62b3zG';
+const CLIENT_SECRET = '9xPxdvPzFxRVhOAw4_U1Qkbcub8EcT1U';
 export const BASIC_AUTH_HEADER =
   'Basic ' + btoa(`${CLIENT_ID}:${CLIENT_SECRET}`);
 
