@@ -13,6 +13,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build-netlify": "vite build",
     "lint": "eslint . --fix",
     "format": "prettier --write .",
     "stylelint": "stylelint \"src/**/*.css\" --fix",

@@ -1,4 +1,4 @@
-import { Container, Flex, Heading, VisuallyHidden } from '@chakra-ui/react';
+import { Container, Flex, Heading } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { getProducts } from '~/api/requests';
 import { useAuthContext } from '~/hooks/useAuthContext';
@@ -42,11 +42,8 @@ export const MainPage = () => {
   return (
     <Container py='1rem'>
       <Flex justifyContent='center' alignItems='center'>
-        <VisuallyHidden>
-          <Heading>Main page</Heading>
-        </VisuallyHidden>
+        <Heading>Main page</Heading>
       </Flex>
-      {/*для тестов и для скрин-ридеров прошу в случае необходимости не удалять элемент, а обернуть элемент в <VisuallyHidden>*/}
     </Container>
   );
 };

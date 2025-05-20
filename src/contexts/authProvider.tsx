@@ -4,9 +4,16 @@ import { AuthContext } from './authContext';
 import {
   authenticateUser,
   createUser,
+  createUserRegistrationRequest,
   generateAnonymousToken,
 } from '~/api/requests';
-import { isAuthResponse, isCustomerResponse } from '~/utils/typeguards';
+import {
+  isAuthErrorResponse,
+  isAuthResponse,
+  isCustomerResponse,
+  isUserProfile,
+} from '~/utils/typeguards';
+import { CustomerResponse, RegistrationData } from '~types/types.ts';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -25,43 +32,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isAuthResponse,
       );
 
-      if (response && !response.access_token) {
+      if (!response?.access_token) {
         throw new Error('access_token was not received during login attempt');
       }
 
-      if (response) {
-        setAccessToken(response.access_token);
-        setIsAuthenticated(true);
-      }
+      setAccessToken(response.access_token);
+      setIsAuthenticated(true);
+
+      return response.access_token;
     } catch (error) {
       throw new Error('Error during user login:', { cause: error });
     }
   };
 
   const register = async (
-    email: string,
-    password: string,
-    firstName: string,
-    lastName: string,
-  ) => {
+    data: RegistrationData,
+  ): Promise<CustomerResponse | undefined> => {
+    clearErrors();
     try {
-      if (!accessToken) {
-        throw new Error('access_token is not provided');
-      }
+      await makeRequest(createUserRegistrationRequest(data), isUserProfile);
 
-      const response = await makeRequest(
-        createUser(email, password, firstName, lastName, accessToken),
+      const token = await login(data.email, data.password);
+
+      const profile = await makeRequest(
+        createUser(data, token),
         isCustomerResponse,
       );
 
-      if (response) {
-        setIsAuthenticated(true);
-        return response;
+      return profile;
+    } catch (err: unknown) {
+      if (isAuthErrorResponse(err)) {
+        throw new Error(err.message);
       }
-    } catch (error) {
-      throw new Error('Error during registration:', {
-        cause: error,
-      });
+      throw new Error('Error during user registration', { cause: err });
     }
   };
 

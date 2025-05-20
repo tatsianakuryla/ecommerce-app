@@ -1,6 +1,7 @@
 import {
   AuthErrorResponse,
   ProductsResponse,
+  User,
   AuthResponse,
   CustomerResponse,
 } from '~types/types';
@@ -76,6 +77,20 @@ export const isProductsResponse = (data: unknown): data is ProductsResponse => {
     );
   });
 };
+
+export function isUserProfile(body: unknown): body is User {
+  return (
+    typeof body === 'object' &&
+    body !== null &&
+    'id' in body &&
+    'email' in body &&
+    'firstName' in body &&
+    'lastName' in body &&
+    'isActive' in body &&
+    'permissionLevel' in body &&
+    'scopes' in body
+  );
+}
 
 export const isCustomerResponse = (obj: unknown): obj is CustomerResponse => {
   if (

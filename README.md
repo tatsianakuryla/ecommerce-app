@@ -90,8 +90,8 @@ E-COMMERCE-APP/
 │   ├── router/
 │   ├── styles/
 │   ├── types/
+│   ├── tests/
 │   ├── utils/
-│   ├── store/
 │   ├── App.tsx
 │   └── index.tsx
 └── README.md

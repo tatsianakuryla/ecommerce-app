@@ -7,7 +7,7 @@ import {
   GUEST_AUTH_TOKEN_URL,
   CUSTOMER_CREATION_URL,
 } from '~/constants/constants';
-import { PermissionLevel } from '~/types/types';
+import { PermissionLevel, RegistrationData } from '~/types/types';
 
 const userPermissions = generatePermissions(PermissionLevel.USER);
 const guestPermissions = generatePermissions();
@@ -27,6 +27,7 @@ export const authenticateUser = (
     method: 'POST',
     headers: {
       Authorization: BASIC_AUTH_HEADER,
+      'Content-Type': 'application/x-www-form-urlencoded',
     },
     body,
   });
@@ -56,19 +57,19 @@ export const generateAnonymousToken = (): Request => {
   });
 };
 
+export function createUserRegistrationRequest(data: RegistrationData): Request {
+  return new Request(CUSTOMER_CREATION_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+}
+
 export const createUser = (
-  email: string,
-  password: string,
-  firstName: string,
-  lastName: string,
+  data: RegistrationData,
   accessToken: string,
 ): Request => {
-  const body = JSON.stringify({
-    email,
-    firstName,
-    lastName,
-    password,
-  });
+  const body = JSON.stringify(data);
 
   return new Request(CUSTOMER_CREATION_URL, {
     method: 'POST',

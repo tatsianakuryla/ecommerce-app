@@ -1,8 +1,10 @@
 // Requests related
 export const PROJECT_KEY = 'rssecomm';
-const { VITE_CLIENT_ID, VITE_CLIENT_SECRET } = import.meta.env;
 export const BASIC_AUTH_HEADER =
-  'Basic ' + btoa(`${VITE_CLIENT_ID}:${VITE_CLIENT_SECRET}`);
+  'Basic ' +
+  btoa(
+    `${import.meta.env.VITE_CLIENT_ID}:${import.meta.env.VITE_CLIENT_SECRET}`,
+  );
 
 // Permissions
 const GUEST_PERMISSIONS = {
@@ -39,8 +41,8 @@ export const permissions = {
 export const BASE_API_URL = 'https://api.eu-central-1.aws.commercetools.com/';
 export const BASE_AUTH_URL = 'https://auth.eu-central-1.aws.commercetools.com/';
 export const USER_AUTH_TOKEN = `oauth/${PROJECT_KEY}/customers/token`;
-export const CLIENT_AUTH_URL = `${BASE_AUTH_URL}oauth/token`;
 export const GUEST_AUTH_TOKEN_URL = `${BASE_AUTH_URL}oauth/${PROJECT_KEY}/anonymous/token`;
+export const CLIENT_AUTH_URL = `${BASE_AUTH_URL}oauth/token`;
 export const USER_AUTH_URL = `${BASE_AUTH_URL}${USER_AUTH_TOKEN}`;
 export const PUBLISHED_PRODUCTS_URL = `${BASE_API_URL}${PROJECT_KEY}/product-projections`;
 export const CUSTOMER_CREATION_URL = `${BASE_API_URL}${PROJECT_KEY}/customers`;

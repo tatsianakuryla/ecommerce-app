@@ -6,6 +6,7 @@ import { ProgressCircleElement } from '~components/Progress-circle/Progress-circ
 import RedirectionLink from '~components/RedirectionLink/RedirectionLink.tsx';
 import { FiUserPlus } from 'react-icons/fi';
 import { Flex } from '@chakra-ui/react';
+import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert.tsx';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
@@ -79,6 +80,7 @@ export function LoginForm() {
         loading={loading}
         submitLabel='Login'
       />
+      {error != null && <ErrorAlert name='error' error={error} />}
       <RedirectionLink
         label='Don`t have an account?'
         to='/register'

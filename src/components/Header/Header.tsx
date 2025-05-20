@@ -62,7 +62,7 @@ function Header() {
       <VisuallyHidden>
         <Heading as='h1'>E-commerce. Shop smart. Live better.</Heading>
       </VisuallyHidden>
-      <NavLink to='/main'>
+      <NavLink to='/'>
         <Image
           src={logo}
           height='100px'

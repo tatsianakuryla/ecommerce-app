@@ -9,6 +9,29 @@ export enum PermissionLevel {
 
 export type Permissions = typeof permissions;
 
+export interface Address {
+  street: string;
+  city: string;
+  postalCode: string;
+  country: string;
+}
+
+export interface RegistrationData {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  address: Address;
+}
+
+export interface User extends RegistrationData {
+  id: string;
+  isActive: boolean;
+  permissionLevel: PermissionLevel;
+  scopes: Permissions[PermissionLevel];
+}
+
 export interface AuthResponse {
   access_token: string;
   expires_in: number;
@@ -33,19 +56,15 @@ export interface AuthErrorResponse {
 }
 
 export interface AuthContextValue {
+  login: (email: string, password: string) => Promise<string>;
+  register: (data: RegistrationData) => Promise<CustomerResponse | undefined>;
   logout: () => void;
-  login: (email: string, password: string) => Promise<void>;
-  register: (
-    email: string,
-    password: string,
-    firstName: string,
-    lastName: string,
-  ) => Promise<CustomerResponse | undefined>;
   clearErrors: () => void;
-  error: string | null;
+
   accessToken: string | null;
-  loading: boolean;
   isAuthenticated: boolean;
+  loading: boolean;
+  error: string | null;
 }
 
 export interface MenuItem {
@@ -62,6 +81,14 @@ export interface FormField {
   onChange: (value: string) => void;
   error?: string;
 }
+
+export type FieldKey =
+  | keyof RegistrationData
+  | 'confirmPassword'
+  | 'street'
+  | 'city'
+  | 'postalCode'
+  | 'country';
 
 export interface FormProps {
   fields: FormField[];
