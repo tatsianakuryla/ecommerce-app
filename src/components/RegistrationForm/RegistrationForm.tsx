@@ -1,10 +1,32 @@
 import { useState } from 'react';
 import { Form } from '~components/Form/Form';
-import RedirectionLink from '~components/RedirectionLink/RedirectionLink.tsx';
+import RedirectionLink from '~components/RedirectionLink/RedirectionLink';
 import { FiLogIn } from 'react-icons/fi';
 import type { FieldKey, FormField, RegistrationData } from '~/types/types';
-import { useAuth } from '~/contexts/authContext.tsx';
-import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert.tsx';
+import { useAuth } from '~/contexts/authContext';
+import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert';
+import {
+  formatDateInput,
+  validateCity,
+  validateConfirmPassword,
+  validateCountry,
+  validateDateOfBirth,
+  validateEmail,
+  validateFirstName,
+  validateLastName,
+  validatePassword,
+  validatePostalCode,
+  validateStreet,
+} from '~components/RegistrationForm/registrationFormValidation.ts';
+import countries from 'i18n-iso-countries';
+import enLocale from 'i18n-iso-countries/langs/en.json';
+countries.registerLocale(enLocale);
+const COUNTRY_OPTIONS = Object.entries(countries.getNames('en')).map(
+  ([code, name]) => ({
+    label: name,
+    value: code,
+  }),
+);
 
 export function RegistrationForm() {
   const [fieldError, setFieldError] = useState<
@@ -23,7 +45,6 @@ export function RegistrationForm() {
       country: '',
     },
   });
-
   const [confirmPassword, setConfirmPassword] = useState('');
   const { register, loading, error, clearErrors } = useAuth();
 
@@ -31,25 +52,26 @@ export function RegistrationForm() {
     e.preventDefault();
     clearErrors();
     const errors: Partial<Record<FieldKey, string>> = {};
-
-    if (!data.firstName.trim()) errors.firstName = 'First name is required';
-    if (!data.lastName.trim()) errors.lastName = 'Last name is required';
-    if (!data.email.trim()) errors.email = 'Email is required';
-    if (!data.password.trim()) errors.password = 'Password is required';
-    if (data.password !== confirmPassword)
-      errors.confirmPassword = 'Passwords must match';
-    if (!data.dateOfBirth.trim())
-      errors.dateOfBirth = 'Date of birth is required';
-
-    if (!data.address.street.trim()) errors.street = 'Street is required';
-    if (!data.address.city.trim()) errors.city = 'City is required';
-    if (!data.address.postalCode.trim())
-      errors.postalCode = 'Postal code is required';
-    if (!data.address.country.trim()) errors.country = 'Country is required';
-
+    errors.firstName = validateFirstName(data.firstName);
+    errors.lastName = validateLastName(data.lastName);
+    errors.email = validateEmail(data.email);
+    errors.password = validatePassword(data.password);
+    errors.confirmPassword = validateConfirmPassword(
+      data.password,
+      confirmPassword,
+    );
+    errors.dateOfBirth = validateDateOfBirth(data.dateOfBirth);
+    errors.street = validateStreet(data.address.street);
+    errors.city = validateCity(data.address.city);
+    errors.postalCode = validatePostalCode(
+      data.address.postalCode,
+      data.address.country,
+    );
+    errors.country = validateCountry(data.address.country);
     setFieldError(errors);
-    if (Object.keys(errors).length > 0) return;
-
+    if (Object.values(errors).some((msg) => msg && msg.length > 0)) return;
+    setFieldError(errors);
+    if (Object.keys(errors).length) return;
     await register(data);
   };
 
@@ -58,8 +80,9 @@ export function RegistrationForm() {
       name: 'firstName',
       value: data.firstName,
       placeholder: 'First Name',
-      onChange: (value: string) => {
+      onChange: (value) => {
         setData({ ...data, firstName: value });
+        setFieldError((f) => ({ ...f, firstName: validateFirstName(value) }));
       },
       error: fieldError.firstName,
     },
@@ -67,8 +90,9 @@ export function RegistrationForm() {
       name: 'lastName',
       value: data.lastName,
       placeholder: 'Last Name',
-      onChange: (value: string) => {
+      onChange: (value) => {
         setData({ ...data, lastName: value });
+        setFieldError((f) => ({ ...f, lastName: validateLastName(value) }));
       },
       error: fieldError.lastName,
     },
@@ -77,28 +101,35 @@ export function RegistrationForm() {
       type: 'email',
       value: data.email,
       placeholder: 'Email',
-      onChange: (value: string) => {
+      onChange: (value) => {
         setData({ ...data, email: value });
+        setFieldError((f) => ({ ...f, email: validateEmail(value) }));
       },
       error: fieldError.email,
     },
     {
       name: 'dateOfBirth',
-      type: 'string',
+      type: 'text',
       value: data.dateOfBirth,
       placeholder: 'Date of Birth',
-      onChange: (value: string) => {
-        setData({ ...data, dateOfBirth: value });
+      onChange: (value) => {
+        const formatted = formatDateInput(value);
+        setData((prev) => ({ ...prev, dateOfBirth: formatted }));
+        setFieldError((prev) => ({
+          ...prev,
+          dateOfBirth: validateDateOfBirth(formatted),
+        }));
       },
-      error: fieldError.email,
+      error: fieldError.dateOfBirth,
     },
     {
       name: 'password',
       type: 'password',
       value: data.password,
       placeholder: 'Password',
-      onChange: (value: string) => {
+      onChange: (value) => {
         setData({ ...data, password: value });
+        setFieldError((f) => ({ ...f, password: validatePassword(value) }));
       },
       error: fieldError.password,
     },
@@ -107,8 +138,12 @@ export function RegistrationForm() {
       type: 'password',
       value: confirmPassword,
       placeholder: 'Confirm Password',
-      onChange: (value: string) => {
+      onChange: (value) => {
         setConfirmPassword(value);
+        setFieldError((f) => ({
+          ...f,
+          confirmPassword: validateConfirmPassword(data.password, value),
+        }));
       },
       error: fieldError.confirmPassword,
     },
@@ -116,8 +151,9 @@ export function RegistrationForm() {
       name: 'street',
       value: data.address.street,
       placeholder: 'Street',
-      onChange: (value: string) => {
+      onChange: (value) => {
         setData({ ...data, address: { ...data.address, street: value } });
+        setFieldError((f) => ({ ...f, street: validateStreet(value) }));
       },
       error: fieldError.street,
     },
@@ -127,6 +163,7 @@ export function RegistrationForm() {
       placeholder: 'City',
       onChange: (value) => {
         setData({ ...data, address: { ...data.address, city: value } });
+        setFieldError((f) => ({ ...f, city: validateCity(value) }));
       },
       error: fieldError.city,
     },
@@ -135,22 +172,23 @@ export function RegistrationForm() {
       value: data.address.postalCode,
       placeholder: 'Postal Code',
       onChange: (value) => {
-        setData({
-          ...data,
-          address: { ...data.address, postalCode: value },
-        });
+        setData({ ...data, address: { ...data.address, postalCode: value } });
+        setFieldError((f) => ({
+          ...f,
+          postalCode: validatePostalCode(value, data.address.country),
+        }));
       },
       error: fieldError.postalCode,
     },
     {
       name: 'country',
+      type: 'select',
+      options: COUNTRY_OPTIONS,
       value: data.address.country,
       placeholder: 'Country',
-      onChange: (value) => {
-        setData({
-          ...data,
-          address: { ...data.address, country: value },
-        });
+      onChange: (value: string) => {
+        setData({ ...data, address: { ...data.address, country: value } });
+        setFieldError((f) => ({ ...f, country: validateCountry(value) }));
       },
       error: fieldError.country,
     },

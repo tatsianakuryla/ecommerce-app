@@ -76,6 +76,7 @@ export interface MenuItem {
 export interface FormField {
   name: string;
   type?: string;
+  options?: Array<{ label: string; value: string }>;
   value: string;
   placeholder: string;
   onChange: (value: string) => void;
