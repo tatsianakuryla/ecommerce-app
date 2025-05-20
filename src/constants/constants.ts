@@ -1,5 +1,5 @@
 // Requests related
-export const PROJECT_KEY = import.meta.env.VITE_API_CLIENT_NAME;
+export const PROJECT_KEY = 'rssecomm';
 const { VITE_CLIENT_ID, VITE_CLIENT_SECRET } = import.meta.env;
 export const BASIC_AUTH_HEADER =
   'Basic ' + btoa(`${VITE_CLIENT_ID}:${VITE_CLIENT_SECRET}`);
