@@ -1,5 +1,8 @@
 import { Alert } from '@chakra-ui/react';
-import { ErrorAlertProps } from '~/types/types';
+interface ErrorAlertProps {
+  name: string;
+  error: string;
+}
 
 export function ErrorAlert({ name, error }: ErrorAlertProps) {
   return (

@@ -1,7 +1,6 @@
 import {
-  AuthErrorResponse,
+  ErrorResponse,
   ProductsResponse,
-  User,
   AuthResponse,
   CustomerResponse,
 } from '~types/types';
@@ -18,15 +17,11 @@ export const isAuthResponse = (data: unknown): data is AuthResponse => {
   );
 };
 
-export const isAuthErrorResponse = (
-  data: unknown,
-): data is AuthErrorResponse => {
+export const isErrorResponse = (data: unknown): data is ErrorResponse => {
   return (
     typeof data === 'object' &&
     data !== null &&
     'statusCode' in data &&
-    'error' in data &&
-    'error_description' in data &&
     'message' in data &&
     'errors' in data &&
     Array.isArray(data.errors)
@@ -77,20 +72,6 @@ export const isProductsResponse = (data: unknown): data is ProductsResponse => {
     );
   });
 };
-
-export function isUserProfile(body: unknown): body is User {
-  return (
-    typeof body === 'object' &&
-    body !== null &&
-    'id' in body &&
-    'email' in body &&
-    'firstName' in body &&
-    'lastName' in body &&
-    'isActive' in body &&
-    'permissionLevel' in body &&
-    'scopes' in body
-  );
-}
 
 export const isCustomerResponse = (obj: unknown): obj is CustomerResponse => {
   if (

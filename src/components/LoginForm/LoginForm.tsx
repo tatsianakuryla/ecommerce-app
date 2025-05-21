@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useAuthContext } from '~/hooks/useAuthContext';
-import { Form } from '~components/Form/Form.tsx';
+import { Form } from '~components/Form/Form';
 import { normalizeErrorMessage } from '~/utils/helpers';
-import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle.tsx';
-import RedirectionLink from '~components/RedirectionLink/RedirectionLink.tsx';
+import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle';
+import RedirectionLink from '~components/RedirectionLink/RedirectionLink';
 import { FiUserPlus } from 'react-icons/fi';
 import { Flex } from '@chakra-ui/react';
 import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert.tsx';
@@ -17,7 +17,7 @@ export function LoginForm() {
   const [password, setPassword] = useState('');
   const [fieldError, setFieldError] = useState({ email: '', password: '' });
 
-  const { login, error: serverError, loading, clearErrors } = useAuthContext();
+  const { login, error: serverError, loading, setError } = useAuthContext();
 
   useEffect(() => {
     if (serverError === null) return;
@@ -34,9 +34,9 @@ export function LoginForm() {
 
   useEffect(() => {
     return () => {
-      clearErrors();
+      setError(null);
     };
-  }, [clearErrors]);
+  }, [setError]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

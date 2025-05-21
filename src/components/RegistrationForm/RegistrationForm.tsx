@@ -1,9 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Form } from '~components/Form/Form';
 import RedirectionLink from '~components/RedirectionLink/RedirectionLink';
 import { FiLogIn } from 'react-icons/fi';
 import type { FieldKey, FormField, RegistrationData } from '~/types/types';
-import { useAuth } from '~/contexts/authContext';
 import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert';
 import {
   formatDateInput,
@@ -20,6 +19,7 @@ import {
 } from '~components/RegistrationForm/registrationFormValidation.ts';
 import countries from 'i18n-iso-countries';
 import enLocale from 'i18n-iso-countries/langs/en.json';
+import { useAuthContext } from '~/hooks/useAuthContext';
 countries.registerLocale(enLocale);
 const COUNTRY_OPTIONS = Object.entries(countries.getNames('en')).map(
   ([code, name]) => ({
@@ -29,9 +29,11 @@ const COUNTRY_OPTIONS = Object.entries(countries.getNames('en')).map(
 );
 
 export function RegistrationForm() {
+  const { register, error, setError, loading } = useAuthContext();
   const [fieldError, setFieldError] = useState<
     Partial<Record<FieldKey, string>>
   >({});
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [data, setData] = useState<RegistrationData>({
     firstName: '',
     lastName: '',
@@ -45,12 +47,16 @@ export function RegistrationForm() {
       country: '',
     },
   });
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const { register, loading, error, clearErrors } = useAuth();
+
+  useEffect(() => {
+    return () => {
+      setError(null);
+    };
+  }, [setError]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    clearErrors();
+    setError(null);
     const errors: Partial<Record<FieldKey, string>> = {};
     errors.firstName = validateFirstName(data.firstName);
     errors.lastName = validateLastName(data.lastName);
@@ -111,7 +117,7 @@ export function RegistrationForm() {
       name: 'dateOfBirth',
       type: 'text',
       value: data.dateOfBirth,
-      placeholder: 'Date of Birth',
+      placeholder: '1998-12-31',
       onChange: (value) => {
         const formatted = formatDateInput(value);
         setData((prev) => ({ ...prev, dateOfBirth: formatted }));

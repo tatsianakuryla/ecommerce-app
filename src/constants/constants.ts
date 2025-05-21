@@ -1,10 +1,9 @@
 // Requests related
 export const PROJECT_KEY = 'rssecomm';
+const CLIENT_ID = 'VSoSJL93ehdNSp2ILY62b3zG';
+const CLIENT_SECRET = '9xPxdvPzFxRVhOAw4_U1Qkbcub8EcT1U';
 export const BASIC_AUTH_HEADER =
-  'Basic ' +
-  btoa(
-    `${import.meta.env.VITE_CLIENT_ID}:${import.meta.env.VITE_CLIENT_SECRET}`,
-  );
+  'Basic ' + btoa(`${CLIENT_ID}:${CLIENT_SECRET}`);
 
 // Permissions
 const GUEST_PERMISSIONS = {
