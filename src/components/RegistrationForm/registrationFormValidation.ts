@@ -58,40 +58,42 @@ export function validateDateOfBirth(dob: string): string {
     return 'Date of birth is required.';
   }
 
-  if (dob.length >= 4) {
-    const year = parseInt(dob.slice(0, 4), 10);
-    if (isNaN(year) || year > today.getFullYear()) {
-      return 'Invalid year.';
-    }
+  if (dob.length < 10) {
+    return 'Please enter your full date of birth (YYYY-MM-DD).';
   }
 
-  if (dob.length >= 7) {
-    const month = parseInt(dob.slice(5, 7), 10);
-    if (isNaN(month) || month < 1 || month > 12) {
-      return 'Invalid month.';
-    }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dob)) {
+    return 'Invalid date format.';
   }
 
-  if (dob.length >= 10) {
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(dob)) {
-      return 'Invalid date format.';
-    }
-    const [yyyy, mm, dd] = dob.split('-').map((s) => parseInt(s, 10));
-    const maxDay = new Date(yyyy, mm, 0).getDate();
-    if (isNaN(dd) || dd < 1 || dd > maxDay) {
-      return 'Invalid day for month.';
-    }
+  const [yyyyStr, mmStr, ddStr] = dob.split('-');
+  const year = parseInt(yyyyStr, 10);
+  const month = parseInt(mmStr, 10);
+  const day = parseInt(ddStr, 10);
 
-    let age = today.getFullYear() - yyyy;
-    const monthDiff = today.getMonth() + 1 - mm;
-    const dayDiff = today.getDate() - dd;
-    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-      age--;
-    }
-    if (age < 13) {
-      return 'You must be at least 13 years old.';
-    }
+  if (isNaN(year) || year > today.getFullYear() || year < 1900) {
+    return 'Invalid year.';
   }
+
+  if (isNaN(month) || month < 1 || month > 12) {
+    return 'Invalid month.';
+  }
+
+  const maxDay = new Date(year, month, 0).getDate();
+  if (isNaN(day) || day < 1 || day > maxDay) {
+    return 'Invalid day for month.';
+  }
+
+  let age = today.getFullYear() - year;
+  const monthDiff = today.getMonth() + 1 - month;
+  const dayDiff = today.getDate() - day;
+  if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+    age--;
+  }
+  if (age < 13) {
+    return 'You must be at least 13 years old.';
+  }
+
   return '';
 }
 
