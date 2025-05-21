@@ -31,7 +31,7 @@ export function validateEmail(email: string): string {
 export function validatePassword(pw: string): string {
   if (!pw) return 'Password is required.';
   if (!PASSWORD_REGEX.test(pw))
-    return 'Password must be at least 8 chars, include upper, lower, number.';
+    return 'Password must be at least 8 chars from Latin alphabet, include upper, lower, number.';
   return '';
 }
 
