@@ -82,6 +82,7 @@ export function LoginForm() {
       py='1rem'
     >
       <Form
+        id='registration-form'
         fields={fields}
         onSubmit={handleSubmit}
         loading={loading}

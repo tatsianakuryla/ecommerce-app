@@ -52,7 +52,7 @@ export function RegistrationForm() {
     return () => {
       setError(null);
     };
-  }, [setError]);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -203,6 +203,7 @@ export function RegistrationForm() {
   return (
     <>
       <Form
+        id='registration-form'
         fields={fields}
         onSubmit={(e) => {
           void handleSubmit(e);

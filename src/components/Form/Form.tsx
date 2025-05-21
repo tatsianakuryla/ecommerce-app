@@ -5,7 +5,21 @@ import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { FormProps } from '~types/types';
 import { ErrorAlert } from '../ErrorAlert/ErrorAlert';
 
+const getAutocompleteValue = (name: string): string => {
+  const map: Record<string, string> = {
+    firstName: 'given-name',
+    lastName: 'family-name',
+    email: 'email',
+    password: 'current-password',
+    newPassword: 'new-password',
+    phone: 'tel',
+  };
+
+  return map[name] ?? 'off';
+};
+
 export function Form({
+  id,
   fields,
   onSubmit,
   loading = false,
@@ -34,7 +48,13 @@ export function Form({
       };
 
   return (
-    <Box as='form' pos='relative' onSubmit={onSubmit} style={containerStyle}>
+    <Box
+      as='form'
+      pos='relative'
+      onSubmit={onSubmit}
+      style={containerStyle}
+      id={id}
+    >
       {fields.map(
         ({
           name,
@@ -59,6 +79,9 @@ export function Form({
               <Box position='relative' w='full'>
                 {type === 'select' ? (
                   <Select
+                    id={name}
+                    name={name}
+                    autoComplete={getAutocompleteValue(name)}
                     aria-label={placeholder}
                     maxWidth='382px'
                     icon={<Box />}
@@ -83,6 +106,9 @@ export function Form({
                   </Select>
                 ) : (
                   <Input
+                    id={name}
+                    name={name}
+                    autoComplete={getAutocompleteValue(name)}
                     type={inputType}
                     value={value}
                     onChange={(e) => {

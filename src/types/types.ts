@@ -82,6 +82,7 @@ export type FieldKey =
   | 'country';
 
 export interface FormProps {
+  id: string;
   fields: FormField[];
   onSubmit: (e: React.FormEvent) => void;
   loading?: boolean;
