@@ -77,7 +77,6 @@ export function RegistrationForm() {
     setFieldError(errors);
     if (Object.values(errors).some((msg) => msg && msg.length > 0)) return;
     setFieldError(errors);
-    if (Object.keys(errors).length) return;
     await register(data);
   };
 
