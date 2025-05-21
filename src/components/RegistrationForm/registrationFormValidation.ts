@@ -12,13 +12,13 @@ const CA_POSTAL = /^[A-Za-z]\d[A-Za-z]\s?\d[A-Za-z]\d$/;
 
 export function validateFirstName(name: string): string {
   if (!name.trim()) return 'First name is required.';
-  if (!NAME_REGEX.test(name)) return 'First name must be letters only.';
+  if (!NAME_REGEX.test(name)) return 'First name must be latin letters only.';
   return '';
 }
 
 export function validateLastName(name: string): string {
   if (!name.trim()) return 'Last name is required.';
-  if (!NAME_REGEX.test(name)) return 'Last name must be letters only.';
+  if (!NAME_REGEX.test(name)) return 'Last name must be latin letters only.';
   return '';
 }
 
@@ -104,7 +104,7 @@ export function validateStreet(street: string): string {
 
 export function validateCity(city: string): string {
   if (!city.trim()) return 'City is required.';
-  if (!CITY_REGEX.test(city)) return 'City must be letters only.';
+  if (!CITY_REGEX.test(city)) return 'City must be latin letters only.';
   return '';
 }
 
