@@ -24,6 +24,7 @@ export function Form({
   onSubmit,
   loading = false,
   submitLabel = 'Submit',
+  children,
 }: FormProps) {
   const [showMap, setShowMap] = useState<Record<string, boolean>>({});
 
@@ -144,6 +145,7 @@ export function Form({
           );
         },
       )}
+      {children}
 
       <Button
         type='submit'

@@ -22,7 +22,11 @@ export interface RegistrationData {
   firstName: string;
   lastName: string;
   dateOfBirth: string;
-  address: Address;
+  mainAddress: Address;
+  billingAddress: Address;
+  shippingAddress: Address;
+  isBillingAddressDefault: boolean;
+  isShippingAddressDefault: boolean;
 }
 
 export interface AuthResponse {
@@ -76,10 +80,18 @@ export interface FormField {
 export type FieldKey =
   | keyof RegistrationData
   | 'confirmPassword'
-  | 'street'
-  | 'city'
-  | 'postalCode'
-  | 'country';
+  | 'mainAddressStreet'
+  | 'mainAddressCity'
+  | 'mainAddressPostalCode'
+  | 'mainAddressCountry'
+  | 'billingAddressStreet'
+  | 'billingAddressCity'
+  | 'billingAddressPostalCode'
+  | 'billingAddressCountry'
+  | 'shippingAddressStreet'
+  | 'shippingAddressCity'
+  | 'shippingAddressPostalCode'
+  | 'shippingAddressCountry';
 
 export interface FormProps {
   id: string;
@@ -88,6 +100,7 @@ export interface FormProps {
   loading?: boolean;
   submitLabel?: string;
   nonFieldError?: string | null;
+  children?: React.ReactNode;
 }
 
 export interface LocalizedString {
