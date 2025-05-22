@@ -66,6 +66,7 @@ export interface MenuItem {
 export interface FormField {
   name: string;
   type?: string;
+  options?: Array<{ label: string; value: string }>;
   value: string;
   placeholder: string;
   onChange: (value: string) => void;
@@ -81,6 +82,7 @@ export type FieldKey =
   | 'country';
 
 export interface FormProps {
+  id: string;
   fields: FormField[];
   onSubmit: (e: React.FormEvent) => void;
   loading?: boolean;

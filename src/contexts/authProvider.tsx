@@ -10,8 +10,15 @@ import { isAuthResponse, isCustomerResponse } from '~/utils/typeguards';
 import { CustomerResponse, RegistrationData } from '~types/types.ts';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [accessToken, setAccessToken] = useState<string | null>(null);
+  /*const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+   */
+  const [accessToken, setAccessToken] = useState<string | null>(() =>
+    localStorage.getItem('authToken'),
+  );
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    () => !!localStorage.getItem('authToken'),
+  );
   const [justRegistered, setJustRegistered] = useState(false);
   const { makeRequest, error, loading, setError } = useMakeRequest();
 
@@ -32,6 +39,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     void fetchAnonymousToken();
     setIsAuthenticated(false);
+    localStorage.removeItem('authToken');
+    setAccessToken(null);
   };
 
   const login = async (email: string, password: string) => {
@@ -46,6 +55,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       setAccessToken(response.access_token);
+      localStorage.setItem('authToken', response.access_token);
       setIsAuthenticated(true);
     } catch (error) {
       throw new Error('user login failed', { cause: error });
