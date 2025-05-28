@@ -17,6 +17,7 @@ import { MenuItem } from '~types/types';
 const navItems: MenuItem[] = [
   { label: 'About', to: '/about' },
   { label: 'Main', to: '/' },
+  { label: 'Catalog', to: '/catalog' },
 ];
 
 const loginRegisterItems: MenuItem[] = [
