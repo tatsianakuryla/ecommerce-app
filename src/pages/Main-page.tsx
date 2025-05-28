@@ -18,7 +18,7 @@ import { isProductsResponse } from '~/utils/typeguards';
 export const MainPage = () => {
   const { accessToken, justRegistered, setJustRegistered } = useAuthContext();
   const { makeRequest } = useMakeRequest();
-  const [response, setProductsResponse] = useState<ProductsResponse>();
+  const [productsResponse, setProductsResponse] = useState<ProductsResponse>();
 
   useEffect(() => {
     if (accessToken == null) return;
@@ -26,17 +26,13 @@ export const MainPage = () => {
     let ignore = false;
 
     const startFetching = async () => {
-      try {
-        const response = await makeRequest<ProductsResponse>(
-          getProducts(accessToken),
-          isProductsResponse,
-        );
+      const productsResponse = await makeRequest<ProductsResponse>(
+        getProducts(accessToken),
+        isProductsResponse,
+      );
 
-        if (!ignore && response) {
-          setProductsResponse(response);
-        }
-      } catch (error) {
-        console.error('Error while fetching products:', error);
+      if (!ignore && productsResponse) {
+        setProductsResponse(productsResponse);
       }
     };
 
@@ -61,10 +57,25 @@ export const MainPage = () => {
         gap='1rem'
         justifyItems='center'
       >
-        {response &&
-          response.results.map((product) => (
+        {productsResponse &&
+          productsResponse.results.map((product) => (
             <GridItem key={product.id}>
               <ProductCard
+                discount={
+                  product.masterVariant.prices[0].discounted
+                    ? new Intl.NumberFormat(
+                        locales[product.masterVariant.prices[0].country],
+                        {
+                          style: 'currency',
+                          currency:
+                            product.masterVariant.prices[0].value.currencyCode,
+                        },
+                      ).format(
+                        product.masterVariant.prices[0].discounted.value
+                          .centAmount / 100,
+                      )
+                    : ''
+                }
                 name={product.name[locales.EN]}
                 description={product.description[locales.EN]}
                 img={product.masterVariant.images[0].url}

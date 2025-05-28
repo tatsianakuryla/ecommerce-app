@@ -110,7 +110,7 @@ export type LocalizedString = Record<Locale, string>;
 export interface Price {
   id: string;
   value: {
-    type: string;
+    type: 'centPrecision';
     currencyCode: string;
     centAmount: number;
     fractionDigits: number;
@@ -118,6 +118,13 @@ export interface Price {
   key: string;
   country: LocaleKey;
   channel?: Reference;
+  discounted?: {
+    value: Price['value'];
+    discount: {
+      typeId: 'product-discount';
+      id: string;
+    };
+  };
 }
 
 export interface Image {
