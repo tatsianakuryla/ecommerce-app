@@ -3,6 +3,7 @@ import { AboutPage } from '~pages/About-page.tsx';
 import { LoginPage } from '~pages/Login-page.tsx';
 import { MainPage } from '~pages/Main-page.tsx';
 import { RegisterPage } from '~pages/Register-page.tsx';
+import { ProfilePage } from '~pages/Profile-page.tsx';
 import { RootLayout } from '~/layouts/RootLayout';
 import {
   createBrowserRouter,
@@ -10,11 +11,19 @@ import {
   Route,
 } from 'react-router-dom';
 import { RedirectIfAuth } from '~components/Protected-route/Protected-route.tsx';
+import { RequireAuth } from '~components/Protected-route/RequireAuth.tsx';
+import { CatalogPage } from '~pages/Catalog-page.tsx';
+import { ProductPage } from '~pages/Product-page.tsx';
 
 export const routes = createRoutesFromElements(
   <Route path='/' element={<RootLayout />}>
     <Route index element={<MainPage />} />
     <Route path='about' element={<AboutPage />} />
+    <Route path='catalog' element={<CatalogPage />} />
+    <Route path='catalog/:productId' element={<ProductPage />} />
+    <Route element={<RequireAuth />}>
+      <Route path='profile' element={<ProfilePage />} />
+    </Route>
     <Route element={<RedirectIfAuth />}>
       <Route path='login' element={<LoginPage />} />
       <Route path='register' element={<RegisterPage />} />

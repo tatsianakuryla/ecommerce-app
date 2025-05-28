@@ -1,5 +1,12 @@
 import { Box, Link as ChakraLink } from '@chakra-ui/react';
-import { FiHome, FiInfo, FiLogIn, FiUserPlus } from 'react-icons/fi';
+import {
+  FiHome,
+  FiInfo,
+  FiLogIn,
+  FiUserPlus,
+  FiUser,
+  FiBookOpen,
+} from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
 
 export default function NavItem({
@@ -12,7 +19,7 @@ export default function NavItem({
   onClick?: () => void;
 }) {
   const icon =
-    to === '/main' ? (
+    to === '/' ? (
       <FiHome />
     ) : to === '/about' ? (
       <FiInfo />
@@ -20,6 +27,10 @@ export default function NavItem({
       <FiLogIn />
     ) : to === '/register' ? (
       <FiUserPlus />
+    ) : to === '/profile' ? (
+      <FiUser />
+    ) : to === '/catalog' ? (
+      <FiBookOpen />
     ) : null;
 
   const baseLinkStyle = {

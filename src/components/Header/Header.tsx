@@ -17,6 +17,7 @@ import { MenuItem } from '~types/types';
 const navItems: MenuItem[] = [
   { label: 'About', to: '/about' },
   { label: 'Main', to: '/' },
+  { label: 'Catalog', to: '/catalog' },
 ];
 
 const loginRegisterItems: MenuItem[] = [
@@ -30,6 +31,7 @@ function Header() {
   const guestItems = [...navItems, ...loginRegisterItems];
   const authItems = [
     ...navItems,
+    { label: 'Profile', to: '/profile' },
     { label: 'Logout', to: '/', onClick: logout },
   ];
   const itemsToRender = isAuthenticated ? authItems : guestItems;
