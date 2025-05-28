@@ -13,21 +13,27 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "build-netlify": "vite build",
+    "lint": "eslint --fix",
     "format": "prettier --write .",
     "stylelint": "stylelint \"src/**/*.css\" --fix",
     "prepare": "husky install",
     "preview": "vite preview",
-    "test": "vitest"
-  },
-  "lint-staged": {
-    "*.{ts,tsx,json,html,js}": "npm run format",
-    "*.{ts,tsx}": "npm run lint",
-    "*.css": "npm run stylelint"
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "@chakra-ui/input": "^2.1.2",
+    "@chakra-ui/react": "^3.19.1",
+    "@chakra-ui/select": "^2.1.2",
+    "@emotion/react": "^11.14.0",
+    "hamburger-react": "^2.5.2",
+    "i18n-iso-countries": "^7.14.0",
+    "next-themes": "^0.4.6",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-icons": "^5.5.0",
+    "react-router-dom": "^7.5.3",
     "zustand": "^5.0.4"
   },
   "devDependencies": {
@@ -35,17 +41,25 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.15.15",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.0.4",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/testing-library__user-event": "^4.2.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "@vitest/coverage-v8": "^3.1.3",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
+    "eslint-plugin-vitest": "^0.5.4",
     "globals": "^16.0.0",
     "husky": "^9.1.7",
+    "jiti": "^2.4.2",
     "jsdom": "^26.1.0",
     "lint-staged": "^15.5.1",
+    "msw": "^2.8.2",
     "prettier": "^3.5.3",
     "stylelint": "^16.19.1",
     "stylelint-config-clean-order": "^7.0.0",
@@ -53,7 +67,14 @@
     "stylelint-prettier": "^5.0.3",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.26.1",
+    "uuid": "^11.1.0",
     "vite": "^6.3.1",
-    "vitest": "^3.1.2"
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.1.3"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,json,html,js}": "prettier --write --ignore-unknown",
+    "*.{ts,tsx}": "eslint --fix",
+    "*.css": "npm run stylelint"
   }
 }
