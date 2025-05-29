@@ -13,6 +13,7 @@ import { locales } from '~/constants/constants';
 import { useAuthContext } from '~/hooks/useAuthContext';
 import { useMakeRequest } from '~/hooks/useMakeRequest';
 import { ProductsResponse } from '~/types/types';
+import { formatPrice } from '~/utils/helpers';
 import { isProductsResponse } from '~/utils/typeguards';
 
 export const MainPage = () => {
@@ -58,41 +59,30 @@ export const MainPage = () => {
         justifyItems='center'
       >
         {productsResponse &&
-          productsResponse.results.map((product) => (
-            <GridItem key={product.id}>
-              <ProductCard
-                discount={
-                  product.masterVariant.prices[0].discounted
-                    ? new Intl.NumberFormat(
-                        locales[product.masterVariant.prices[0].country],
-                        {
-                          style: 'currency',
-                          currency:
-                            product.masterVariant.prices[0].value.currencyCode,
-                        },
-                      ).format(
-                        product.masterVariant.prices[0].discounted.value
-                          .centAmount / 100,
-                      )
-                    : ''
-                }
-                name={product.name[locales.EN]}
-                description={product.description[locales.EN]}
-                img={product.masterVariant.images[0].url}
-                alt={product.name[locales.EN]}
-                price={new Intl.NumberFormat(
-                  locales[product.masterVariant.prices[0].country],
-                  {
-                    style: 'currency',
-                    currency:
-                      product.masterVariant.prices[0].value.currencyCode,
-                  },
-                ).format(
-                  product.masterVariant.prices[0].value.centAmount / 100,
-                )}
-              />
-            </GridItem>
-          ))}
+          productsResponse.results.map((product) => {
+            const price = product.masterVariant.prices[0].value.centAmount;
+            const discountedPrice =
+              product.masterVariant.prices[0].discounted?.value.centAmount;
+            const currency = product.masterVariant.prices[0].value.currencyCode;
+            const locale = locales.UK;
+
+            return (
+              <GridItem key={product.id}>
+                <ProductCard
+                  discount={
+                    discountedPrice
+                      ? formatPrice(discountedPrice, currency, locale)
+                      : ''
+                  }
+                  name={product.name[locale]}
+                  description={product.description[locale]}
+                  img={product.masterVariant.images[0].url}
+                  alt={product.name[locale]}
+                  price={formatPrice(price, currency, locale)}
+                />
+              </GridItem>
+            );
+          })}
         {justRegistered && (
           <JustRegisteredDialog
             title={'Registration'}
