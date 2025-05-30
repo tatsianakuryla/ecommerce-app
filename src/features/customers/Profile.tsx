@@ -39,6 +39,27 @@ import {
 } from '~components/RegistrationForm/registrationFormValidation';
 
 export function Profile() {
+  const toastifyOptions = {
+    duration: 3000,
+    close: false,
+    gravity: 'bottom',
+    position: 'center',
+    stopOnFocus: true,
+    style: {
+      padding: '10px',
+      background: 'linear-gradient(to right, #00b09b, #96c93d)',
+      boxShadow: '0 2px 12px rgba(0,0,0,0.2)',
+      fontSize: '16px',
+      color: '#fff',
+      bottom: '5px',
+      marginBottom: '0',
+      left: '0',
+      position: 'fixed',
+      zIndex: '9999',
+      cursor: 'pointer',
+    },
+  };
+
   const { accessToken } = useAuthContext();
   const { makeRequest, loading, error } = useMakeRequest();
 
@@ -224,8 +245,8 @@ export function Profile() {
         isCustomer,
       );
       Toastify({
+        ...toastifyOptions,
         text: 'Profile updated!',
-        backgroundColor: 'green',
       }).showToast();
       setIsEditing(false);
       const refreshed = await makeRequest(
@@ -234,7 +255,10 @@ export function Profile() {
       );
       if (refreshed) setProfile(refreshed);
     } catch {
-      Toastify({ text: 'Update failed', backgroundColor: 'red' }).showToast();
+      Toastify({
+        ...toastifyOptions,
+        text: 'Profile was not updated.',
+      }).showToast();
     }
   };
 
@@ -254,32 +278,57 @@ export function Profile() {
   const renderAddress = (address: Address) => {
     const isShip = address.id === defaultShippingAddressId;
     const isBill = address.id === defaultBillingAddressId;
+
     return (
       <Box
         key={address.id}
-        p='1rem'
+        p={4}
         borderWidth='1px'
-        borderRadius='lg'
+        borderRadius='xl'
         boxShadow='sm'
+        bg='gray.50'
+        _hover={{ boxShadow: 'md', bg: 'gray.100' }}
+        transition='all 0.2s'
       >
-        <Stack gap={1}>
-          <Text>
-            <strong>Street:</strong> {address.streetName}
-          </Text>
-          <Text>
-            <strong>City:</strong> {address.city}
-          </Text>
-          <Text>
-            <strong>Postal:</strong> {address.postalCode}
-          </Text>
-          <Text>
-            <strong>Country:</strong> {address.country}
-          </Text>
+        <Stack gap={1} fontSize='sm'>
+          <HStack>
+            <Text fontWeight='semibold' minW='80px'>
+              Street:
+            </Text>
+            <Text>{address.streetName}</Text>
+          </HStack>
+          <HStack>
+            <Text fontWeight='semibold' minW='80px'>
+              City:
+            </Text>
+            <Text>{address.city}</Text>
+          </HStack>
+          <HStack>
+            <Text fontWeight='semibold' minW='80px'>
+              Postal:
+            </Text>
+            <Text>{address.postalCode}</Text>
+          </HStack>
+          <HStack>
+            <Text fontWeight='semibold' minW='80px'>
+              Country:
+            </Text>
+            <Text>{address.country}</Text>
+          </HStack>
         </Stack>
-        <Stack direction='row' gap={2} mt={2}>
-          {isShip && <Badge colorScheme='green'>Shipping</Badge>}
-          {isBill && <Badge colorScheme='blue'>Billing</Badge>}
-        </Stack>
+
+        <HStack gap={2} mt={3}>
+          {isShip && (
+            <Badge colorScheme='green' px={2}>
+              Shipping
+            </Badge>
+          )}
+          {isBill && (
+            <Badge colorScheme='blue' px={2}>
+              Billing
+            </Badge>
+          )}
+        </HStack>
       </Box>
     );
   };
@@ -377,7 +426,7 @@ export function Profile() {
       </Card>
 
       <Card>
-        <CardHeader display='flex' alignItems='center' gap='1rem'>
+        <CardHeader display='flex' alignItems='center' gap='1rem' mb='1rem'>
           <Icon as={FiMapPin} boxSize={6} color='purple.500' />
           <Heading size='md'>Addresses</Heading>
         </CardHeader>
@@ -385,123 +434,127 @@ export function Profile() {
           {addresses.length === 0 ? (
             <Text>No saved addresses.</Text>
           ) : (
-            <SimpleGrid columns={{ base: 1, md: 2 }} gap='1rem'>
-              {addressEdits.map((address, index) => (
-                <Box
-                  key={address.id}
-                  p='1rem'
-                  borderWidth='1px'
-                  borderRadius='lg'
-                >
-                  {isEditing ? (
-                    <>
-                      <FormControl isInvalid={!!addressErrors[index].street}>
-                        <FormLabel>Street</FormLabel>
-                        <Input
-                          mb={2}
-                          value={address.streetName}
-                          onChange={(event) => {
-                            onAddressFieldChange(
-                              index,
-                              'street',
-                              event.target.value,
-                            );
-                          }}
-                        />
-                        <FormErrorMessage>
-                          {addressErrors[index].street}
-                        </FormErrorMessage>
-                      </FormControl>
+            <Box bg='white' borderRadius='md'>
+              <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+                {addressEdits.map((address, index) =>
+                  isEditing ? (
+                    <Box
+                      key={address.id}
+                      p={4}
+                      borderWidth='1px'
+                      borderRadius='xl'
+                      boxShadow='sm'
+                      bg='gray.50'
+                      _hover={{ boxShadow: 'md', bg: 'gray.100' }}
+                      transition='all 0.2s'
+                    >
+                      <Stack gap={3}>
+                        <FormControl isInvalid={!!addressErrors[index].street}>
+                          <FormLabel fontWeight='semibold'>Street</FormLabel>
+                          <Input
+                            value={address.streetName}
+                            onChange={(event) => {
+                              onAddressFieldChange(
+                                index,
+                                'street',
+                                event.target.value,
+                              );
+                            }}
+                          />
+                          <FormErrorMessage>
+                            {addressErrors[index].street}
+                          </FormErrorMessage>
+                        </FormControl>
 
-                      <FormControl isInvalid={!!addressErrors[index].city}>
-                        <FormLabel>City</FormLabel>
-                        <Input
-                          mb={2}
-                          value={address.city}
-                          onChange={(event) => {
-                            onAddressFieldChange(
-                              index,
-                              'city',
-                              event.target.value,
-                            );
-                          }}
-                        />
-                        <FormErrorMessage>
-                          {addressErrors[index].city}
-                        </FormErrorMessage>
-                      </FormControl>
+                        <FormControl isInvalid={!!addressErrors[index].city}>
+                          <FormLabel fontWeight='semibold'>City</FormLabel>
+                          <Input
+                            value={address.city}
+                            onChange={(event) => {
+                              onAddressFieldChange(
+                                index,
+                                'city',
+                                event.target.value,
+                              );
+                            }}
+                          />
+                          <FormErrorMessage>
+                            {addressErrors[index].city}
+                          </FormErrorMessage>
+                        </FormControl>
 
-                      <FormControl
-                        isInvalid={!!addressErrors[index].postalCode}
-                      >
-                        <FormLabel>Postal Code</FormLabel>
-                        <Input
-                          mb={2}
-                          value={address.postalCode}
-                          onChange={(event) => {
-                            onAddressFieldChange(
-                              index,
-                              'postalCode',
-                              event.target.value,
-                            );
-                          }}
-                        />
-                        <FormErrorMessage>
-                          {addressErrors[index].postalCode}
-                        </FormErrorMessage>
-                      </FormControl>
-
-                      <FormControl isInvalid={!!addressErrors[index].country}>
-                        <FormLabel>Country</FormLabel>
-                        <Input
-                          mb={2}
-                          value={address.country}
-                          onChange={(event) => {
-                            onAddressFieldChange(
-                              index,
-                              'country',
-                              event.target.value,
-                            );
-                          }}
-                        />
-                        <FormErrorMessage>
-                          {addressErrors[index].country}
-                        </FormErrorMessage>
-                      </FormControl>
-
-                      <HStack mt={2} gap={4}>
-                        <Button
-                          size='sm'
-                          variant={
-                            defaultShipIndex === index ? 'solid' : 'outline'
-                          }
-                          colorScheme='green'
-                          onClick={() => {
-                            setDefaultShipIndex(index);
-                          }}
+                        <FormControl
+                          isInvalid={!!addressErrors[index].postalCode}
                         >
-                          Default Ship
-                        </Button>
-                        <Button
-                          size='sm'
-                          variant={
-                            defaultBillIndex === index ? 'solid' : 'outline'
-                          }
-                          colorScheme='blue'
-                          onClick={() => {
-                            setDefaultBillIndex(index);
-                          }}
-                        >
-                          Default Bill
-                        </Button>
-                      </HStack>
-                    </>
+                          <FormLabel fontWeight='semibold'>
+                            Postal Code
+                          </FormLabel>
+                          <Input
+                            value={address.postalCode}
+                            onChange={(event) => {
+                              onAddressFieldChange(
+                                index,
+                                'postalCode',
+                                event.target.value,
+                              );
+                            }}
+                          />
+                          <FormErrorMessage>
+                            {addressErrors[index].postalCode}
+                          </FormErrorMessage>
+                        </FormControl>
+
+                        <FormControl isInvalid={!!addressErrors[index].country}>
+                          <FormLabel fontWeight='semibold'>Country</FormLabel>
+                          <Input
+                            value={address.country}
+                            onChange={(event) => {
+                              onAddressFieldChange(
+                                index,
+                                'country',
+                                event.target.value,
+                              );
+                            }}
+                          />
+                          <FormErrorMessage>
+                            {addressErrors[index].country}
+                          </FormErrorMessage>
+                        </FormControl>
+
+                        <HStack gap={3} pt={2}>
+                          <Button
+                            size='sm'
+                            variant={
+                              defaultShipIndex === index ? 'solid' : 'outline'
+                            }
+                            colorScheme='green'
+                            onClick={() => {
+                              setDefaultShipIndex(index);
+                            }}
+                          >
+                            Default Ship
+                          </Button>
+                          <Button
+                            size='sm'
+                            variant={
+                              defaultBillIndex === index ? 'solid' : 'outline'
+                            }
+                            colorScheme='blue'
+                            onClick={() => {
+                              setDefaultBillIndex(index);
+                            }}
+                          >
+                            Default Bill
+                          </Button>
+                        </HStack>
+                      </Stack>
+                    </Box>
                   ) : (
                     renderAddress(address)
-                  )}
-                </Box>
-              ))}
-            </SimpleGrid>
+                  ),
+                )}
+              </SimpleGrid>
+            </Box>
           )}
         </CardBody>
       </Card>
