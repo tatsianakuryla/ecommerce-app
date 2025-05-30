@@ -6,50 +6,56 @@ import {
   Customer,
 } from '~types/types';
 
-export const isAuthResponse = (data: unknown): data is AuthResponse => {
+export const isAuthResponse = (
+  data__________: unknown,
+): data__________ is AuthResponse => {
   return (
-    typeof data === 'object' &&
-    data !== null &&
-    'access_token' in data &&
-    'expires_in' in data &&
-    'token_type' in data &&
-    'scope' in data &&
-    'refresh_token' in data
+    typeof data__________ === 'object' &&
+    data__________ !== null &&
+    'access_token' in data__________ &&
+    'expires_in' in data__________ &&
+    'token_type' in data__________ &&
+    'scope' in data__________ &&
+    'refresh_token' in data__________
   );
 };
 
-export const isErrorResponse = (data: unknown): data is ErrorResponse => {
+export const isErrorResponse = (
+  data__________: unknown,
+): data__________ is ErrorResponse => {
   return (
-    typeof data === 'object' &&
-    data !== null &&
-    'statusCode' in data &&
-    'message' in data &&
-    'errors' in data &&
-    Array.isArray(data.errors)
+    typeof data__________ === 'object' &&
+    data__________ !== null &&
+    'statusCode' in data__________ &&
+    'message' in data__________ &&
+    'errors' in data__________ &&
+    Array.isArray(data__________.errors)
   );
 };
 
-export const isProductsResponse = (data: unknown): data is ProductsResponse => {
-  if (typeof data !== 'object' || data === null) {
+export const isProductsResponse = (
+  data__________: unknown,
+): data__________ is ProductsResponse => {
+  if (typeof data__________ !== 'object' || data__________ === null) {
     return false;
   }
 
   if (
-    !('results' in data) ||
-    !Array.isArray(data.results) ||
-    !('limit' in data) ||
-    typeof data.limit !== 'number' ||
-    !('offset' in data) ||
-    typeof data.offset !== 'number' ||
-    !('count' in data) ||
-    typeof data.count !== 'number' ||
-    !('total' in data) ||
-    typeof data.total !== 'number'
+    !('results' in data__________) ||
+    !Array.isArray(data__________.results) ||
+    !('limit' in data__________) ||
+    typeof data__________.limit !== 'number' ||
+    !('offset' in data__________) ||
+    typeof data__________.offset !== 'number' ||
+    !('count' in data__________) ||
+    typeof data__________.count !== 'number' ||
+    !('total' in data__________) ||
+    typeof data__________.total !== 'number'
   ) {
     return false;
   }
 
-  return data.results.every((item: unknown) => {
+  return data__________.results.every((item: unknown) => {
     if (typeof item !== 'object' || item === null) {
       return false;
     }
@@ -74,15 +80,17 @@ export const isProductsResponse = (data: unknown): data is ProductsResponse => {
   });
 };
 
-export const isCustomerResponse = (obj: unknown): obj is CustomerResponse => {
+export const isCustomerResponse = (
+  object: unknown,
+): object is CustomerResponse => {
   if (
-    typeof obj === 'object' &&
-    obj !== null &&
-    'customer' in obj &&
-    typeof obj.customer === 'object' &&
-    obj.customer !== null
+    typeof object === 'object' &&
+    object !== null &&
+    'customer' in object &&
+    typeof object.customer === 'object' &&
+    object.customer !== null
   ) {
-    const c = obj.customer;
+    const c = object.customer;
     return (
       'id' in c &&
       'version' in c &&
@@ -132,11 +140,12 @@ function isRecord(x: unknown): x is Record<string, unknown> {
   return typeof x === 'object' && x !== null;
 }
 
-export function isCustomer(obj: unknown): obj is Customer {
-  if (!isRecord(obj)) return false;
-  if (!('id' in obj) || typeof obj.id !== 'string') return false;
-  if (!('addresses' in obj) || !Array.isArray(obj.addresses)) return false;
-  if (!('email' in obj) || typeof obj.email !== 'string') return false;
+export function isCustomer(object: unknown): object is Customer {
+  if (!isRecord(object)) return false;
+  if (!('id' in object) || typeof object.id !== 'string') return false;
+  if (!('addresses' in object) || !Array.isArray(object.addresses))
+    return false;
+  if (!('email' in object) || typeof object.email !== 'string') return false;
 
   return true;
 }

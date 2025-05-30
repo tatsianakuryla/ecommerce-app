@@ -55,8 +55,8 @@ export function RegistrationForm() {
     };
   }, [setError]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
     setError(null);
     const errors: Partial<Record<FieldKey, string>> = {};
     errors.firstName = validateFirstName(data.firstName);
@@ -76,7 +76,8 @@ export function RegistrationForm() {
     );
     errors.country = validateCountry(data.address.country);
     setFieldError(errors);
-    if (Object.values(errors).some((msg) => msg && msg.length > 0)) return;
+    if (Object.values(errors).some((message) => message && message.length > 0))
+      return;
     setFieldError(errors);
     await register(data);
   };
@@ -88,7 +89,10 @@ export function RegistrationForm() {
       placeholder: 'First Name',
       onChange: (value) => {
         setData({ ...data, firstName: value });
-        setFieldError((f) => ({ ...f, firstName: validateFirstName(value) }));
+        setFieldError((field) => ({
+          ...field,
+          firstName: validateFirstName(value),
+        }));
       },
       error: fieldError.firstName,
     },
@@ -98,7 +102,10 @@ export function RegistrationForm() {
       placeholder: 'Last Name',
       onChange: (value) => {
         setData({ ...data, lastName: value });
-        setFieldError((f) => ({ ...f, lastName: validateLastName(value) }));
+        setFieldError((field) => ({
+          ...field,
+          lastName: validateLastName(value),
+        }));
       },
       error: fieldError.lastName,
     },
@@ -109,7 +116,7 @@ export function RegistrationForm() {
       placeholder: 'Email',
       onChange: (value) => {
         setData({ ...data, email: value });
-        setFieldError((f) => ({ ...f, email: validateEmail(value) }));
+        setFieldError((field) => ({ ...field, email: validateEmail(value) }));
       },
       error: fieldError.email,
     },
@@ -120,9 +127,9 @@ export function RegistrationForm() {
       placeholder: '1998-12-31',
       onChange: (value) => {
         const formatted = formatDateInput(value);
-        setData((prev) => ({ ...prev, dateOfBirth: formatted }));
-        setFieldError((prev) => ({
-          ...prev,
+        setData((previous) => ({ ...previous, dateOfBirth: formatted }));
+        setFieldError((previous) => ({
+          ...previous,
           dateOfBirth: validateDateOfBirth(formatted),
         }));
       },
@@ -135,7 +142,10 @@ export function RegistrationForm() {
       placeholder: 'Password',
       onChange: (value) => {
         setData({ ...data, password: value });
-        setFieldError((f) => ({ ...f, password: validatePassword(value) }));
+        setFieldError((field) => ({
+          ...field,
+          password: validatePassword(value),
+        }));
       },
       error: fieldError.password,
     },
@@ -146,8 +156,8 @@ export function RegistrationForm() {
       placeholder: 'Confirm Password',
       onChange: (value) => {
         setConfirmPassword(value);
-        setFieldError((f) => ({
-          ...f,
+        setFieldError((field) => ({
+          ...field,
           confirmPassword: validateConfirmPassword(data.password, value),
         }));
       },
@@ -159,7 +169,7 @@ export function RegistrationForm() {
       placeholder: 'Street',
       onChange: (value) => {
         setData({ ...data, address: { ...data.address, streetName: value } });
-        setFieldError((f) => ({ ...f, street: validateStreet(value) }));
+        setFieldError((field) => ({ ...field, street: validateStreet(value) }));
       },
       error: fieldError.street,
     },
@@ -169,7 +179,7 @@ export function RegistrationForm() {
       placeholder: 'City',
       onChange: (value) => {
         setData({ ...data, address: { ...data.address, city: value } });
-        setFieldError((f) => ({ ...f, city: validateCity(value) }));
+        setFieldError((field) => ({ ...field, city: validateCity(value) }));
       },
       error: fieldError.city,
     },
@@ -179,8 +189,8 @@ export function RegistrationForm() {
       placeholder: 'Postal Code',
       onChange: (value) => {
         setData({ ...data, address: { ...data.address, postalCode: value } });
-        setFieldError((f) => ({
-          ...f,
+        setFieldError((field) => ({
+          ...field,
           postalCode: validatePostalCode(value, data.address.country),
         }));
       },
@@ -194,7 +204,10 @@ export function RegistrationForm() {
       placeholder: 'Country',
       onChange: (value: string) => {
         setData({ ...data, address: { ...data.address, country: value } });
-        setFieldError((f) => ({ ...f, country: validateCountry(value) }));
+        setFieldError((field) => ({
+          ...field,
+          country: validateCountry(value),
+        }));
       },
       error: fieldError.country,
     },
@@ -205,8 +218,8 @@ export function RegistrationForm() {
       <Form
         id='registration-form'
         fields={fields}
-        onSubmit={(e) => {
-          void handleSubmit(e);
+        onSubmit={(event) => {
+          void handleSubmit(event);
         }}
         loading={loading}
         submitLabel='Register'

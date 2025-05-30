@@ -11,7 +11,9 @@ interface RenderOptions {
   loading?: boolean;
   logout?: () => void;
   login?: () => Promise<void>;
-  register?: (data: RegistrationData) => Promise<CustomerResponse | undefined>;
+  register?: (
+    data__________: RegistrationData,
+  ) => Promise<CustomerResponse | undefined>;
   clearErrors?: () => void;
 }
 

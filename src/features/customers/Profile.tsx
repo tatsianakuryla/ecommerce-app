@@ -60,8 +60,8 @@ export function Profile() {
   const [addressErrors, setAddressErrors] = useState<
     Array<{ street: string; city: string; postalCode: string; country: string }>
   >([]);
-  const [defaultShipIdx, setDefaultShipIdx] = useState<number>();
-  const [defaultBillIdx, setDefaultBillIdx] = useState<number>();
+  const [defaultShipIndex, setDefaultShipIndex] = useState<number>();
+  const [defaultBillIndex, setDefaultBillIndex] = useState<number>();
 
   useEffect(() => {
     if (!profile) return;
@@ -82,14 +82,14 @@ export function Profile() {
         country: '',
       })),
     );
-    setDefaultShipIdx(
+    setDefaultShipIndex(
       profile.addresses.findIndex(
-        (a) => a.id === profile.defaultShippingAddressId,
+        (address) => address.id === profile.defaultShippingAddressId,
       ),
     );
-    setDefaultBillIdx(
+    setDefaultBillIndex(
       profile.addresses.findIndex(
-        (a) => a.id === profile.defaultBillingAddressId,
+        (address) => address.id === profile.defaultBillingAddressId,
       ),
     );
   }, [profile]);
@@ -103,48 +103,52 @@ export function Profile() {
     );
   }, [accessToken, makeRequest]);
 
-  const onFirstNameChange = (val: string) => {
-    setEditData((d) => ({ ...d, firstName: val }));
-    setErrors((e) => ({ ...e, firstName: validateFirstName(val) }));
+  const onFirstNameChange = (value: string) => {
+    setEditData((data) => ({ ...data, firstName: value }));
+    setErrors((event) => ({ ...event, firstName: validateFirstName(value) }));
   };
-  const onLastNameChange = (val: string) => {
-    setEditData((d) => ({ ...d, lastName: val }));
-    setErrors((e) => ({ ...e, lastName: validateLastName(val) }));
+  const onLastNameChange = (value: string) => {
+    setEditData((data) => ({ ...data, lastName: value }));
+    setErrors((event) => ({ ...event, lastName: validateLastName(value) }));
   };
-  const onDobChange = (raw: string) => {
+  const onDateOfBirthChange = (raw: string) => {
     const formatted = formatDateInput(raw);
-    setEditData((d) => ({ ...d, dateOfBirth: formatted }));
-    setErrors((e) => ({
-      ...e,
+    setEditData((data) => ({ ...data, dateOfBirth: formatted }));
+    setErrors((event) => ({
+      ...event,
       dateOfBirth: validateDateOfBirth(formatted),
     }));
   };
 
   const onAddressFieldChange = (
-    idx: number,
+    index: number,
     field: keyof (typeof addressErrors)[0],
     value: string,
   ) => {
     setAddressEdits((list) =>
-      list.map((addr, i) => (i === idx ? { ...addr, [field]: value } : addr)),
+      list.map((address, index) =>
+        index === index ? { ...address, [field]: value } : address,
+      ),
     );
-    let msg = '';
+    let message = '';
     switch (field) {
       case 'street':
-        msg = validateStreet(value);
+        message = validateStreet(value);
         break;
       case 'city':
-        msg = validateCity(value);
+        message = validateCity(value);
         break;
       case 'postalCode':
-        msg = validatePostalCode(value, addressEdits[idx].country);
+        message = validatePostalCode(value, addressEdits[index].country);
         break;
       case 'country':
-        msg = validateCountry(value);
+        message = validateCountry(value);
         break;
     }
     setAddressErrors((list) =>
-      list.map((err, i) => (i === idx ? { ...err, [field]: msg } : err)),
+      list.map((error, index) =>
+        index === index ? { ...error, [field]: message } : error,
+      ),
     );
   };
 
@@ -152,7 +156,9 @@ export function Profile() {
     !!errors.firstName ||
     !!errors.lastName ||
     !!errors.dateOfBirth ||
-    addressErrors.some((errObj) => Object.values(errObj).some((msg) => !!msg));
+    addressErrors.some((errorObject) =>
+      Object.values(errorObject).some((message) => !!message),
+    );
 
   const saveChanges = async () => {
     if (!profile || !accessToken) return;
@@ -172,24 +178,24 @@ export function Profile() {
       });
     }
 
-    addressEdits.forEach((addr, idx) => {
-      const old = profile.addresses[idx];
+    addressEdits.forEach((address, index) => {
+      const old = profile.addresses[index];
       if (
-        addr.streetName !== old.streetName ||
-        addr.city !== old.city ||
-        addr.postalCode !== old.postalCode ||
-        addr.country !== old.country
+        address.streetName !== old.streetName ||
+        address.city !== old.city ||
+        address.postalCode !== old.postalCode ||
+        address.country !== old.country
       ) {
         actions.push({
           action: 'changeAddress',
           addressId: old.id,
-          address: addr,
+          address: address,
         });
       }
     });
 
-    if (defaultShipIdx !== undefined) {
-      const newId = addressEdits[defaultShipIdx].id;
+    if (defaultShipIndex !== undefined) {
+      const newId = addressEdits[defaultShipIndex].id;
       if (newId !== profile.defaultShippingAddressId) {
         actions.push({
           action: 'setDefaultShippingAddress',
@@ -197,8 +203,8 @@ export function Profile() {
         });
       }
     }
-    if (defaultBillIdx !== undefined) {
-      const newId = addressEdits[defaultBillIdx].id;
+    if (defaultBillIndex !== undefined) {
+      const newId = addressEdits[defaultBillIndex].id;
       if (newId !== profile.defaultBillingAddressId) {
         actions.push({
           action: 'setDefaultBillingAddress',
@@ -245,12 +251,12 @@ export function Profile() {
     defaultBillingAddressId,
   } = profile;
 
-  const renderAddress = (addr: Address) => {
-    const isShip = addr.id === defaultShippingAddressId;
-    const isBill = addr.id === defaultBillingAddressId;
+  const renderAddress = (address: Address) => {
+    const isShip = address.id === defaultShippingAddressId;
+    const isBill = address.id === defaultBillingAddressId;
     return (
       <Box
-        key={addr.id}
+        key={address.id}
         p='1rem'
         borderWidth='1px'
         borderRadius='lg'
@@ -258,16 +264,16 @@ export function Profile() {
       >
         <Stack gap={1}>
           <Text>
-            <strong>Street:</strong> {addr.streetName}
+            <strong>Street:</strong> {address.streetName}
           </Text>
           <Text>
-            <strong>City:</strong> {addr.city}
+            <strong>City:</strong> {address.city}
           </Text>
           <Text>
-            <strong>Postal:</strong> {addr.postalCode}
+            <strong>Postal:</strong> {address.postalCode}
           </Text>
           <Text>
-            <strong>Country:</strong> {addr.country}
+            <strong>Country:</strong> {address.country}
           </Text>
         </Stack>
         <Stack direction='row' gap={2} mt={2}>
@@ -323,8 +329,8 @@ export function Profile() {
                 <FormLabel>First Name</FormLabel>
                 <Input
                   value={editData.firstName}
-                  onChange={(e) => {
-                    onFirstNameChange(e.target.value);
+                  onChange={(event) => {
+                    onFirstNameChange(event.target.value);
                   }}
                 />
                 <FormErrorMessage>{errors.firstName}</FormErrorMessage>
@@ -334,8 +340,8 @@ export function Profile() {
                 <FormLabel>Last Name</FormLabel>
                 <Input
                   value={editData.lastName}
-                  onChange={(e) => {
-                    onLastNameChange(e.target.value);
+                  onChange={(event) => {
+                    onLastNameChange(event.target.value);
                   }}
                 />
                 <FormErrorMessage>{errors.lastName}</FormErrorMessage>
@@ -346,8 +352,8 @@ export function Profile() {
                 <Input
                   placeholder='YYYY-MM-DD'
                   value={editData.dateOfBirth}
-                  onChange={(e) => {
-                    onDobChange(e.target.value);
+                  onChange={(event) => {
+                    onDateOfBirthChange(event.target.value);
                   }}
                 />
                 <FormErrorMessage>{errors.dateOfBirth}</FormErrorMessage>
@@ -370,7 +376,6 @@ export function Profile() {
         </CardBody>
       </Card>
 
-      {/* Addresses */}
       <Card>
         <CardHeader display='flex' alignItems='center' gap='1rem'>
           <Icon as={FiMapPin} boxSize={6} color='purple.500' />
@@ -381,91 +386,110 @@ export function Profile() {
             <Text>No saved addresses.</Text>
           ) : (
             <SimpleGrid columns={{ base: 1, md: 2 }} gap='1rem'>
-              {addressEdits.map((addr, idx) => (
-                <Box key={addr.id} p='1rem' borderWidth='1px' borderRadius='lg'>
+              {addressEdits.map((address, index) => (
+                <Box
+                  key={address.id}
+                  p='1rem'
+                  borderWidth='1px'
+                  borderRadius='lg'
+                >
                   {isEditing ? (
                     <>
-                      <FormControl isInvalid={!!addressErrors[idx].street}>
+                      <FormControl isInvalid={!!addressErrors[index].street}>
                         <FormLabel>Street</FormLabel>
                         <Input
                           mb={2}
-                          value={addr.streetName}
-                          onChange={(e) => {
-                            onAddressFieldChange(idx, 'street', e.target.value);
+                          value={address.streetName}
+                          onChange={(event) => {
+                            onAddressFieldChange(
+                              index,
+                              'street',
+                              event.target.value,
+                            );
                           }}
                         />
                         <FormErrorMessage>
-                          {addressErrors[idx].street}
+                          {addressErrors[index].street}
                         </FormErrorMessage>
                       </FormControl>
 
-                      <FormControl isInvalid={!!addressErrors[idx].city}>
+                      <FormControl isInvalid={!!addressErrors[index].city}>
                         <FormLabel>City</FormLabel>
                         <Input
                           mb={2}
-                          value={addr.city}
-                          onChange={(e) => {
-                            onAddressFieldChange(idx, 'city', e.target.value);
+                          value={address.city}
+                          onChange={(event) => {
+                            onAddressFieldChange(
+                              index,
+                              'city',
+                              event.target.value,
+                            );
                           }}
                         />
                         <FormErrorMessage>
-                          {addressErrors[idx].city}
+                          {addressErrors[index].city}
                         </FormErrorMessage>
                       </FormControl>
 
-                      <FormControl isInvalid={!!addressErrors[idx].postalCode}>
+                      <FormControl
+                        isInvalid={!!addressErrors[index].postalCode}
+                      >
                         <FormLabel>Postal Code</FormLabel>
                         <Input
                           mb={2}
-                          value={addr.postalCode}
-                          onChange={(e) => {
+                          value={address.postalCode}
+                          onChange={(event) => {
                             onAddressFieldChange(
-                              idx,
+                              index,
                               'postalCode',
-                              e.target.value,
+                              event.target.value,
                             );
                           }}
                         />
                         <FormErrorMessage>
-                          {addressErrors[idx].postalCode}
+                          {addressErrors[index].postalCode}
                         </FormErrorMessage>
                       </FormControl>
 
-                      <FormControl isInvalid={!!addressErrors[idx].country}>
+                      <FormControl isInvalid={!!addressErrors[index].country}>
                         <FormLabel>Country</FormLabel>
                         <Input
                           mb={2}
-                          value={addr.country}
-                          onChange={(e) => {
+                          value={address.country}
+                          onChange={(event) => {
                             onAddressFieldChange(
-                              idx,
+                              index,
                               'country',
-                              e.target.value,
+                              event.target.value,
                             );
                           }}
                         />
                         <FormErrorMessage>
-                          {addressErrors[idx].country}
+                          {addressErrors[index].country}
                         </FormErrorMessage>
                       </FormControl>
 
                       <HStack mt={2} gap={4}>
                         <Button
                           size='sm'
-                          variant={defaultShipIdx === idx ? 'solid' : 'outline'}
+                          variant={
+                            defaultShipIndex === index ? 'solid' : 'outline'
+                          }
                           colorScheme='green'
                           onClick={() => {
-                            setDefaultShipIdx(idx);
+                            setDefaultShipIndex(index);
                           }}
                         >
                           Default Ship
                         </Button>
                         <Button
                           size='sm'
-                          variant={defaultBillIdx === idx ? 'solid' : 'outline'}
+                          variant={
+                            defaultBillIndex === index ? 'solid' : 'outline'
+                          }
                           colorScheme='blue'
                           onClick={() => {
-                            setDefaultBillIdx(idx);
+                            setDefaultBillIndex(index);
                           }}
                         >
                           Default Bill
@@ -473,7 +497,7 @@ export function Profile() {
                       </HStack>
                     </>
                   ) : (
-                    renderAddress(addr)
+                    renderAddress(address)
                   )}
                 </Box>
               ))}

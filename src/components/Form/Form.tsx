@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Input, Button, Box, IconButton } from '@chakra-ui/react';
 import { Select } from '@chakra-ui/select';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
-import { FormProps } from '~types/types';
+import { FormProperties } from '~types/types';
 import { ErrorAlert } from '../ErrorAlert/ErrorAlert';
 
 const getAutocompleteValue = (name: string): string => {
@@ -24,13 +24,13 @@ export function Form({
   onSubmit,
   loading = false,
   submitLabel = 'Submit',
-}: FormProps) {
+}: FormProperties) {
   const [showMap, setShowMap] = useState<Record<string, boolean>>({});
 
   const toggleShow = (name: string): void => {
-    setShowMap((prev) => ({
-      ...prev,
-      [name]: !prev[name],
+    setShowMap((previous) => ({
+      ...previous,
+      [name]: !previous[name],
     }));
   };
 
@@ -67,7 +67,7 @@ export function Form({
         }) => {
           const hasError = error.trim() !== '';
           const isPasswordField = type === 'password';
-          const showPassword = !!showMap[name];
+          const showPassword = showMap[name];
           const inputType = isPasswordField
             ? showPassword
               ? 'text'
@@ -86,8 +86,8 @@ export function Form({
                     maxWidth='382px'
                     icon={<Box />}
                     value={value}
-                    onChange={(e) => {
-                      onChange(e.target.value);
+                    onChange={(event) => {
+                      onChange(event.target.value);
                     }}
                     placeholder={placeholder}
                     pr={isPasswordField ? '2.5rem' : undefined}
@@ -98,9 +98,9 @@ export function Form({
                     borderRadius='md'
                     _hover={{ borderColor: hasError ? 'red.500' : 'gray.400' }}
                   >
-                    {options?.map((o) => (
-                      <option key={o.value} value={o.value}>
-                        {o.label}
+                    {options?.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
                       </option>
                     ))}
                   </Select>
@@ -111,8 +111,8 @@ export function Form({
                     autoComplete={getAutocompleteValue(name)}
                     type={inputType}
                     value={value}
-                    onChange={(e) => {
-                      onChange(e.target.value);
+                    onChange={(event) => {
+                      onChange(event.target.value);
                     }}
                     placeholder={placeholder}
                     pr={isPasswordField ? '2.5rem' : undefined}

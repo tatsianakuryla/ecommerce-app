@@ -51,25 +51,25 @@ export function formatDateInput(value: string): string {
   }
 }
 
-export function validateDateOfBirth(dob: string): string {
+export function validateDateOfBirth(dateOfBirth: string): string {
   const today = new Date();
 
-  if (!dob.trim()) {
+  if (!dateOfBirth.trim()) {
     return 'Date of birth is required.';
   }
 
-  if (dob.length < 10) {
+  if (dateOfBirth.length < 10) {
     return 'Please enter your full date of birth (YYYY-MM-DD).';
   }
 
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(dob)) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateOfBirth)) {
     return 'Invalid date format.';
   }
 
-  const [yyyyStr, mmStr, ddStr] = dob.split('-');
-  const year = parseInt(yyyyStr, 10);
-  const month = parseInt(mmStr, 10);
-  const day = parseInt(ddStr, 10);
+  const [yyyyString, mmString, ddString] = dateOfBirth.split('-');
+  const year = parseInt(yyyyString, 10);
+  const month = parseInt(mmString, 10);
+  const day = parseInt(ddString, 10);
 
   if (isNaN(year) || year > today.getFullYear() || year < 1900) {
     return 'Invalid year.';

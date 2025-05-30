@@ -66,22 +66,22 @@ export const generateAnonymousToken = (): Request => {
 };
 
 export const createUser = (
-  data: RegistrationData,
+  data__________: RegistrationData,
   accessToken: string,
 ): Request => {
   const customerDraft: CustomerDraft = {
-    email: data.email,
-    password: data.password,
-    firstName: data.firstName,
-    lastName: data.lastName,
-    dateOfBirth: data.dateOfBirth,
+    email: data__________.email,
+    password: data__________.password,
+    firstName: data__________.firstName,
+    lastName: data__________.lastName,
+    dateOfBirth: data__________.dateOfBirth,
     addresses: [
       {
-        id: data.address.id || uuid(),
-        streetName: data.address.streetName,
-        city: data.address.city,
-        postalCode: data.address.postalCode,
-        country: data.address.country,
+        id: data__________.address.id || uuid(),
+        streetName: data__________.address.streetName,
+        city: data__________.address.city,
+        postalCode: data__________.address.postalCode,
+        country: data__________.address.country,
       },
     ],
     defaultShippingAddress: 0,

@@ -21,10 +21,10 @@ export function LoginForm() {
 
   useEffect(() => {
     if (serverError === null) return;
-    const msg = serverError.toLowerCase();
+    const message = serverError.toLowerCase();
     const next = { email: '', password: '' };
-    if (msg.includes('email')) next.email = serverError;
-    if (msg.includes('password'))
+    if (message.includes('email')) next.email = serverError;
+    if (message.includes('password'))
       next.password = normalizeErrorMessage(serverError);
     if (!next.email && !next.password) {
       next.email = next.password = serverError;
@@ -38,12 +38,12 @@ export function LoginForm() {
     };
   }, [setError]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const eErr = validateEmail(email);
-    const pErr = validatePassword(password);
-    setFieldError({ email: eErr, password: pErr });
-    if (eErr || pErr) return;
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    const emailError = validateEmail(email);
+    const passwordError = validatePassword(password);
+    setFieldError({ email: emailError, password: passwordError });
+    if (emailError || passwordError) return;
     void login(email, password);
   };
 
@@ -55,8 +55,8 @@ export function LoginForm() {
       placeholder: 'Email',
       onChange: (value: string) => {
         setEmail(value);
-        const err = validateEmail(value);
-        setFieldError((prev) => ({ ...prev, email: err }));
+        const error = validateEmail(value);
+        setFieldError((previous) => ({ ...previous, email: error }));
       },
       error: fieldError.email,
     },
@@ -67,8 +67,8 @@ export function LoginForm() {
       placeholder: 'Password',
       onChange: (value: string) => {
         setPassword(value);
-        const err = validatePassword(value);
-        setFieldError((prev) => ({ ...prev, password: err }));
+        const error = validatePassword(value);
+        setFieldError((previous) => ({ ...previous, password: error }));
       },
       error: fieldError.password,
     },

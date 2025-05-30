@@ -82,10 +82,10 @@ export type FieldKey =
   | 'postalCode'
   | 'country';
 
-export interface FormProps {
+export interface FormProperties {
   id: string;
   fields: FormField[];
-  onSubmit: (e: React.FormEvent) => void;
+  onSubmit: (event: React.FormEvent) => void;
   loading?: boolean;
   submitLabel?: string;
   nonFieldError?: string | null;
