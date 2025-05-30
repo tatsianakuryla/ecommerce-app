@@ -12,6 +12,11 @@ import {
   HStack,
   Button,
 } from '@chakra-ui/react';
+import {
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+} from '@chakra-ui/form-control';
 import { Card, CardHeader, CardBody } from '@chakra-ui/card';
 import { FiUser, FiMapPin } from 'react-icons/fi';
 import { useAuthContext } from '~hooks/useAuthContext';
@@ -22,32 +27,39 @@ import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert';
 import { isCustomer } from '~utils/typeguards.ts';
 import Toastify from 'toastify-js';
 
+import {
+  validateFirstName,
+  validateLastName,
+  formatDateInput,
+  validateDateOfBirth,
+  validateStreet,
+  validateCity,
+  validatePostalCode,
+  validateCountry,
+} from '~components/RegistrationForm/registrationFormValidation';
+
 export function Profile() {
   const { accessToken } = useAuthContext();
   const { makeRequest, loading, error } = useMakeRequest();
+
   const [profile, setProfile] = useState<Customer | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [editData, setEditData] = useState<{
-    firstName: string;
-    lastName: string;
-    dateOfBirth: string;
-  }>({
+
+  const [editData, setEditData] = useState({
+    firstName: '',
+    lastName: '',
+    dateOfBirth: '',
+  });
+  const [errors, setErrors] = useState({
     firstName: '',
     lastName: '',
     dateOfBirth: '',
   });
 
-  useEffect(() => {
-    if (profile) {
-      setEditData({
-        firstName: profile.firstName ?? '',
-        lastName: profile.lastName ?? '',
-        dateOfBirth: profile.dateOfBirth ?? '',
-      });
-    }
-  }, [profile]);
-
   const [addressEdits, setAddressEdits] = useState<Address[]>([]);
+  const [addressErrors, setAddressErrors] = useState<
+    Array<{ street: string; city: string; postalCode: string; country: string }>
+  >([]);
   const [defaultShipIdx, setDefaultShipIdx] = useState<number>();
   const [defaultBillIdx, setDefaultBillIdx] = useState<number>();
 
@@ -59,8 +71,17 @@ export function Profile() {
       lastName: profile.lastName ?? '',
       dateOfBirth: profile.dateOfBirth ?? '',
     });
+    setErrors({ firstName: '', lastName: '', dateOfBirth: '' });
 
     setAddressEdits(profile.addresses);
+    setAddressErrors(
+      profile.addresses.map(() => ({
+        street: '',
+        city: '',
+        postalCode: '',
+        country: '',
+      })),
+    );
     setDefaultShipIdx(
       profile.addresses.findIndex(
         (a) => a.id === profile.defaultShippingAddressId,
@@ -73,21 +94,76 @@ export function Profile() {
     );
   }, [profile]);
 
+  useEffect(() => {
+    if (!accessToken) return;
+    void makeRequest(fetchUserProfileRequest(accessToken), isCustomer).then(
+      (customer) => {
+        if (customer) setProfile(customer);
+      },
+    );
+  }, [accessToken, makeRequest]);
+
+  const onFirstNameChange = (val: string) => {
+    setEditData((d) => ({ ...d, firstName: val }));
+    setErrors((e) => ({ ...e, firstName: validateFirstName(val) }));
+  };
+  const onLastNameChange = (val: string) => {
+    setEditData((d) => ({ ...d, lastName: val }));
+    setErrors((e) => ({ ...e, lastName: validateLastName(val) }));
+  };
+  const onDobChange = (raw: string) => {
+    const formatted = formatDateInput(raw);
+    setEditData((d) => ({ ...d, dateOfBirth: formatted }));
+    setErrors((e) => ({
+      ...e,
+      dateOfBirth: validateDateOfBirth(formatted),
+    }));
+  };
+
+  const onAddressFieldChange = (
+    idx: number,
+    field: keyof (typeof addressErrors)[0],
+    value: string,
+  ) => {
+    setAddressEdits((list) =>
+      list.map((addr, i) => (i === idx ? { ...addr, [field]: value } : addr)),
+    );
+    let msg = '';
+    switch (field) {
+      case 'street':
+        msg = validateStreet(value);
+        break;
+      case 'city':
+        msg = validateCity(value);
+        break;
+      case 'postalCode':
+        msg = validatePostalCode(value, addressEdits[idx].country);
+        break;
+      case 'country':
+        msg = validateCountry(value);
+        break;
+    }
+    setAddressErrors((list) =>
+      list.map((err, i) => (i === idx ? { ...err, [field]: msg } : err)),
+    );
+  };
+
+  const hasErrors =
+    !!errors.firstName ||
+    !!errors.lastName ||
+    !!errors.dateOfBirth ||
+    addressErrors.some((errObj) => Object.values(errObj).some((msg) => !!msg));
+
   const saveChanges = async () => {
     if (!profile || !accessToken) return;
 
     const actions: CustomerUpdateAction[] = [];
+
     if (editData.firstName !== profile.firstName) {
-      actions.push({
-        action: 'setFirstName',
-        firstName: editData.firstName,
-      });
+      actions.push({ action: 'setFirstName', firstName: editData.firstName });
     }
     if (editData.lastName !== profile.lastName) {
-      actions.push({
-        action: 'setLastName',
-        lastName: editData.lastName,
-      });
+      actions.push({ action: 'setLastName', lastName: editData.lastName });
     }
     if (editData.dateOfBirth !== profile.dateOfBirth) {
       actions.push({
@@ -96,7 +172,7 @@ export function Profile() {
       });
     }
 
-    addressEdits.forEach((addr: Address, idx: number) => {
+    addressEdits.forEach((addr, idx) => {
       const old = profile.addresses[idx];
       if (
         addr.streetName !== old.streetName ||
@@ -113,20 +189,20 @@ export function Profile() {
     });
 
     if (defaultShipIdx !== undefined) {
-      const newShipId = addressEdits[defaultShipIdx].id;
-      if (newShipId !== profile.defaultShippingAddressId) {
+      const newId = addressEdits[defaultShipIdx].id;
+      if (newId !== profile.defaultShippingAddressId) {
         actions.push({
           action: 'setDefaultShippingAddress',
-          addressId: newShipId,
+          addressId: newId,
         });
       }
     }
     if (defaultBillIdx !== undefined) {
-      const newBillId = addressEdits[defaultBillIdx].id;
-      if (newBillId !== profile.defaultBillingAddressId) {
+      const newId = addressEdits[defaultBillIdx].id;
+      if (newId !== profile.defaultBillingAddressId) {
         actions.push({
           action: 'setDefaultBillingAddress',
-          addressId: newBillId,
+          addressId: newId,
         });
       }
     }
@@ -156,15 +232,6 @@ export function Profile() {
     }
   };
 
-  useEffect(() => {
-    if (!accessToken) return;
-    void makeRequest(fetchUserProfileRequest(accessToken), isCustomer).then(
-      (customer) => {
-        if (customer) setProfile(customer);
-      },
-    );
-  }, [accessToken, makeRequest]);
-
   if (loading) return <Spinner size='xl' mt='4rem' />;
   if (error) return <ErrorAlert name='profile' error={error} />;
   if (!profile) return <Text mt='4rem'>Profile not found.</Text>;
@@ -178,36 +245,34 @@ export function Profile() {
     defaultBillingAddressId,
   } = profile;
 
-  const renderAddress = (address: Address) => {
-    const isDefaultShipping = address.id === defaultShippingAddressId;
-    const isDefaultBilling = address.id === defaultBillingAddressId;
-
+  const renderAddress = (addr: Address) => {
+    const isShip = addr.id === defaultShippingAddressId;
+    const isBill = addr.id === defaultBillingAddressId;
     return (
       <Box
-        key={address.id}
+        key={addr.id}
         p='1rem'
         borderWidth='1px'
         borderRadius='lg'
         boxShadow='sm'
-        position='relative'
       >
         <Stack gap={1}>
           <Text>
-            <strong>Street:</strong> {address.streetName}
+            <strong>Street:</strong> {addr.streetName}
           </Text>
           <Text>
-            <strong>City:</strong> {address.city}
+            <strong>City:</strong> {addr.city}
           </Text>
           <Text>
-            <strong>Postal:</strong> {address.postalCode}
+            <strong>Postal:</strong> {addr.postalCode}
           </Text>
           <Text>
-            <strong>Country:</strong> {address.country}
+            <strong>Country:</strong> {addr.country}
           </Text>
         </Stack>
-        <Stack gap={1}>
-          {isDefaultShipping && <Badge colorScheme='green'>Shipping</Badge>}
-          {isDefaultBilling && <Badge colorScheme='blue'>Billing</Badge>}
+        <Stack direction='row' gap={2} mt={2}>
+          {isShip && <Badge colorScheme='green'>Shipping</Badge>}
+          {isBill && <Badge colorScheme='blue'>Billing</Badge>}
         </Stack>
       </Box>
     );
@@ -216,12 +281,10 @@ export function Profile() {
   return (
     <Stack gap='2rem' maxW='800px' mx='auto'>
       <Card>
-        <CardHeader display='flex' alignItems='center' gap='1rem' mb='1rem'>
+        <CardHeader display='flex' alignItems='center' gap='1rem'>
           <Icon as={FiUser} boxSize={6} color='teal.500' />
-          <Heading size='md' mr='auto'>
-            Personal Information
-          </Heading>
-          <HStack gap={2} mt={2}>
+          <Heading size='md'>Personal Information</Heading>
+          <HStack ml='auto'>
             {isEditing ? (
               <>
                 <Button
@@ -236,6 +299,7 @@ export function Profile() {
                   size='sm'
                   colorScheme='teal'
                   onClick={() => void saveChanges()}
+                  disabled={hasErrors}
                 >
                   Save
                 </Button>
@@ -253,67 +317,62 @@ export function Profile() {
           </HStack>
         </CardHeader>
         <CardBody>
-          <Stack direction='column' gap='1rem'>
-            {isEditing ? (
-              <>
-                <Box>
-                  <Text fontWeight='semibold'>First Name</Text>
-                  <Input
-                    value={editData.firstName}
-                    onChange={(e) => {
-                      setEditData((d) => ({ ...d, firstName: e.target.value }));
-                    }}
-                  />
-                </Box>
-                <Box>
-                  <Text fontWeight='semibold'>Last Name</Text>
-                  <Input
-                    value={editData.lastName}
-                    onChange={(e) => {
-                      setEditData((d) => ({ ...d, lastName: e.target.value }));
-                    }}
-                  />
-                </Box>
-                <Box>
-                  <Text fontWeight='semibold'>Date of Birth</Text>
-                  <Input
-                    placeholder='YYYY-MM-DD'
-                    value={editData.dateOfBirth}
-                    onChange={(e) => {
-                      setEditData((d) => ({
-                        ...d,
-                        dateOfBirth: e.target.value,
-                      }));
-                    }}
-                  />
-                </Box>
-              </>
-            ) : (
-              <>
-                <Box>
-                  <Text fontWeight='semibold'>First Name</Text>
-                  <Text>{firstName}</Text>
-                </Box>
-                <Box>
-                  <Text fontWeight='semibold'>Last Name</Text>
-                  <Text>{lastName}</Text>
-                </Box>
-                <Box>
-                  <Text fontWeight='semibold'>Date of Birth</Text>
-                  <Text>
-                    {dateOfBirth
-                      ? new Date(dateOfBirth).toLocaleDateString()
-                      : '—'}
-                  </Text>
-                </Box>
-              </>
-            )}
-          </Stack>
+          {isEditing ? (
+            <Stack gap='1rem'>
+              <FormControl isInvalid={!!errors.firstName}>
+                <FormLabel>First Name</FormLabel>
+                <Input
+                  value={editData.firstName}
+                  onChange={(e) => {
+                    onFirstNameChange(e.target.value);
+                  }}
+                />
+                <FormErrorMessage>{errors.firstName}</FormErrorMessage>
+              </FormControl>
+
+              <FormControl isInvalid={!!errors.lastName}>
+                <FormLabel>Last Name</FormLabel>
+                <Input
+                  value={editData.lastName}
+                  onChange={(e) => {
+                    onLastNameChange(e.target.value);
+                  }}
+                />
+                <FormErrorMessage>{errors.lastName}</FormErrorMessage>
+              </FormControl>
+
+              <FormControl isInvalid={!!errors.dateOfBirth}>
+                <FormLabel>Date of Birth</FormLabel>
+                <Input
+                  placeholder='YYYY-MM-DD'
+                  value={editData.dateOfBirth}
+                  onChange={(e) => {
+                    onDobChange(e.target.value);
+                  }}
+                />
+                <FormErrorMessage>{errors.dateOfBirth}</FormErrorMessage>
+              </FormControl>
+            </Stack>
+          ) : (
+            <Stack gap='1rem'>
+              <Text>
+                <strong>First Name:</strong> {firstName}
+              </Text>
+              <Text>
+                <strong>Last Name:</strong> {lastName}
+              </Text>
+              <Text>
+                <strong>Date of Birth:</strong>{' '}
+                {dateOfBirth ? new Date(dateOfBirth).toLocaleDateString() : '—'}
+              </Text>
+            </Stack>
+          )}
         </CardBody>
       </Card>
 
+      {/* Addresses */}
       <Card>
-        <CardHeader display='flex' gap='1rem' mb='1rem'>
+        <CardHeader display='flex' alignItems='center' gap='1rem'>
           <Icon as={FiMapPin} boxSize={6} color='purple.500' />
           <Heading size='md'>Addresses</Heading>
         </CardHeader>
@@ -323,67 +382,72 @@ export function Profile() {
           ) : (
             <SimpleGrid columns={{ base: 1, md: 2 }} gap='1rem'>
               {addressEdits.map((addr, idx) => (
-                <Box
-                  key={addr.id}
-                  p='1rem'
-                  borderWidth='1px'
-                  borderRadius='lg'
-                  mb='1rem'
-                >
+                <Box key={addr.id} p='1rem' borderWidth='1px' borderRadius='lg'>
                   {isEditing ? (
                     <>
-                      <Input
-                        mb={2}
-                        value={addr.streetName}
-                        onChange={(e) => {
-                          setAddressEdits((list) =>
-                            list.map((x, i) =>
-                              i === idx
-                                ? { ...x, streetName: e.target.value }
-                                : x,
-                            ),
-                          );
-                        }}
-                        placeholder='Street'
-                      />
-                      <Input
-                        mb={2}
-                        value={addr.city}
-                        onChange={(e) => {
-                          setAddressEdits((list) =>
-                            list.map((x, i) =>
-                              i === idx ? { ...x, city: e.target.value } : x,
-                            ),
-                          );
-                        }}
-                        placeholder='City'
-                      />
-                      <Input
-                        mb={2}
-                        value={addr.postalCode}
-                        onChange={(e) => {
-                          setAddressEdits((list) =>
-                            list.map((x, i) =>
-                              i === idx
-                                ? { ...x, postalCode: e.target.value }
-                                : x,
-                            ),
-                          );
-                        }}
-                        placeholder='Postal Code'
-                      />
-                      <Input
-                        mb={2}
-                        value={addr.country}
-                        onChange={(e) => {
-                          setAddressEdits((list) =>
-                            list.map((x, i) =>
-                              i === idx ? { ...x, country: e.target.value } : x,
-                            ),
-                          );
-                        }}
-                        placeholder='Country'
-                      />
+                      <FormControl isInvalid={!!addressErrors[idx].street}>
+                        <FormLabel>Street</FormLabel>
+                        <Input
+                          mb={2}
+                          value={addr.streetName}
+                          onChange={(e) => {
+                            onAddressFieldChange(idx, 'street', e.target.value);
+                          }}
+                        />
+                        <FormErrorMessage>
+                          {addressErrors[idx].street}
+                        </FormErrorMessage>
+                      </FormControl>
+
+                      <FormControl isInvalid={!!addressErrors[idx].city}>
+                        <FormLabel>City</FormLabel>
+                        <Input
+                          mb={2}
+                          value={addr.city}
+                          onChange={(e) => {
+                            onAddressFieldChange(idx, 'city', e.target.value);
+                          }}
+                        />
+                        <FormErrorMessage>
+                          {addressErrors[idx].city}
+                        </FormErrorMessage>
+                      </FormControl>
+
+                      <FormControl isInvalid={!!addressErrors[idx].postalCode}>
+                        <FormLabel>Postal Code</FormLabel>
+                        <Input
+                          mb={2}
+                          value={addr.postalCode}
+                          onChange={(e) => {
+                            onAddressFieldChange(
+                              idx,
+                              'postalCode',
+                              e.target.value,
+                            );
+                          }}
+                        />
+                        <FormErrorMessage>
+                          {addressErrors[idx].postalCode}
+                        </FormErrorMessage>
+                      </FormControl>
+
+                      <FormControl isInvalid={!!addressErrors[idx].country}>
+                        <FormLabel>Country</FormLabel>
+                        <Input
+                          mb={2}
+                          value={addr.country}
+                          onChange={(e) => {
+                            onAddressFieldChange(
+                              idx,
+                              'country',
+                              e.target.value,
+                            );
+                          }}
+                        />
+                        <FormErrorMessage>
+                          {addressErrors[idx].country}
+                        </FormErrorMessage>
+                      </FormControl>
 
                       <HStack mt={2} gap={4}>
                         <Button
