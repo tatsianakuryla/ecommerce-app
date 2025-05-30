@@ -291,3 +291,11 @@ export interface AddressDraft {
   fax?: string;
   externalId?: string;
 }
+
+export type CustomerUpdateAction =
+  | { action: 'setFirstName'; firstName: string }
+  | { action: 'setLastName'; lastName: string }
+  | { action: 'setDateOfBirth'; dateOfBirth: string }
+  | { action: 'changeAddress'; addressId: string; address: Address }
+  | { action: 'setDefaultShippingAddress'; addressId: string }
+  | { action: 'setDefaultBillingAddress'; addressId: string };

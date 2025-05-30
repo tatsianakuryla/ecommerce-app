@@ -11,6 +11,7 @@ import {
 } from '~/constants/constants';
 import {
   CustomerDraft,
+  CustomerUpdateAction,
   PermissionLevel,
   RegistrationData,
 } from '~/types/types';
@@ -105,5 +106,21 @@ export function fetchUserProfileRequest(token: string): Request {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
+  });
+}
+
+export function updateCustomerRequest(
+  id: string,
+  version: number,
+  actions: CustomerUpdateAction[],
+  token: string,
+): Request {
+  return new Request(`${BASE_API_URL}${PROJECT_KEY}/customers/${id}`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ version, actions }),
   });
 }
