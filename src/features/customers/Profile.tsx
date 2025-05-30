@@ -12,18 +12,13 @@ import {
   HStack,
   Button,
 } from '@chakra-ui/react';
-import {
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-} from '@chakra-ui/form-control';
+import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Card, CardHeader, CardBody } from '@chakra-ui/card';
 import { FiUser, FiMapPin } from 'react-icons/fi';
 import { useAuthContext } from '~hooks/useAuthContext';
 import { useMakeRequest } from '~hooks/useMakeRequest';
 import { fetchUserProfileRequest, updateCustomerRequest } from '~api/requests';
 import { Customer, Address, CustomerUpdateAction } from '~types/types';
-import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert';
 import { isCustomer } from '~utils/typeguards.ts';
 import Toastify from 'toastify-js';
 
@@ -37,6 +32,7 @@ import {
   validatePostalCode,
   validateCountry,
 } from '~components/RegistrationForm/registrationFormValidation';
+import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert.tsx';
 
 export function Profile() {
   const toastifyOptions = {
@@ -57,11 +53,12 @@ export function Profile() {
       position: 'fixed',
       zIndex: '9999',
       cursor: 'pointer',
+      borderRadius: '8px',
     },
   };
 
   const { accessToken } = useAuthContext();
-  const { makeRequest, loading, error } = useMakeRequest();
+  const { makeRequest, loading } = useMakeRequest();
 
   const [profile, setProfile] = useState<Customer | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -79,7 +76,12 @@ export function Profile() {
 
   const [addressEdits, setAddressEdits] = useState<Address[]>([]);
   const [addressErrors, setAddressErrors] = useState<
-    Array<{ street: string; city: string; postalCode: string; country: string }>
+    Array<{
+      streetName: string;
+      city: string;
+      postalCode: string;
+      country: string;
+    }>
   >([]);
   const [defaultShipIndex, setDefaultShipIndex] = useState<number>();
   const [defaultBillIndex, setDefaultBillIndex] = useState<number>();
@@ -97,7 +99,7 @@ export function Profile() {
     setAddressEdits(profile.addresses);
     setAddressErrors(
       profile.addresses.map(() => ({
-        street: '',
+        streetName: '',
         city: '',
         postalCode: '',
         country: '',
@@ -153,7 +155,7 @@ export function Profile() {
     );
     let message = '';
     switch (field) {
-      case 'street':
+      case 'streetName':
         message = validateStreet(value);
         break;
       case 'city':
@@ -262,8 +264,12 @@ export function Profile() {
     }
   };
 
-  if (loading) return <Spinner size='xl' mt='4rem' />;
-  if (error) return <ErrorAlert name='profile' error={error} />;
+  if (loading)
+    return (
+      <Box display='flex' justifyContent='center' width='100vw'>
+        <Spinner size='xl' color='teal.500' />
+      </Box>
+    );
   if (!profile) return <Text mt='4rem'>Profile not found.</Text>;
 
   const {
@@ -382,7 +388,9 @@ export function Profile() {
                     onFirstNameChange(event.target.value);
                   }}
                 />
-                <FormErrorMessage>{errors.firstName}</FormErrorMessage>
+                {errors.firstName && (
+                  <ErrorAlert name='firstName' error={errors.firstName} />
+                )}
               </FormControl>
 
               <FormControl isInvalid={!!errors.lastName}>
@@ -393,7 +401,9 @@ export function Profile() {
                     onLastNameChange(event.target.value);
                   }}
                 />
-                <FormErrorMessage>{errors.lastName}</FormErrorMessage>
+                {errors.lastName && (
+                  <ErrorAlert name='lastName' error={errors.lastName} />
+                )}
               </FormControl>
 
               <FormControl isInvalid={!!errors.dateOfBirth}>
@@ -405,7 +415,9 @@ export function Profile() {
                     onDateOfBirthChange(event.target.value);
                   }}
                 />
-                <FormErrorMessage>{errors.dateOfBirth}</FormErrorMessage>
+                {errors.dateOfBirth && (
+                  <ErrorAlert name='dateOfBirth' error={errors.dateOfBirth} />
+                )}
               </FormControl>
             </Stack>
           ) : (
@@ -449,21 +461,26 @@ export function Profile() {
                       transition='all 0.2s'
                     >
                       <Stack gap={3}>
-                        <FormControl isInvalid={!!addressErrors[index].street}>
+                        <FormControl
+                          isInvalid={!!addressErrors[index].streetName}
+                        >
                           <FormLabel fontWeight='semibold'>Street</FormLabel>
                           <Input
                             value={address.streetName}
                             onChange={(event) => {
                               onAddressFieldChange(
                                 index,
-                                'street',
+                                'streetName',
                                 event.target.value,
                               );
                             }}
                           />
-                          <FormErrorMessage>
-                            {addressErrors[index].street}
-                          </FormErrorMessage>
+                          {addressErrors[index].streetName && (
+                            <ErrorAlert
+                              name={`address-street-${index}`}
+                              error={addressErrors[index].streetName}
+                            />
+                          )}
                         </FormControl>
 
                         <FormControl isInvalid={!!addressErrors[index].city}>
@@ -478,9 +495,12 @@ export function Profile() {
                               );
                             }}
                           />
-                          <FormErrorMessage>
-                            {addressErrors[index].city}
-                          </FormErrorMessage>
+                          {addressErrors[index].city && (
+                            <ErrorAlert
+                              name={`address-city-${index}`}
+                              error={addressErrors[index].city}
+                            />
+                          )}
                         </FormControl>
 
                         <FormControl
@@ -499,9 +519,12 @@ export function Profile() {
                               );
                             }}
                           />
-                          <FormErrorMessage>
-                            {addressErrors[index].postalCode}
-                          </FormErrorMessage>
+                          {addressErrors[index].postalCode && (
+                            <ErrorAlert
+                              name={`address-postalCode-${index}`}
+                              error={addressErrors[index].postalCode}
+                            />
+                          )}
                         </FormControl>
 
                         <FormControl isInvalid={!!addressErrors[index].country}>
@@ -516,9 +539,12 @@ export function Profile() {
                               );
                             }}
                           />
-                          <FormErrorMessage>
-                            {addressErrors[index].country}
-                          </FormErrorMessage>
+                          {addressErrors[index].country && (
+                            <ErrorAlert
+                              name={`address-country-${index}`}
+                              error={addressErrors[index].country}
+                            />
+                          )}
                         </FormControl>
 
                         <HStack gap={3} pt={2}>

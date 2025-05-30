@@ -3,7 +3,6 @@ import { Form } from '~components/Form/Form';
 import RedirectionLink from '~components/RedirectionLink/RedirectionLink';
 import { FiLogIn } from 'react-icons/fi';
 import type { FieldKey, FormField, RegistrationData } from '~/types/types';
-import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert';
 import {
   formatDateInput,
   validateCity,
@@ -29,7 +28,7 @@ const COUNTRY_OPTIONS = Object.entries(countries.getNames('en')).map(
 );
 
 export function RegistrationForm() {
-  const { register, error, setError, loading } = useAuthContext();
+  const { register, setError, loading } = useAuthContext();
   const [fieldError, setFieldError] = useState<
     Partial<Record<FieldKey, string>>
   >({});
@@ -224,7 +223,7 @@ export function RegistrationForm() {
         loading={loading}
         submitLabel='Register'
       />
-      {error != null && <ErrorAlert name='error' error={error} />}
+
       <RedirectionLink
         label='Already have an account?'
         to='/login'
