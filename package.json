@@ -23,6 +23,7 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@chakra-ui/card": "^2.2.0",
     "@chakra-ui/input": "^2.1.2",
     "@chakra-ui/react": "^3.19.1",
     "@chakra-ui/select": "^2.1.2",

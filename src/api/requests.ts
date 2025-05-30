@@ -6,8 +6,15 @@ import {
   PUBLISHED_PRODUCTS_URL,
   GUEST_AUTH_TOKEN_URL,
   CUSTOMER_CREATION_URL,
+  BASE_API_URL,
+  PROJECT_KEY,
 } from '~/constants/constants';
-import { PermissionLevel, RegistrationData } from '~/types/types';
+import {
+  CustomerDraft,
+  PermissionLevel,
+  RegistrationData,
+} from '~/types/types';
+import { v4 as uuid } from 'uuid';
 
 const userPermissions = generatePermissions(PermissionLevel.USER);
 const guestPermissions = generatePermissions();
@@ -61,7 +68,24 @@ export const createUser = (
   data: RegistrationData,
   accessToken: string,
 ): Request => {
-  const body = JSON.stringify(data);
+  const customerDraft: CustomerDraft = {
+    email: data.email,
+    password: data.password,
+    firstName: data.firstName,
+    lastName: data.lastName,
+    dateOfBirth: data.dateOfBirth,
+    addresses: [
+      {
+        id: data.address.id || uuid(),
+        streetName: data.address.streetName,
+        city: data.address.city,
+        postalCode: data.address.postalCode,
+        country: data.address.country,
+      },
+    ],
+    defaultShippingAddress: 0,
+    defaultBillingAddress: 0,
+  };
 
   return new Request(CUSTOMER_CREATION_URL, {
     method: 'POST',
@@ -69,6 +93,17 @@ export const createUser = (
       'Content-Type': 'application/json',
       Authorization: `Bearer ${accessToken}`,
     },
-    body,
+    body: JSON.stringify(customerDraft),
   });
 };
+
+export function fetchUserProfileRequest(token: string): Request {
+  const url = `${BASE_API_URL}${PROJECT_KEY}/me`;
+  return new Request(url, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+}

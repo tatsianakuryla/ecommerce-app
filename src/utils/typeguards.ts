@@ -3,6 +3,7 @@ import {
   ProductsResponse,
   AuthResponse,
   CustomerResponse,
+  Customer,
 } from '~types/types';
 
 export const isAuthResponse = (data: unknown): data is AuthResponse => {
@@ -126,3 +127,16 @@ export const isCustomerResponse = (obj: unknown): obj is CustomerResponse => {
 
   return false;
 };
+
+function isRecord(x: unknown): x is Record<string, unknown> {
+  return typeof x === 'object' && x !== null;
+}
+
+export function isCustomer(obj: unknown): obj is Customer {
+  if (!isRecord(obj)) return false;
+  if (!('id' in obj) || typeof obj.id !== 'string') return false;
+  if (!('addresses' in obj) || !Array.isArray(obj.addresses)) return false;
+  if (!('email' in obj) || typeof obj.email !== 'string') return false;
+
+  return true;
+}

@@ -41,7 +41,8 @@ export function RegistrationForm() {
     password: '',
     dateOfBirth: '',
     address: {
-      street: '',
+      id: '',
+      streetName: '',
       city: '',
       postalCode: '',
       country: '',
@@ -52,7 +53,7 @@ export function RegistrationForm() {
     return () => {
       setError(null);
     };
-  }, []);
+  }, [setError]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,7 +68,7 @@ export function RegistrationForm() {
       confirmPassword,
     );
     errors.dateOfBirth = validateDateOfBirth(data.dateOfBirth);
-    errors.street = validateStreet(data.address.street);
+    errors.street = validateStreet(data.address.streetName);
     errors.city = validateCity(data.address.city);
     errors.postalCode = validatePostalCode(
       data.address.postalCode,
@@ -154,10 +155,10 @@ export function RegistrationForm() {
     },
     {
       name: 'street',
-      value: data.address.street,
+      value: data.address.streetName,
       placeholder: 'Street',
       onChange: (value) => {
-        setData({ ...data, address: { ...data.address, street: value } });
+        setData({ ...data, address: { ...data.address, streetName: value } });
         setFieldError((f) => ({ ...f, street: validateStreet(value) }));
       },
       error: fieldError.street,
