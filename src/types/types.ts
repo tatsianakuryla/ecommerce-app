@@ -23,7 +23,9 @@ export interface RegistrationData {
   firstName: string;
   lastName: string;
   dateOfBirth: string;
-  address: Address;
+  addresses: Address[];
+  defaultShippingAddress?: -1 | 0;
+  defaultBillingAddress?: -1 | 1;
 }
 
 export interface AuthResponse {
@@ -77,10 +79,14 @@ export interface FormField {
 export type FieldKey =
   | keyof RegistrationData
   | 'confirmPassword'
-  | 'street'
-  | 'city'
-  | 'postalCode'
-  | 'country';
+  | 'billingStreet'
+  | 'billingCity'
+  | 'billingPostalCode'
+  | 'billingCountry'
+  | 'shippingStreet'
+  | 'shippingCity'
+  | 'shippingPostalCode'
+  | 'shippingCountry';
 
 export interface FormProperties {
   id: string;
@@ -311,4 +317,6 @@ export interface AddressFormProperties {
   setFieldError: React.Dispatch<
     React.SetStateAction<Partial<Record<FieldKey, string>>>
   >;
+  handleDefaultShippingAddress?: () => void;
+  handleDefaultBillingAddress?: () => void;
 }

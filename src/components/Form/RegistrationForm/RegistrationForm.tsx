@@ -2,7 +2,12 @@ import { useEffect, useState } from 'react';
 import { Form } from '~components/Form/Form.tsx';
 import RedirectionLink from '~components/RedirectionLink/RedirectionLink.tsx';
 import { FiLogIn } from 'react-icons/fi';
-import type { FieldKey, FormField, RegistrationData } from '~types/types.ts';
+import type {
+  FieldKey,
+  FormField,
+  RegistrationData,
+  Address,
+} from '~types/types.ts';
 import {
   formatDateInput,
   validateCity,
@@ -18,26 +23,40 @@ import {
 } from '~components/Form/RegistrationForm/registrationFormValidation.ts';
 import { useAuthContext } from '~hooks/useAuthContext.ts';
 import { AddressForm } from '~components/Form/AddressForm/AddressForm.tsx';
+import { Button } from '@chakra-ui/react';
+import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert.tsx';
 
 export function RegistrationForm() {
-  const { register, setError, loading } = useAuthContext();
+  const { register, error, setError, loading } = useAuthContext();
   const [fieldError, setFieldError] = useState<
     Partial<Record<FieldKey, string>>
   >({});
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [isAddedBillingAddress, setIsAddedBillingAddress] = useState(false);
   const [data, setData] = useState<RegistrationData>({
     firstName: '',
     lastName: '',
     email: '',
     password: '',
     dateOfBirth: '',
-    address: {
-      id: '',
-      streetName: '',
-      city: '',
-      postalCode: '',
-      country: '',
-    },
+    addresses: [
+      {
+        id: '',
+        streetName: '',
+        city: '',
+        postalCode: '',
+        country: '',
+      },
+      {
+        id: '',
+        streetName: '',
+        city: '',
+        postalCode: '',
+        country: '',
+      },
+    ],
+    defaultShippingAddress: -1,
+    defaultBillingAddress: -1,
   });
 
   useEffect(() => {
@@ -49,6 +68,7 @@ export function RegistrationForm() {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError(null);
+
     const errors: Partial<Record<FieldKey, string>> = {};
     errors.firstName = validateFirstName(data.firstName);
     errors.lastName = validateLastName(data.lastName);
@@ -59,18 +79,65 @@ export function RegistrationForm() {
       confirmPassword,
     );
     errors.dateOfBirth = validateDateOfBirth(data.dateOfBirth);
-    errors.street = validateStreet(data.address.streetName);
-    errors.city = validateCity(data.address.city);
-    errors.postalCode = validatePostalCode(
-      data.address.postalCode,
-      data.address.country,
+    errors.shippingStreet = validateStreet(data.addresses[0].streetName);
+    errors.shippingCity = validateCity(data.addresses[0].city);
+    errors.shippingPostalCode = validatePostalCode(
+      data.addresses[0].postalCode,
+      data.addresses[0].country,
     );
-    errors.country = validateCountry(data.address.country);
+    errors.shippingCountry = validateCountry(data.addresses[0].country);
+    if (isAddedBillingAddress) {
+      errors.billingStreet = validateStreet(data.addresses[1].streetName);
+      errors.billingCity = validateCity(data.addresses[1].city);
+      errors.billingPostalCode = validatePostalCode(
+        data.addresses[1].postalCode,
+        data.addresses[1].country,
+      );
+      errors.billingCountry = validateCountry(data.addresses[1].country);
+    }
+
     setFieldError(errors);
-    if (Object.values(errors).some((message) => message && message.length > 0))
+
+    const hasError = Object.values(errors).some(
+      (message) => message && message.length > 0,
+    );
+    if (hasError) {
       return;
-    setFieldError(errors);
+    }
+
     await register(data);
+  };
+
+  const handleDefaultShippingAddress = () => {
+    setData((previous) => {
+      if (previous.defaultShippingAddress === -1) {
+        return {
+          ...previous,
+          defaultShippingAddress: 0,
+        };
+      } else {
+        return {
+          ...previous,
+          defaultShippingAddress: -1,
+        };
+      }
+    });
+  };
+
+  const handleDefaultBillingAddress = () => {
+    setData((previous) => {
+      if (previous.defaultBillingAddress === -1) {
+        return {
+          ...previous,
+          defaultBillingAddress: 1,
+        };
+      } else {
+        return {
+          ...previous,
+          defaultBillingAddress: -1,
+        };
+      }
+    });
   };
 
   const fields: FormField[] = [
@@ -79,7 +146,7 @@ export function RegistrationForm() {
       value: data.firstName,
       placeholder: 'First Name',
       onChange: (value) => {
-        setData({ ...data, firstName: value });
+        setData((previous) => ({ ...previous, firstName: value }));
         setFieldError((field) => ({
           ...field,
           firstName: validateFirstName(value),
@@ -92,7 +159,7 @@ export function RegistrationForm() {
       value: data.lastName,
       placeholder: 'Last Name',
       onChange: (value) => {
-        setData({ ...data, lastName: value });
+        setData((previous) => ({ ...previous, lastName: value }));
         setFieldError((field) => ({
           ...field,
           lastName: validateLastName(value),
@@ -106,8 +173,11 @@ export function RegistrationForm() {
       value: data.email,
       placeholder: 'Email',
       onChange: (value) => {
-        setData({ ...data, email: value });
-        setFieldError((field) => ({ ...field, email: validateEmail(value) }));
+        setData((previous) => ({ ...previous, email: value }));
+        setFieldError((field) => ({
+          ...field,
+          email: validateEmail(value),
+        }));
       },
       error: fieldError.email,
     },
@@ -119,8 +189,8 @@ export function RegistrationForm() {
       onChange: (value) => {
         const formatted = formatDateInput(value);
         setData((previous) => ({ ...previous, dateOfBirth: formatted }));
-        setFieldError((previous) => ({
-          ...previous,
+        setFieldError((previousError) => ({
+          ...previousError,
           dateOfBirth: validateDateOfBirth(formatted),
         }));
       },
@@ -132,7 +202,7 @@ export function RegistrationForm() {
       value: data.password,
       placeholder: 'Password',
       onChange: (value) => {
-        setData({ ...data, password: value });
+        setData((previous) => ({ ...previous, password: value }));
         setFieldError((field) => ({
           ...field,
           password: validatePassword(value),
@@ -156,6 +226,19 @@ export function RegistrationForm() {
     },
   ];
 
+  const addAddressButtonStyle = {
+    background: 'none',
+    color: 'teal.600',
+    padding: '0',
+    height: 'auto',
+    _hover: { textDecoration: 'underline', background: 'none' },
+    _active: { background: 'none' },
+    _focus: { boxShadow: 'none' },
+    transition: 'all 0.2s ease',
+    mb: '1rem',
+    mt: '1rem',
+  };
+
   return (
     <>
       <Form
@@ -169,14 +252,46 @@ export function RegistrationForm() {
       >
         <AddressForm
           addressType='shipping'
-          data={data.address}
-          setData={(address) => {
-            setData((previous) => ({ ...previous, address }));
+          handleDefaultShippingAddress={handleDefaultShippingAddress}
+          data={data.addresses[0]}
+          setData={(address: Address) => {
+            setData((previous) => ({
+              ...previous,
+              addresses: [address, previous.addresses[1]],
+            }));
           }}
           fieldError={fieldError}
           setFieldError={setFieldError}
         />
+
+        <Button
+          {...addAddressButtonStyle}
+          onClick={() => {
+            setIsAddedBillingAddress((previous) => !previous);
+          }}
+        >
+          {isAddedBillingAddress
+            ? 'Hide Billing Address'
+            : 'Add Billing Address'}
+        </Button>
+
+        {isAddedBillingAddress && (
+          <AddressForm
+            addressType='billing'
+            handleDefaultBillingAddress={handleDefaultBillingAddress}
+            data={data.addresses[1]}
+            setData={(address: Address) => {
+              setData((previous) => ({
+                ...previous,
+                addresses: [previous.addresses[0], address],
+              }));
+            }}
+            fieldError={fieldError}
+            setFieldError={setFieldError}
+          />
+        )}
       </Form>
+      {error != null && <ErrorAlert name='error' error={error} />}
 
       <RedirectionLink
         label='Already have an account?'

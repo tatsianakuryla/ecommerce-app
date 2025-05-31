@@ -10,12 +10,12 @@ import {
   PROJECT_KEY,
 } from '~/constants/constants';
 import {
+  AddressDraft,
   CustomerDraft,
   CustomerUpdateAction,
   PermissionLevel,
   RegistrationData,
 } from '~/types/types';
-import { v4 as uuid } from 'uuid';
 
 const userPermissions = generatePermissions(PermissionLevel.USER);
 const guestPermissions = generatePermissions();
@@ -66,26 +66,38 @@ export const generateAnonymousToken = (): Request => {
 };
 
 export const createUser = (
-  data__________: RegistrationData,
+  data: RegistrationData,
   accessToken: string,
 ): Request => {
+  const addressesToSend: AddressDraft[] = [];
+
+  addressesToSend.push({
+    streetName: data.addresses[0].streetName,
+    city: data.addresses[0].city,
+    postalCode: data.addresses[0].postalCode,
+    country: data.addresses[0].country,
+  });
+
+  if (data.addresses[1].streetName.trim() !== '') {
+    addressesToSend.push({
+      streetName: data.addresses[1].streetName,
+      city: data.addresses[1].city,
+      postalCode: data.addresses[1].postalCode,
+      country: data.addresses[1].country,
+    });
+  }
+
   const customerDraft: CustomerDraft = {
-    email: data__________.email,
-    password: data__________.password,
-    firstName: data__________.firstName,
-    lastName: data__________.lastName,
-    dateOfBirth: data__________.dateOfBirth,
-    addresses: [
-      {
-        id: data__________.address.id || uuid(),
-        streetName: data__________.address.streetName,
-        city: data__________.address.city,
-        postalCode: data__________.address.postalCode,
-        country: data__________.address.country,
-      },
-    ],
-    defaultShippingAddress: 0,
-    defaultBillingAddress: 0,
+    email: data.email,
+    password: data.password,
+    firstName: data.firstName,
+    lastName: data.lastName,
+    dateOfBirth: data.dateOfBirth,
+    addresses: addressesToSend,
+    defaultShippingAddress:
+      data.defaultShippingAddress === -1 ? 0 : data.defaultShippingAddress,
+    defaultBillingAddress:
+      data.defaultBillingAddress === -1 ? 0 : data.defaultBillingAddress,
   };
 
   return new Request(CUSTOMER_CREATION_URL, {

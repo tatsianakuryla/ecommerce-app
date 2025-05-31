@@ -52,9 +52,7 @@ export const MainPage = () => {
         {justRegistered && (
           <JustRegisteredDialog
             title={'Registration'}
-            description={
-              "Congrats! You've successfully registered and, as you can see, the app has not crashed, which is always a good sign"
-            }
+            description={"Congrats! You've successfully registered!"}
             handleCloseDialog={handleCloseDialog}
           />
         )}

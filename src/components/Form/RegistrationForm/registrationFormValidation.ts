@@ -97,13 +97,14 @@ export function validateDateOfBirth(dateOfBirth: string): string {
 
 export function validateStreet(street: string): string {
   if (!street.trim()) return 'Street is required.';
-  if (!NAME_REGEX.test(street)) return 'Last name must be latin letters only.';
+  if (!NAME_REGEX.test(street))
+    return 'Street must contain latin letters only.';
   return '';
 }
 
 export function validateCity(city: string): string {
   if (!city.trim()) return 'City is required.';
-  if (!CITY_REGEX.test(city)) return 'City must be latin letters only.';
+  if (!CITY_REGEX.test(city)) return 'City must contain latin letters only.';
   return '';
 }
 

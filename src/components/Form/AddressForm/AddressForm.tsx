@@ -8,7 +8,7 @@ import countries from 'i18n-iso-countries';
 import enLocale from 'i18n-iso-countries/langs/en.json';
 countries.registerLocale(enLocale);
 import { AddressFormProperties, FormField } from '~types/types';
-import { Box, Heading, Input } from '@chakra-ui/react';
+import { Box, Heading, Input, Checkbox } from '@chakra-ui/react';
 import { Select } from '@chakra-ui/select';
 import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert';
 
@@ -19,46 +19,64 @@ const COUNTRY_OPTIONS: Array<{ label: string; value: string }> = Object.entries(
   value: code,
 }));
 
+const addressLabels = {
+  shipping: 'Shipping Address',
+  billing: 'Billing Address',
+  main: 'Main Address',
+};
+
 export function AddressForm({
   addressType,
   data,
   setData,
   fieldError,
   setFieldError,
+  handleDefaultShippingAddress,
+  handleDefaultBillingAddress,
 }: AddressFormProperties) {
+  const prefix = addressType === 'shipping' ? 'shipping' : 'billing';
   const addressesFields: FormField[] = [
     {
       name: 'streetName',
       value: data.streetName,
       placeholder: 'Street',
       onChange: (value) => {
+        const errorField = `${prefix}Street`;
         setData({ ...data, streetName: value });
-        setFieldError((field) => ({ ...field, street: validateStreet(value) }));
+        setFieldError((field) => ({
+          ...field,
+          [errorField]: validateStreet(value),
+        }));
       },
-      error: fieldError.street,
+      error: fieldError[`${prefix}Street`],
     },
     {
       name: 'city',
       value: data.city,
       placeholder: 'City',
       onChange: (value) => {
+        const errorField = `${prefix}City`;
         setData({ ...data, city: value });
-        setFieldError((field) => ({ ...field, city: validateCity(value) }));
+        setFieldError((field) => ({
+          ...field,
+          [errorField]: validateCity(value),
+        }));
       },
-      error: fieldError.city,
+      error: fieldError[`${prefix}City`],
     },
     {
       name: 'postalCode',
       value: data.postalCode,
       placeholder: 'Postal Code',
       onChange: (value) => {
+        const errorField = `${prefix}PostalCode`;
         setData({ ...data, postalCode: value });
         setFieldError((field) => ({
           ...field,
-          postalCode: validatePostalCode(value, data.country),
+          [errorField]: validatePostalCode(value, data.country),
         }));
       },
-      error: fieldError.postalCode,
+      error: fieldError[`${prefix}PostalCode`],
     },
     {
       name: 'country',
@@ -67,19 +85,25 @@ export function AddressForm({
       value: data.country,
       placeholder: 'Country',
       onChange: (value: string) => {
+        const errorField = `${prefix}Country`;
         setData({ ...data, country: value });
         setFieldError((field) => ({
           ...field,
-          country: validateCountry(value),
+          [errorField]: validateCountry(value),
         }));
       },
-      error: fieldError.country,
+      error: fieldError[`${prefix}Country`],
     },
   ];
+  const handleDefaultAddress =
+    addressType === 'shipping'
+      ? handleDefaultShippingAddress
+      : handleDefaultBillingAddress;
+
   return (
     <>
       <Heading as='h3' size='md' mb={2}>
-        {addressType === 'shipping' ? 'Shipping Address' : 'Billing Address'}
+        {addressLabels[addressType] || 'Address'}
       </Heading>
       {addressesFields.map(
         ({
@@ -98,7 +122,7 @@ export function AddressForm({
               <Box position='relative' w='full'>
                 {type === 'select' ? (
                   <Select
-                    id={name}
+                    id={prefix + name}
                     name={name}
                     aria-label={placeholder}
                     maxWidth='382px'
@@ -114,6 +138,7 @@ export function AddressForm({
                     errorBorderColor='red.500'
                     borderRadius='md'
                     _hover={{ borderColor: hasError ? 'red.500' : 'gray.400' }}
+                    size='md'
                   >
                     {options?.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -141,6 +166,15 @@ export function AddressForm({
           );
         },
       )}
+      <Checkbox.Root variant='outline' onCheckedChange={handleDefaultAddress}>
+        <Checkbox.HiddenInput />
+        <Checkbox.Control />
+        <Checkbox.Label>
+          {addressType === 'shipping'
+            ? 'Select the shipping address as default'
+            : 'Select the billing address as default'}
+        </Checkbox.Label>
+      </Checkbox.Root>
     </>
   );
 }

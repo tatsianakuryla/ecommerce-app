@@ -35,6 +35,21 @@ export function Form({
         margin: '2rem auto',
       };
 
+  const registrationButtonStyle = {
+    width: '100%',
+    padding: '0.75rem 1rem',
+    marginTop: '1rem',
+    backgroundColor: 'teal.500',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '0.5rem',
+    fontSize: '1rem',
+    fontWeight: 600,
+    opacity: loading ? 0.6 : 1,
+    transition: 'all 0.2s ease-in-out',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+  };
+
   return (
     <Box
       as='form'
@@ -99,8 +114,9 @@ export function Form({
       <Button
         type='submit'
         disabled={loading}
-        style={{ width: '100%', padding: '0.5rem' }}
         data-testid='auth-submit-button'
+        cursor={loading ? 'not-allowed' : 'pointer'}
+        {...registrationButtonStyle}
       >
         {submitLabel}
       </Button>
