@@ -5,7 +5,6 @@ import {
   Heading,
   Text,
   SimpleGrid,
-  Spinner,
   Icon,
   Input,
   Badge,
@@ -33,6 +32,7 @@ import {
   validateCountry,
 } from '~components/Form/RegistrationForm/registrationFormValidation';
 import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert.tsx';
+import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle.tsx';
 
 export function Profile() {
   const toastifyOptions = {
@@ -266,8 +266,14 @@ export function Profile() {
 
   if (loading)
     return (
-      <Box display='flex' justifyContent='center' width='100vw'>
-        <Spinner size='xl' color='teal.500' />
+      <Box
+        className='hi'
+        minHeight='calc(100vh - 120px)'
+        display='flex'
+        alignItems='center'
+        justifyContent='center'
+      >
+        <ProgressCircleElement />
       </Box>
     );
   if (!profile) return <Text mt='4rem'>Profile not found.</Text>;
