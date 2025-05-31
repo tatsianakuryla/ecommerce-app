@@ -16,16 +16,8 @@ import {
   validatePostalCode,
   validateStreet,
 } from '~components/Form/RegistrationForm/registrationFormValidation.ts';
-import countries from 'i18n-iso-countries';
-import enLocale from 'i18n-iso-countries/langs/en.json';
 import { useAuthContext } from '~hooks/useAuthContext.ts';
-countries.registerLocale(enLocale);
-const COUNTRY_OPTIONS = Object.entries(countries.getNames('en')).map(
-  ([code, name]) => ({
-    label: name,
-    value: code,
-  }),
-);
+import { AddressForm } from '~components/Form/AddressForm/AddressForm.tsx';
 
 export function RegistrationForm() {
   const { register, setError, loading } = useAuthContext();
@@ -162,54 +154,6 @@ export function RegistrationForm() {
       },
       error: fieldError.confirmPassword,
     },
-    {
-      name: 'street',
-      value: data.address.streetName,
-      placeholder: 'Street',
-      onChange: (value) => {
-        setData({ ...data, address: { ...data.address, streetName: value } });
-        setFieldError((field) => ({ ...field, street: validateStreet(value) }));
-      },
-      error: fieldError.street,
-    },
-    {
-      name: 'city',
-      value: data.address.city,
-      placeholder: 'City',
-      onChange: (value) => {
-        setData({ ...data, address: { ...data.address, city: value } });
-        setFieldError((field) => ({ ...field, city: validateCity(value) }));
-      },
-      error: fieldError.city,
-    },
-    {
-      name: 'postalCode',
-      value: data.address.postalCode,
-      placeholder: 'Postal Code',
-      onChange: (value) => {
-        setData({ ...data, address: { ...data.address, postalCode: value } });
-        setFieldError((field) => ({
-          ...field,
-          postalCode: validatePostalCode(value, data.address.country),
-        }));
-      },
-      error: fieldError.postalCode,
-    },
-    {
-      name: 'country',
-      type: 'select',
-      options: COUNTRY_OPTIONS,
-      value: data.address.country,
-      placeholder: 'Country',
-      onChange: (value: string) => {
-        setData({ ...data, address: { ...data.address, country: value } });
-        setFieldError((field) => ({
-          ...field,
-          country: validateCountry(value),
-        }));
-      },
-      error: fieldError.country,
-    },
   ];
 
   return (
@@ -222,7 +166,17 @@ export function RegistrationForm() {
         }}
         loading={loading}
         submitLabel='Register'
-      />
+      >
+        <AddressForm
+          addressType='shipping'
+          data={data.address}
+          setData={(address) => {
+            setData((previous) => ({ ...previous, address }));
+          }}
+          fieldError={fieldError}
+          setFieldError={setFieldError}
+        />
+      </Form>
 
       <RedirectionLink
         label='Already have an account?'
