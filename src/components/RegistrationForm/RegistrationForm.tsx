@@ -19,6 +19,7 @@ import {
 import countries from 'i18n-iso-countries';
 import enLocale from 'i18n-iso-countries/langs/en.json';
 import { useAuthContext } from '~/hooks/useAuthContext';
+import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert.tsx';
 countries.registerLocale(enLocale);
 const COUNTRY_OPTIONS = Object.entries(countries.getNames('en')).map(
   ([code, name]) => ({
@@ -28,7 +29,7 @@ const COUNTRY_OPTIONS = Object.entries(countries.getNames('en')).map(
 );
 
 export function RegistrationForm() {
-  const { register, setError, loading } = useAuthContext();
+  const { register, error, setError, loading } = useAuthContext();
   const [fieldError, setFieldError] = useState<
     Partial<Record<FieldKey, string>>
   >({});
@@ -223,7 +224,7 @@ export function RegistrationForm() {
         loading={loading}
         submitLabel='Register'
       />
-
+      {error != null && <ErrorAlert name='error' error={error} />}
       <RedirectionLink
         label='Already have an account?'
         to='/login'
