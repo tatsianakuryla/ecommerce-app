@@ -1,5 +1,5 @@
 import { Container, Heading, VisuallyHidden } from '@chakra-ui/react';
-import { RegistrationForm } from '~components/RegistrationForm/RegistrationForm.tsx';
+import { RegistrationForm } from '~components/Form/RegistrationForm/RegistrationForm.tsx';
 
 export const RegisterPage = () => {
   return (

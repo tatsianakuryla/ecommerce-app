@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Form } from '~components/Form/Form';
-import RedirectionLink from '~components/RedirectionLink/RedirectionLink';
+import { Form } from '~components/Form/Form.tsx';
+import RedirectionLink from '~components/RedirectionLink/RedirectionLink.tsx';
 import { FiLogIn } from 'react-icons/fi';
-import type { FieldKey, FormField, RegistrationData } from '~/types/types';
+import type { FieldKey, FormField, RegistrationData } from '~types/types.ts';
 import {
   formatDateInput,
   validateCity,
@@ -15,10 +15,10 @@ import {
   validatePassword,
   validatePostalCode,
   validateStreet,
-} from '~components/RegistrationForm/registrationFormValidation.ts';
+} from '~components/Form/RegistrationForm/registrationFormValidation.ts';
 import countries from 'i18n-iso-countries';
 import enLocale from 'i18n-iso-countries/langs/en.json';
-import { useAuthContext } from '~/hooks/useAuthContext';
+import { useAuthContext } from '~hooks/useAuthContext.ts';
 countries.registerLocale(enLocale);
 const COUNTRY_OPTIONS = Object.entries(countries.getNames('en')).map(
   ([code, name]) => ({

@@ -1,4 +1,4 @@
-import { LoginForm } from '~components/LoginForm/LoginForm';
+import { LoginForm } from '~components/Form/LoginForm/LoginForm';
 import { Container, Heading, Flex, VisuallyHidden } from '@chakra-ui/react';
 
 export const LoginPage = () => {

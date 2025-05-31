@@ -5,7 +5,7 @@ import { describe, it, beforeEach, expect, vi } from 'vitest';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { Provider } from '~components/ui/provider.tsx';
 import { AuthProvider } from '~/contexts/authProvider.tsx';
-import { LoginForm } from '~components/LoginForm/LoginForm';
+import { LoginForm } from '~components/Form/LoginForm/LoginForm';
 import { useAuthContext } from '~hooks/useAuthContext';
 
 vi.mock('~hooks/useAuthContext');
