@@ -71,7 +71,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         createUser(data, accessToken),
         isCustomerResponse,
       );
-
       if (!response) {
         throw new Error('empty registration response');
       }

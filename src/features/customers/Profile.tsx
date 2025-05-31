@@ -30,7 +30,7 @@ import {
   validateCity,
   validatePostalCode,
   validateCountry,
-} from '~components/RegistrationForm/registrationFormValidation';
+} from '~components/Form/RegistrationForm/registrationFormValidation';
 import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert.tsx';
 import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle.tsx';
 

@@ -20,3 +20,20 @@ export function normalizeErrorMessage(message: string): string {
 
   return `${prefix}: ${field} ${description.charAt(0).toLowerCase()}${description.slice(1)}`;
 }
+
+export function textToUpperCase(text: string): string {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+export const getAutocompleteValue = (name: string): string => {
+  const map: Record<string, string> = {
+    firstName: 'given-name',
+    lastName: 'family-name',
+    email: 'email',
+    password: 'current-password',
+    newPassword: 'new-password',
+    phone: 'tel',
+  };
+
+  return map[name] ?? 'off';
+};

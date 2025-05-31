@@ -23,7 +23,9 @@ export interface RegistrationData {
   firstName: string;
   lastName: string;
   dateOfBirth: string;
-  address: Address;
+  addresses: Address[];
+  defaultShippingAddress?: -1 | 0;
+  defaultBillingAddress?: -1 | 1;
 }
 
 export interface AuthResponse {
@@ -77,10 +79,14 @@ export interface FormField {
 export type FieldKey =
   | keyof RegistrationData
   | 'confirmPassword'
-  | 'street'
-  | 'city'
-  | 'postalCode'
-  | 'country';
+  | 'billingStreet'
+  | 'billingCity'
+  | 'billingPostalCode'
+  | 'billingCountry'
+  | 'shippingStreet'
+  | 'shippingCity'
+  | 'shippingPostalCode'
+  | 'shippingCountry';
 
 export interface FormProperties {
   id: string;
@@ -89,6 +95,7 @@ export interface FormProperties {
   loading?: boolean;
   submitLabel?: string;
   nonFieldError?: string | null;
+  children?: React.ReactNode;
 }
 
 export interface LocalizedString {
@@ -299,3 +306,17 @@ export type CustomerUpdateAction =
   | { action: 'changeAddress'; addressId: string; address: Address }
   | { action: 'setDefaultShippingAddress'; addressId: string }
   | { action: 'setDefaultBillingAddress'; addressId: string };
+
+type AddressType = 'shipping' | 'billing';
+
+export interface AddressFormProperties {
+  addressType: AddressType;
+  data: Address;
+  setData: (address: Address) => void;
+  fieldError: Partial<Record<FieldKey, string>>;
+  setFieldError: React.Dispatch<
+    React.SetStateAction<Partial<Record<FieldKey, string>>>
+  >;
+  handleDefaultShippingAddress?: () => void;
+  handleDefaultBillingAddress?: () => void;
+}
