@@ -1,4 +1,4 @@
-import { permissions } from '~constants/constants';
+import { permissions, locales } from '~constants/constants';
 
 export enum PermissionLevel {
   FULL = 'all',
@@ -98,26 +98,33 @@ export interface FormProperties {
   children?: React.ReactNode;
 }
 
-export interface LocalizedString {
-  [locale: string]: string;
-}
-
 export interface Reference {
   typeId: string;
   id: string;
 }
 
+type LocaleKey = keyof typeof locales;
+export type Locale = (typeof locales)[LocaleKey];
+export type LocalizedString = Record<Locale, string>;
+
 export interface Price {
   id: string;
   value: {
-    type: string;
+    type: 'centPrecision';
     currencyCode: string;
     centAmount: number;
     fractionDigits: number;
   };
   key: string;
-  country: string;
+  country: LocaleKey;
   channel?: Reference;
+  discounted?: {
+    value: Price['value'];
+    discount: {
+      typeId: 'product-discount';
+      id: string;
+    };
+  };
 }
 
 export interface Image {
@@ -130,7 +137,7 @@ export interface Image {
 
 export interface Attribute {
   name: string;
-  value: LocalizedString | string;
+  value: Locale;
 }
 
 export interface AvailabilityChannel {

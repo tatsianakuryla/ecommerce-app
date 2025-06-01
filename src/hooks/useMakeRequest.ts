@@ -21,9 +21,11 @@ export function useMakeRequest() {
           throw json;
         }
 
-        if (validateResponse(json)) {
-          return json;
+        if (!validateResponse(json)) {
+          throw new Error('Invalid response shape');
         }
+
+        return json;
       } catch (error: unknown) {
         if (isErrorResponse(error)) {
           setError(error.message);
