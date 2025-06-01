@@ -10,9 +10,6 @@ import { isAuthResponse, isCustomerResponse } from '~/utils/typeguards';
 import { CustomerResponse, RegistrationData } from '~types/types.ts';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  /*const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-   */
   const [accessToken, setAccessToken] = useState<string | null>(() =>
     localStorage.getItem('authToken'),
   );
@@ -74,7 +71,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         createUser(data, accessToken),
         isCustomerResponse,
       );
-
       if (!response) {
         throw new Error('empty registration response');
       }
@@ -88,9 +84,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    void fetchAnonymousToken();
-  }, [fetchAnonymousToken]);
-
+    if (!accessToken) {
+      void fetchAnonymousToken();
+    }
+  }, [accessToken, fetchAnonymousToken]);
   return (
     <AuthContext.Provider
       value={{

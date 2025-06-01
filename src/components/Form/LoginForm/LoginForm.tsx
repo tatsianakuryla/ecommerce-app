@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
-import { useAuthContext } from '~/hooks/useAuthContext';
-import { Form } from '~components/Form/Form';
-import { normalizeErrorMessage } from '~/utils/helpers';
-import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle';
-import RedirectionLink from '~components/RedirectionLink/RedirectionLink';
+import { useAuthContext } from '~hooks/useAuthContext.ts';
+import { Form } from '~components/Form/Form.tsx';
+import { normalizeErrorMessage } from '~utils/helpers.ts';
+import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle.tsx';
+import RedirectionLink from '~components/RedirectionLink/RedirectionLink.tsx';
 import { FiUserPlus } from 'react-icons/fi';
 import { Flex } from '@chakra-ui/react';
 import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert.tsx';
 import {
   validateEmail,
   validatePassword,
-} from '~components/LoginForm/loginFormValidation.ts';
+} from '~components/Form/LoginForm/loginFormValidation.ts';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
@@ -21,10 +21,10 @@ export function LoginForm() {
 
   useEffect(() => {
     if (serverError === null) return;
-    const msg = serverError.toLowerCase();
+    const message = serverError.toLowerCase();
     const next = { email: '', password: '' };
-    if (msg.includes('email')) next.email = serverError;
-    if (msg.includes('password'))
+    if (message.includes('email')) next.email = serverError;
+    if (message.includes('password'))
       next.password = normalizeErrorMessage(serverError);
     if (!next.email && !next.password) {
       next.email = next.password = serverError;
@@ -38,12 +38,12 @@ export function LoginForm() {
     };
   }, [setError]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const eErr = validateEmail(email);
-    const pErr = validatePassword(password);
-    setFieldError({ email: eErr, password: pErr });
-    if (eErr || pErr) return;
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    const emailError = validateEmail(email);
+    const passwordError = validatePassword(password);
+    setFieldError({ email: emailError, password: passwordError });
+    if (emailError || passwordError) return;
     void login(email, password);
   };
 
@@ -55,8 +55,8 @@ export function LoginForm() {
       placeholder: 'Email',
       onChange: (value: string) => {
         setEmail(value);
-        const err = validateEmail(value);
-        setFieldError((prev) => ({ ...prev, email: err }));
+        const error = validateEmail(value);
+        setFieldError((previous) => ({ ...previous, email: error }));
       },
       error: fieldError.email,
     },
@@ -67,8 +67,8 @@ export function LoginForm() {
       placeholder: 'Password',
       onChange: (value: string) => {
         setPassword(value);
-        const err = validatePassword(value);
-        setFieldError((prev) => ({ ...prev, password: err }));
+        const error = validatePassword(value);
+        setFieldError((previous) => ({ ...previous, password: error }));
       },
       error: fieldError.password,
     },

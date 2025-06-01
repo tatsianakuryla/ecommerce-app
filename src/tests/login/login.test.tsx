@@ -5,7 +5,7 @@ import { describe, it, beforeEach, expect, vi } from 'vitest';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { Provider } from '~components/ui/provider.tsx';
 import { AuthProvider } from '~/contexts/authProvider.tsx';
-import { LoginForm } from '~components/LoginForm/LoginForm';
+import { LoginForm } from '~components/Form/LoginForm/LoginForm';
 import { useAuthContext } from '~hooks/useAuthContext';
 
 vi.mock('~hooks/useAuthContext');
@@ -84,12 +84,12 @@ describe('LoginForm UI', () => {
   it('toggles password visibility', async () => {
     renderForm();
     const pwdInput = screen.getByPlaceholderText('Password');
-    const showBtn = screen.getByLabelText(/show password/i);
+    const showButton = screen.getByLabelText(/show password/i);
     expect(pwdInput).toHaveAttribute('type', 'password');
-    await userEvent.click(showBtn);
+    await userEvent.click(showButton);
     expect(pwdInput).toHaveAttribute('type', 'text');
-    const hideBtn = screen.getByLabelText(/hide password/i);
-    await userEvent.click(hideBtn);
+    const hideButton = screen.getByLabelText(/hide password/i);
+    await userEvent.click(hideButton);
     expect(pwdInput).toHaveAttribute('type', 'password');
   });
 

@@ -10,9 +10,10 @@ export enum PermissionLevel {
 export type Permissions = typeof permissions;
 
 export interface Address {
-  street: string;
-  city: string;
+  id: string;
+  streetName: string;
   postalCode: string;
+  city: string;
   country: string;
 }
 
@@ -22,7 +23,9 @@ export interface RegistrationData {
   firstName: string;
   lastName: string;
   dateOfBirth: string;
-  address: Address;
+  addresses: Address[];
+  defaultShippingAddress?: -1 | 0;
+  defaultBillingAddress?: -1 | 1;
 }
 
 export interface AuthResponse {
@@ -76,18 +79,23 @@ export interface FormField {
 export type FieldKey =
   | keyof RegistrationData
   | 'confirmPassword'
-  | 'street'
-  | 'city'
-  | 'postalCode'
-  | 'country';
+  | 'billingStreet'
+  | 'billingCity'
+  | 'billingPostalCode'
+  | 'billingCountry'
+  | 'shippingStreet'
+  | 'shippingCity'
+  | 'shippingPostalCode'
+  | 'shippingCountry';
 
-export interface FormProps {
+export interface FormProperties {
   id: string;
   fields: FormField[];
-  onSubmit: (e: React.FormEvent) => void;
+  onSubmit: (event: React.FormEvent) => void;
   loading?: boolean;
   submitLabel?: string;
   nonFieldError?: string | null;
+  children?: React.ReactNode;
 }
 
 export interface LocalizedString {
@@ -182,34 +190,133 @@ export interface ProductsResponse {
   results: Product[];
 }
 
-export interface CustomerResponse {
-  customer: {
-    id: string;
-    version: number;
-    versionModifiedAt: string;
-    lastMessageSequenceNumber: number;
-    createdAt: string;
-    lastModifiedAt: string;
-    lastModifiedBy: {
-      clientId: string;
-      isPlatformClient: boolean;
-      anonymousId: string;
-    };
-    createdBy: {
-      clientId: string;
-      isPlatformClient: boolean;
-      anonymousId: string;
-    };
-    email: string;
-    firstName: string;
-    lastName: string;
-    password: string;
-    addresses: [];
-    shippingAddressIds: string[];
-    billingAddressIds: string[];
-    isEmailVerified: boolean;
-    customerGroupAssignments: [];
-    stores: [];
-    authenticationMode: string;
+export interface CustomFields {
+  type: Reference;
+  fields: Record<string, unknown>;
+}
+
+export interface Customer {
+  id: string;
+  version: number;
+  createdAt: string;
+  lastModifiedAt: string;
+  lastMessageSequenceNumber: number;
+  createdBy: {
+    clientId?: string;
+    isPlatformClient: boolean;
+    anonymousId?: string;
   };
+  lastModifiedBy: {
+    clientId?: string;
+    isPlatformClient: boolean;
+    anonymousId?: string;
+  };
+
+  customerNumber: string;
+  email: string;
+  password?: never;
+  firstName?: string;
+  lastName?: string;
+  middleName?: string;
+  title?: string;
+  dateOfBirth?: string;
+  companyName?: string;
+  vatId?: string;
+  addresses: Address[];
+  defaultShippingAddressId?: string;
+  defaultBillingAddressId?: string;
+  shippingAddressIds: string[];
+  billingAddressIds: string[];
+  isEmailVerified: boolean;
+  customerGroup?: Reference;
+  customerGroupAssignments: Array<{
+    customerGroup: Reference;
+  }>;
+  stores: Reference[];
+  authenticationMode?: string;
+  locale?: string;
+  custom?: CustomFields;
+}
+
+export interface CustomerResponse {
+  customer: Customer;
+}
+
+export interface CustomerPagedQueryResponse {
+  limit: number;
+  offset: number;
+  count: number;
+  total?: number;
+  results: Customer[];
+}
+
+export interface CustomerDraft {
+  email: string;
+  password: string;
+
+  firstName?: string;
+  lastName?: string;
+  middleName?: string;
+  title?: string;
+  dateOfBirth?: string;
+  companyName?: string;
+  vatId?: string;
+
+  addresses?: AddressDraft[];
+
+  defaultShippingAddress?: number;
+  defaultBillingAddress?: number;
+
+  shippingAddressIds?: number[];
+  billingAddressIds?: number[];
+}
+
+export interface AddressDraft {
+  id?: string;
+  key?: string;
+  title?: string;
+  salutation?: string;
+  firstName?: string;
+  lastName?: string;
+
+  streetName: string;
+  additionalStreetInfo?: string;
+  postalCode?: string;
+  city: string;
+  region?: string;
+  state?: string;
+  country: string;
+
+  company?: string;
+  department?: string;
+  building?: string;
+  apartment?: string;
+  pOBox?: string;
+  phone?: string;
+  mobile?: string;
+  email?: string;
+  fax?: string;
+  externalId?: string;
+}
+
+export type CustomerUpdateAction =
+  | { action: 'setFirstName'; firstName: string }
+  | { action: 'setLastName'; lastName: string }
+  | { action: 'setDateOfBirth'; dateOfBirth: string }
+  | { action: 'changeAddress'; addressId: string; address: Address }
+  | { action: 'setDefaultShippingAddress'; addressId: string }
+  | { action: 'setDefaultBillingAddress'; addressId: string };
+
+type AddressType = 'shipping' | 'billing';
+
+export interface AddressFormProperties {
+  addressType: AddressType;
+  data: Address;
+  setData: (address: Address) => void;
+  fieldError: Partial<Record<FieldKey, string>>;
+  setFieldError: React.Dispatch<
+    React.SetStateAction<Partial<Record<FieldKey, string>>>
+  >;
+  handleDefaultShippingAddress?: () => void;
+  handleDefaultBillingAddress?: () => void;
 }

@@ -83,7 +83,7 @@ function Header() {
       >
         <List.Root {...listStyles}>
           {itemsToRender.map(({ label, to, onClick }) => (
-            <List.Item key={to}>
+            <List.Item key={`${label}-${to}`}>
               <NavItem label={label} to={to} onClick={onClick} />
             </List.Item>
           ))}

@@ -6,8 +6,16 @@ import {
   PUBLISHED_PRODUCTS_URL,
   GUEST_AUTH_TOKEN_URL,
   CUSTOMER_CREATION_URL,
+  BASE_API_URL,
+  PROJECT_KEY,
 } from '~/constants/constants';
-import { PermissionLevel, RegistrationData } from '~/types/types';
+import {
+  AddressDraft,
+  CustomerDraft,
+  CustomerUpdateAction,
+  PermissionLevel,
+  RegistrationData,
+} from '~/types/types';
 
 const userPermissions = generatePermissions(PermissionLevel.USER);
 const guestPermissions = generatePermissions();
@@ -61,7 +69,36 @@ export const createUser = (
   data: RegistrationData,
   accessToken: string,
 ): Request => {
-  const body = JSON.stringify(data);
+  const addressesToSend: AddressDraft[] = [];
+
+  addressesToSend.push({
+    streetName: data.addresses[0].streetName,
+    city: data.addresses[0].city,
+    postalCode: data.addresses[0].postalCode,
+    country: data.addresses[0].country,
+  });
+
+  if (data.addresses[1].streetName.trim() !== '') {
+    addressesToSend.push({
+      streetName: data.addresses[1].streetName,
+      city: data.addresses[1].city,
+      postalCode: data.addresses[1].postalCode,
+      country: data.addresses[1].country,
+    });
+  }
+
+  const customerDraft: CustomerDraft = {
+    email: data.email,
+    password: data.password,
+    firstName: data.firstName,
+    lastName: data.lastName,
+    dateOfBirth: data.dateOfBirth,
+    addresses: addressesToSend,
+    defaultShippingAddress:
+      data.defaultShippingAddress === -1 ? 0 : data.defaultShippingAddress,
+    defaultBillingAddress:
+      data.defaultBillingAddress === -1 ? 0 : data.defaultBillingAddress,
+  };
 
   return new Request(CUSTOMER_CREATION_URL, {
     method: 'POST',
@@ -69,6 +106,33 @@ export const createUser = (
       'Content-Type': 'application/json',
       Authorization: `Bearer ${accessToken}`,
     },
-    body,
+    body: JSON.stringify(customerDraft),
   });
 };
+
+export function fetchUserProfileRequest(token: string): Request {
+  const url = `${BASE_API_URL}${PROJECT_KEY}/me`;
+  return new Request(url, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+}
+
+export function updateCustomerRequest(
+  id: string,
+  version: number,
+  actions: CustomerUpdateAction[],
+  token: string,
+): Request {
+  return new Request(`${BASE_API_URL}${PROJECT_KEY}/customers/${id}`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ version, actions }),
+  });
+}
