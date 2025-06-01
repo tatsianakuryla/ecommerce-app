@@ -18,7 +18,7 @@ import { useAuthContext } from '~hooks/useAuthContext';
 import { useMakeRequest } from '~hooks/useMakeRequest';
 import { fetchUserProfileRequest, updateCustomerRequest } from '~api/requests';
 import { Customer, Address, CustomerUpdateAction } from '~types/types';
-import { isCustomer } from '~utils/typeguards.ts';
+import { isCustomer } from '~utils/typeguards';
 import Toastify from 'toastify-js';
 
 import {

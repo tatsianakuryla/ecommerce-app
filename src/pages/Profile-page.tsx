@@ -1,5 +1,5 @@
 import { Container, Heading, VisuallyHidden } from '@chakra-ui/react';
-import { Profile } from '~features/customers/Profile.tsx';
+import { Profile } from '~features/customers/Profile';
 
 export const ProfilePage = () => {
   return (

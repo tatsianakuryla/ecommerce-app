@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Form } from '~components/Form/Form.tsx';
-import RedirectionLink from '~components/RedirectionLink/RedirectionLink.tsx';
+import { Form } from '~components/Form/Form';
+import RedirectionLink from '~components/RedirectionLink/RedirectionLink';
 import { FiLogIn } from 'react-icons/fi';
 import type {
   FieldKey,
   FormField,
   RegistrationData,
   Address,
-} from '~types/types.ts';
+} from '~types/types';
 import {
   formatDateInput,
   validateCity,
@@ -20,11 +20,11 @@ import {
   validatePassword,
   validatePostalCode,
   validateStreet,
-} from '~components/Form/RegistrationForm/registrationFormValidation.ts';
-import { useAuthContext } from '~hooks/useAuthContext.ts';
-import { AddressForm } from '~components/Form/AddressForm/AddressForm.tsx';
+} from '~components/Form/RegistrationForm/registrationFormValidation';
+import { useAuthContext } from '~hooks/useAuthContext';
+import { AddressForm } from '~components/Form/AddressForm/AddressForm';
 import { Button } from '@chakra-ui/react';
-import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert.tsx';
+import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert';
 
 export function RegistrationForm() {
   const { register, error, setError, loading } = useAuthContext();

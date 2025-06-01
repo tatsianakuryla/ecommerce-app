@@ -7,7 +7,7 @@ import {
   generateAnonymousToken,
 } from '~/api/requests';
 import { isAuthResponse, isCustomerResponse } from '~/utils/typeguards';
-import { CustomerResponse, RegistrationData } from '~types/types.ts';
+import { CustomerResponse, RegistrationData } from '~types/types';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [accessToken, setAccessToken] = useState<string | null>(() =>
