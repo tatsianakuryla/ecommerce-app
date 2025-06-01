@@ -10,9 +10,9 @@ import {
   Badge,
   HStack,
   Button,
+  Card,
 } from '@chakra-ui/react';
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
-import { Card, CardHeader, CardBody } from '@chakra-ui/card';
 import { FiUser, FiMapPin } from 'react-icons/fi';
 import { useAuthContext } from '~hooks/useAuthContext';
 import { useMakeRequest } from '~hooks/useMakeRequest';
@@ -347,8 +347,8 @@ export function Profile() {
 
   return (
     <Stack gap='2rem' maxW='800px' mx='auto'>
-      <Card>
-        <CardHeader display='flex' alignItems='center' gap='1rem'>
+      <Card.Root>
+        <Card.Header display='flex' alignItems='center' gap='1rem'>
           <Icon as={FiUser} boxSize={6} color='teal.500' />
           <Heading size='md'>Personal Information</Heading>
           <HStack ml='auto'>
@@ -382,8 +382,8 @@ export function Profile() {
               </Button>
             )}
           </HStack>
-        </CardHeader>
-        <CardBody>
+        </Card.Header>
+        <Card.Body>
           {isEditing ? (
             <Stack gap='1rem'>
               <FormControl isInvalid={!!errors.firstName}>
@@ -440,15 +440,15 @@ export function Profile() {
               </Text>
             </Stack>
           )}
-        </CardBody>
-      </Card>
+        </Card.Body>
+      </Card.Root>
 
-      <Card>
-        <CardHeader display='flex' alignItems='center' gap='1rem' mb='1rem'>
+      <Card.Root>
+        <Card.Header display='flex' alignItems='center' gap='1rem' mb='1rem'>
           <Icon as={FiMapPin} boxSize={6} color='purple.500' />
           <Heading size='md'>Addresses</Heading>
-        </CardHeader>
-        <CardBody>
+        </Card.Header>
+        <Card.Body>
           {addresses.length === 0 ? (
             <Text>No saved addresses.</Text>
           ) : (
@@ -588,8 +588,8 @@ export function Profile() {
               </SimpleGrid>
             </Box>
           )}
-        </CardBody>
-      </Card>
+        </Card.Body>
+      </Card.Root>
     </Stack>
   );
 }

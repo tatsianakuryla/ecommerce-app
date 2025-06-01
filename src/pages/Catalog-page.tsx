@@ -19,6 +19,7 @@ export const CatalogPage = () => {
       <Heading mb='1rem'>Catalog page</Heading>
       {TEST_PRODUCTS.map((product) => (
         <ChakraLink
+          asChild
           key={product.id}
           as={RouterLink}
           p='1rem'
