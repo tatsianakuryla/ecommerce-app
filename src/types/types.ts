@@ -1,4 +1,4 @@
-import { permissions, locales } from '~constants/constants';
+import { locales } from '~constants/constants';
 
 export enum PermissionLevel {
   FULL = 'all',
@@ -6,8 +6,6 @@ export enum PermissionLevel {
   USER = 'user',
   GUEST = 'guest',
 }
-
-export type Permissions = typeof permissions;
 
 export interface Address {
   id: string;
@@ -62,7 +60,7 @@ export interface AuthContextValue {
     customerId: string,
     version: number,
     actions: CustomerUpdateAction[],
-  ) => Promise<CustomerResponse | undefined>;
+  ) => Promise<Customer | undefined>;
 }
 
 export interface MenuItem {
@@ -260,14 +258,6 @@ export interface CustomerResponse {
   customer: Customer;
 }
 
-// export interface CustomerPagedQueryResponse {
-//   limit: number;
-//   offset: number;
-//   count: number;
-//   total?: number;
-//   results: Customer[];
-// }
-
 export interface CustomerDraft {
   email: string;
   password: string;
@@ -322,7 +312,9 @@ export type CustomerUpdateAction =
   | { action: 'setLastName'; lastName: string }
   | { action: 'setDateOfBirth'; dateOfBirth: string }
   | { action: 'changeEmail'; email: string }
-  | { action: 'changeAddress'; addressId: string; address: Address }
+  | { action: 'changeAddress'; addressId: string; address: AddressDraft }
+  | { action: 'addAddress'; address: AddressDraft }
+  | { action: 'removeAddress'; addressId: string }
   | { action: 'setDefaultShippingAddress'; addressId: string }
   | { action: 'setDefaultBillingAddress'; addressId: string };
 
@@ -339,46 +331,6 @@ export interface AddressFormProperties {
   handleDefaultShippingAddress?: () => void;
   handleDefaultBillingAddress?: () => void;
 }
-
-// export interface PersonalInfoSectionProperties {
-//   isEditing: boolean;
-//   values: {
-//     firstName: string;
-//     lastName: string;
-//     dateOfBirth: string;
-//   };
-//   errors: {
-//     firstName: string;
-//     lastName: string;
-//     dateOfBirth: string;
-//   };
-//   onFirstNameChange: (value: string) => void;
-//   onLastNameChange: (value: string) => void;
-//   onDateOfBirthChange: (value: string) => void;
-// }
-
-// export interface AddressesSectionProperties {
-//   addresses: Address[];
-//   defaultShippingAddressId?: string;
-//   defaultBillingAddressId?: string;
-//   isEditing: boolean;
-//   addressEdits: Address[];
-//   addressErrors: Array<{
-//     streetName: string;
-//     city: string;
-//     postalCode: string;
-//     country: string;
-//   }>;
-//   defaultShipIndex?: number;
-//   defaultBillIndex?: number;
-//   setDefaultShipIndex: (index: number) => void;
-//   setDefaultBillIndex: (index: number) => void;
-//   onAddressFieldChange: (
-//     index: number,
-//     field: 'streetName' | 'city' | 'postalCode' | 'country',
-//     value: string,
-//   ) => void;
-// }
 
 export interface AddressError {
   streetName: string;
@@ -415,6 +367,7 @@ export interface PersonalInfoProperties {
   onSave: () => void;
   hasErrors: boolean;
 }
+
 export interface AddressesProperties {
   addresses: Address[];
   addressEdits: Address[];
@@ -429,4 +382,5 @@ export interface AddressesProperties {
   ) => void;
   onSetDefaultShip: (index: number) => void;
   onSetDefaultBill: (index: number) => void;
+  onDeleteAddress: (indexToDelete: number) => void;
 }

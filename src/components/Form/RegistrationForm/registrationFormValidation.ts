@@ -21,6 +21,8 @@ export function validateLastName(name: string): string {
 }
 
 export function validateEmail(email: string): string {
+  if (/[А-Яа-яЁё]/.test(email))
+    return 'Email must not contain Cyrillic letters.';
   if (!email.trim()) return 'Email is required.';
   if (!EMAIL_REGEX.test(email)) return 'Invalid email format.';
   return '';

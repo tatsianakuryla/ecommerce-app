@@ -7,8 +7,13 @@ import {
   generateAnonymousToken,
   updateCustomerRequest,
 } from '~/api/requests';
-import { isAuthResponse, isCustomerResponse } from '~/utils/typeguards';
 import {
+  isAuthResponse,
+  isCustomerResponse,
+  isCustomer,
+} from '~/utils/typeguards';
+import {
+  Customer,
   CustomerResponse,
   CustomerUpdateAction,
   RegistrationData,
@@ -92,7 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     customerId: string,
     version: number,
     actions: CustomerUpdateAction[],
-  ): Promise<CustomerResponse | undefined> => {
+  ): Promise<Customer | undefined> => {
     try {
       if (!accessToken) {
         throw new Error('access_token is not provided');
@@ -100,7 +105,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       const response = await makeRequest(
         updateCustomerRequest(customerId, version, actions, accessToken),
-        isCustomerResponse,
+        isCustomer,
       );
       if (!response) {
         throw new Error('Empty response from the server');
