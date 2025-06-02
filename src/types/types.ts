@@ -58,6 +58,11 @@ export interface AuthContextValue {
   loading: boolean;
   error: string | null;
   justRegistered: boolean;
+  updateProfile: (
+    customerId: string,
+    version: number,
+    actions: CustomerUpdateAction[],
+  ) => Promise<CustomerResponse | undefined>;
 }
 
 export interface MenuItem {

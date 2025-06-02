@@ -16,7 +16,7 @@ import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { FiUser, FiMapPin } from 'react-icons/fi';
 import { useAuthContext } from '~hooks/useAuthContext';
 import { useMakeRequest } from '~hooks/useMakeRequest';
-import { fetchUserProfileRequest, updateCustomerRequest } from '~api/requests';
+import { fetchUserProfileRequest } from '~api/requests';
 import { Customer, Address, CustomerUpdateAction } from '~types/types';
 import { isCustomer } from '~utils/typeguards';
 import Toastify from 'toastify-js';
@@ -41,7 +41,7 @@ import {
 } from '~/styles/style.ts';
 
 export function Profile() {
-  const { accessToken, error } = useAuthContext();
+  const { accessToken, error, updateProfile } = useAuthContext();
   const { makeRequest, loading } = useMakeRequest();
 
   const [profile, setProfile] = useState<Customer | null>(null);
@@ -232,29 +232,24 @@ export function Profile() {
     }
 
     try {
-      await makeRequest(
-        updateCustomerRequest(
-          profile.id,
-          profile.version,
-          actions,
-          accessToken,
-        ),
-        isCustomer,
+      const updatedResponse = await updateProfile(
+        profile.id,
+        profile.version,
+        actions,
       );
-      Toastify({
-        ...profileToastifyOptions,
-        text: 'Profile updated!',
-      }).showToast();
-      setIsEditing(false);
-      const refreshed = await makeRequest(
-        fetchUserProfileRequest(accessToken),
-        isCustomer,
-      );
-      if (refreshed) setProfile(refreshed);
+
+      if (updatedResponse) {
+        setProfile(updatedResponse.customer);
+        Toastify({
+          ...profileToastifyOptions,
+          text: 'The profile was saved.',
+        }).showToast();
+        setIsEditing(false);
+      }
     } catch {
       Toastify({
         ...profileToastifyOptions,
-        text: 'Profile was not updated.',
+        text: `The profile was not saved. ${error}`,
       }).showToast();
     }
   };
@@ -586,7 +581,6 @@ export function Profile() {
           )}
         </Card.Body>
       </Card.Root>
-      {error != null && <ErrorAlert name='error' error={error} />}
     </Stack>
   );
 }

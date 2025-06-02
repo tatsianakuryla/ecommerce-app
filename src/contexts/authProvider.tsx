@@ -5,9 +5,14 @@ import {
   authenticateUser,
   createUser,
   generateAnonymousToken,
+  updateCustomerRequest,
 } from '~/api/requests';
 import { isAuthResponse, isCustomerResponse } from '~/utils/typeguards';
-import { CustomerResponse, RegistrationData } from '~types/types';
+import {
+  CustomerResponse,
+  CustomerUpdateAction,
+  RegistrationData,
+} from '~types/types';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [accessToken, setAccessToken] = useState<string | null>(() =>
@@ -83,6 +88,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const updateProfile = async (
+    customerId: string,
+    version: number,
+    actions: CustomerUpdateAction[],
+  ): Promise<CustomerResponse | undefined> => {
+    try {
+      if (!accessToken) {
+        throw new Error('access_token is not provided');
+      }
+
+      const response = await makeRequest(
+        updateCustomerRequest(customerId, version, actions, accessToken),
+        isCustomerResponse,
+      );
+      if (!response) {
+        throw new Error('Empty response from the server');
+      }
+
+      return response;
+    } catch (error: unknown) {
+      throw new Error('The profile was not updated', { cause: error });
+    }
+  };
+
   useEffect(() => {
     if (!accessToken) {
       void fetchAnonymousToken();
@@ -101,6 +130,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         justRegistered,
         setJustRegistered,
         setError,
+        updateProfile,
       }}
     >
       {children}
