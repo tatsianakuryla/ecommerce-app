@@ -31,7 +31,7 @@ import { profileToastifyOptions, profileBoxStyle } from '~/styles/style.ts';
 
 import { PersonalInfo } from './PersonalInfo';
 import { Addresses } from './Addresses';
-import { ChangePasswordForm } from './ChangePasswordForm';
+import { ChangePasswordDialog } from './ChangePasswordForm';
 
 const initialAddressErrorState: AddressError = {
   streetName: '',
@@ -444,13 +444,12 @@ export function Profile() {
           </Button>
         )}
 
-        {showPasswordForm && (
-          <ChangePasswordForm
-            onClose={() => {
-              setShowPasswordForm(false);
-            }}
-          />
-        )}
+        <ChangePasswordDialog
+          isOpen={showPasswordForm}
+          onClose={() => {
+            setShowPasswordForm(false);
+          }}
+        />
 
         {isEditing && (
           <Button size='sm' colorScheme='purple' onClick={onAddAddress}>
