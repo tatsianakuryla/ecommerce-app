@@ -89,7 +89,7 @@ export const profileProgressCircleBoxStyle = {
 };
 
 export const profileBoxStyle = {
-  p: '2rem',
+  p: '0.5rem',
   borderWidth: '1px',
   borderRadius: 'xl',
   boxShadow: 'sm',

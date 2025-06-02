@@ -209,43 +209,48 @@ export function Addresses({
                       >
                         Country
                       </FormLabel>
-                      <Select
-                        id={`address-${index}-country-select`}
-                        name={`address[${index}].country`}
-                        aria-label='Country'
-                        maxWidth='382px'
-                        icon={<Box />}
-                        value={address.country}
-                        onChange={(event) => {
-                          onAddressFieldChange(
-                            index,
-                            'country',
-                            event.target.value,
-                          );
-                        }}
-                        placeholder='Select country'
-                        variant='outline'
-                        borderColor={
-                          addressErrors[index].country ? 'red.500' : 'gray.300'
-                        }
-                        focusBorderColor={
-                          addressErrors[index].country ? 'red.500' : 'teal.500'
-                        }
-                        errorBorderColor='red.500'
-                        borderRadius='md'
-                        _hover={{
-                          borderColor: addressErrors[index].country
-                            ? 'red.500'
-                            : 'gray.400',
-                        }}
-                        size='md'
-                      >
-                        {COUNTRY_OPTIONS.map((option) => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                      </Select>
+                      <Box w='100%' maxWidth='380px'>
+                        <Select
+                          id={`address-${index}-country-select`}
+                          name={`address[${index}].country`}
+                          aria-label='Country'
+                          icon={<Box />}
+                          value={address.country}
+                          onChange={(event) => {
+                            onAddressFieldChange(
+                              index,
+                              'country',
+                              event.target.value,
+                            );
+                          }}
+                          placeholder='Select country'
+                          variant='outline'
+                          borderColor={
+                            addressErrors[index].country
+                              ? 'red.500'
+                              : 'gray.300'
+                          }
+                          focusBorderColor={
+                            addressErrors[index].country
+                              ? 'red.500'
+                              : 'teal.500'
+                          }
+                          errorBorderColor='red.500'
+                          borderRadius='md'
+                          _hover={{
+                            borderColor: addressErrors[index].country
+                              ? 'red.500'
+                              : 'gray.400',
+                          }}
+                          size='md'
+                        >
+                          {COUNTRY_OPTIONS.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </Select>
+                      </Box>
                       {addressErrors[index].country && (
                         <ErrorAlert
                           name={`address-country-${index}`}
