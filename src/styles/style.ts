@@ -96,3 +96,21 @@ export const profileBoxStyle = {
   bg: 'gray.50',
   transition: 'all 0.2s',
 };
+
+export const productCardStyles = {
+  maxW: 'sm',
+  overflow: 'hidden',
+  height: '100%',
+  borderRadius: '2xl',
+  boxShadow: 'sm',
+  transition: 'all 0.3s ease-in-out',
+  _hover: {
+    transform: 'scale(1.03)',
+    boxShadow: 'lg',
+    bg: 'gray.50',
+  },
+  _active: {
+    transform: 'scale(1.01)',
+    boxShadow: 'md',
+  },
+};
