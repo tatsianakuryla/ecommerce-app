@@ -29,7 +29,7 @@ export default function NavItem({
       <FiUserPlus />
     ) : to === '/profile' ? (
       <FiUser />
-    ) : to === '/catalog' ? (
+    ) : to === '/' ? (
       <FiBookOpen />
     ) : null;
 

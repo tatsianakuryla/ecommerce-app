@@ -1,25 +1,23 @@
-import { NotFoundPage } from '~pages/Not-found-page.tsx';
-import { AboutPage } from '~pages/About-page.tsx';
-import { LoginPage } from '~pages/Login-page.tsx';
-import { MainPage } from '~pages/Main-page.tsx';
-import { RegisterPage } from '~pages/Register-page.tsx';
-import { ProfilePage } from '~pages/Profile-page.tsx';
+import { NotFoundPage } from '~pages/Not-found-page';
+import { AboutPage } from '~pages/About-page';
+import { LoginPage } from '~pages/Login-page';
+import { RegisterPage } from '~pages/Register-page';
+import { ProfilePage } from '~pages/Profile-page';
 import { RootLayout } from '~/layouts/RootLayout';
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
 } from 'react-router-dom';
-import { RedirectIfAuth } from '~components/Protected-route/Protected-route.tsx';
-import { RequireAuth } from '~components/Protected-route/RequireAuth.tsx';
-import { CatalogPage } from '~pages/Catalog-page.tsx';
-import { ProductPage } from '~pages/Product-page.tsx';
+import { RedirectIfAuth } from '~components/Protected-route/Protected-route';
+import { RequireAuth } from '~components/Protected-route/RequireAuth';
+import { CatalogPage } from '~pages/Catalog-page';
+import { ProductPage } from '~pages/Product-page';
 
 export const routes = createRoutesFromElements(
   <Route path='/' element={<RootLayout />}>
-    <Route index element={<MainPage />} />
+    <Route index element={<CatalogPage />} />
     <Route path='about' element={<AboutPage />} />
-    <Route path='catalog' element={<CatalogPage />} />
     <Route path='catalog/:productId' element={<ProductPage />} />
     <Route element={<RequireAuth />}>
       <Route path='profile' element={<ProfilePage />} />

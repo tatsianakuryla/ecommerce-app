@@ -10,14 +10,13 @@ import {
 import logo from '../../assets/images/logo-without-bg.png';
 import Hamburger from 'hamburger-react';
 import { useState } from 'react';
-import NavItem from '~components/Header/Nav-item.tsx';
+import NavItem from '~components/Header/Nav-item';
 import { useAuthContext } from '~/hooks/useAuthContext';
 import { MenuItem } from '~types/types';
 
 const navItems: MenuItem[] = [
   { label: 'About', to: '/about' },
-  { label: 'Main', to: '/' },
-  { label: 'Catalog', to: '/catalog' },
+  { label: 'Catalog', to: '/' },
 ];
 
 const loginRegisterItems: MenuItem[] = [

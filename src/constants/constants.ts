@@ -1,4 +1,6 @@
 // Requests related
+import { ILocales } from '~types/types.ts';
+
 export const PROJECT_KEY = 'rssecomm';
 const CLIENT_ID = 'VSoSJL93ehdNSp2ILY62b3zG';
 const CLIENT_SECRET = '9xPxdvPzFxRVhOAw4_U1Qkbcub8EcT1U';
@@ -47,7 +49,7 @@ export const PUBLISHED_PRODUCTS_URL = `${BASE_API_URL}${PROJECT_KEY}/product-pro
 export const CUSTOMER_CREATION_URL = `${BASE_API_URL}${PROJECT_KEY}/customers`;
 
 // locales
-export const locales = {
+export const locales: ILocales = {
   DE: 'de-DE',
   EN: 'en-US',
   UK: 'en-GB',

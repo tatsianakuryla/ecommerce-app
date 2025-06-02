@@ -136,3 +136,27 @@ export function updateCustomerRequest(
     body: JSON.stringify({ version, actions }),
   });
 }
+
+export const changePasswordRequest = (
+  id: string,
+  version: number,
+  currentPassword: string,
+  newPassword: string,
+  accessToken: string,
+): Request => {
+  const body = JSON.stringify({
+    id,
+    version,
+    currentPassword,
+    newPassword,
+  });
+
+  return new Request(`${BASE_API_URL}${PROJECT_KEY}/customers/password`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    body,
+  });
+};

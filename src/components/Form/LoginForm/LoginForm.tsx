@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
-import { useAuthContext } from '~hooks/useAuthContext.ts';
-import { Form } from '~components/Form/Form.tsx';
-import { normalizeErrorMessage } from '~utils/helpers.ts';
-import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle.tsx';
-import RedirectionLink from '~components/RedirectionLink/RedirectionLink.tsx';
+import { useAuthContext } from '~hooks/useAuthContext';
+import { Form } from '~components/Form/Form';
+import { normalizeErrorMessage } from '~utils/helpers';
+import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle';
+import RedirectionLink from '~components/RedirectionLink/RedirectionLink';
 import { FiUserPlus } from 'react-icons/fi';
 import { Flex } from '@chakra-ui/react';
-import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert.tsx';
+import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert';
 import {
   validateEmail,
   validatePassword,
-} from '~components/Form/LoginForm/loginFormValidation.ts';
+} from '~components/Form/LoginForm/loginFormValidation';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
