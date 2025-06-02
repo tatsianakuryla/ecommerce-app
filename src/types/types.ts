@@ -303,6 +303,7 @@ export type CustomerUpdateAction =
   | { action: 'setFirstName'; firstName: string }
   | { action: 'setLastName'; lastName: string }
   | { action: 'setDateOfBirth'; dateOfBirth: string }
+  | { action: 'changeEmail'; email: string }
   | { action: 'changeAddress'; addressId: string; address: Address }
   | { action: 'setDefaultShippingAddress'; addressId: string }
   | { action: 'setDefaultBillingAddress'; addressId: string };
@@ -319,4 +320,44 @@ export interface AddressFormProperties {
   >;
   handleDefaultShippingAddress?: () => void;
   handleDefaultBillingAddress?: () => void;
+}
+
+export interface AddressesSectionProperties {
+  addresses: Address[];
+  defaultShippingAddressId?: string;
+  defaultBillingAddressId?: string;
+  isEditing: boolean;
+  addressEdits: Address[];
+  addressErrors: Array<{
+    streetName: string;
+    city: string;
+    postalCode: string;
+    country: string;
+  }>;
+  defaultShipIndex?: number;
+  defaultBillIndex?: number;
+  setDefaultShipIndex: (index: number) => void;
+  setDefaultBillIndex: (index: number) => void;
+  onAddressFieldChange: (
+    index: number,
+    field: 'streetName' | 'city' | 'postalCode' | 'country',
+    value: string,
+  ) => void;
+}
+
+export interface PersonalInfoSectionProperties {
+  isEditing: boolean;
+  values: {
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+  };
+  errors: {
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+  };
+  onFirstNameChange: (value: string) => void;
+  onLastNameChange: (value: string) => void;
+  onDateOfBirthChange: (value: string) => void;
 }

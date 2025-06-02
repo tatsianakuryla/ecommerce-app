@@ -30,34 +30,18 @@ import {
   validateCity,
   validatePostalCode,
   validateCountry,
+  validateEmail,
 } from '~components/Form/RegistrationForm/registrationFormValidation';
 import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert.tsx';
 import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle.tsx';
+import {
+  profileBoxStyle,
+  profileProgressCircleBoxStyle,
+  profileToastifyOptions,
+} from '~/styles/style.ts';
 
 export function Profile() {
-  const toastifyOptions = {
-    duration: 3000,
-    close: false,
-    gravity: 'bottom',
-    position: 'center',
-    stopOnFocus: true,
-    style: {
-      padding: '10px',
-      background: 'linear-gradient(to right, #00b09b, #96c93d)',
-      boxShadow: '0 2px 12px rgba(0,0,0,0.2)',
-      fontSize: '16px',
-      color: '#fff',
-      bottom: '5px',
-      marginBottom: '0',
-      left: '0',
-      position: 'fixed',
-      zIndex: '9999',
-      cursor: 'pointer',
-      borderRadius: '8px',
-    },
-  };
-
-  const { accessToken } = useAuthContext();
+  const { accessToken, error } = useAuthContext();
   const { makeRequest, loading } = useMakeRequest();
 
   const [profile, setProfile] = useState<Customer | null>(null);
@@ -67,11 +51,13 @@ export function Profile() {
     firstName: '',
     lastName: '',
     dateOfBirth: '',
+    email: '',
   });
   const [errors, setErrors] = useState({
     firstName: '',
     lastName: '',
     dateOfBirth: '',
+    email: '',
   });
 
   const [addressEdits, setAddressEdits] = useState<Address[]>([]);
@@ -93,8 +79,9 @@ export function Profile() {
       firstName: profile.firstName ?? '',
       lastName: profile.lastName ?? '',
       dateOfBirth: profile.dateOfBirth ?? '',
+      email: profile.email,
     });
-    setErrors({ firstName: '', lastName: '', dateOfBirth: '' });
+    setErrors({ firstName: '', lastName: '', dateOfBirth: '', email: '' });
 
     setAddressEdits(profile.addresses);
     setAddressErrors(
@@ -142,6 +129,10 @@ export function Profile() {
       dateOfBirth: validateDateOfBirth(formatted),
     }));
   };
+  const onEmailChange = (value: string) => {
+    setEditData((data) => ({ ...data, email: value }));
+    setErrors((event) => ({ ...event, email: validateEmail(value) }));
+  };
 
   const onAddressFieldChange = (
     index: number,
@@ -179,6 +170,7 @@ export function Profile() {
     !!errors.firstName ||
     !!errors.lastName ||
     !!errors.dateOfBirth ||
+    !!errors.email ||
     addressErrors.some((errorObject) =>
       Object.values(errorObject).some((message) => !!message),
     );
@@ -199,6 +191,9 @@ export function Profile() {
         action: 'setDateOfBirth',
         dateOfBirth: editData.dateOfBirth,
       });
+    }
+    if (editData.email !== profile.email) {
+      actions.push({ action: 'changeEmail', email: editData.email });
     }
 
     addressEdits.forEach((address, index) => {
@@ -247,7 +242,7 @@ export function Profile() {
         isCustomer,
       );
       Toastify({
-        ...toastifyOptions,
+        ...profileToastifyOptions,
         text: 'Profile updated!',
       }).showToast();
       setIsEditing(false);
@@ -258,7 +253,7 @@ export function Profile() {
       if (refreshed) setProfile(refreshed);
     } catch {
       Toastify({
-        ...toastifyOptions,
+        ...profileToastifyOptions,
         text: 'Profile was not updated.',
       }).showToast();
     }
@@ -266,13 +261,7 @@ export function Profile() {
 
   if (loading)
     return (
-      <Box
-        className='hi'
-        minHeight='calc(100vh - 120px)'
-        display='flex'
-        alignItems='center'
-        justifyContent='center'
-      >
+      <Box {...profileProgressCircleBoxStyle}>
         <ProgressCircleElement />
       </Box>
     );
@@ -282,6 +271,7 @@ export function Profile() {
     firstName = '—',
     lastName = '—',
     dateOfBirth,
+    email,
     addresses,
     defaultShippingAddressId,
     defaultBillingAddressId,
@@ -294,13 +284,8 @@ export function Profile() {
     return (
       <Box
         key={address.id}
-        p={4}
-        borderWidth='1px'
-        borderRadius='xl'
-        boxShadow='sm'
-        bg='gray.50'
         _hover={{ boxShadow: 'md', bg: 'gray.100' }}
-        transition='all 0.2s'
+        {...profileBoxStyle}
       >
         <Stack gap={1} fontSize='sm'>
           <HStack>
@@ -348,7 +333,7 @@ export function Profile() {
   return (
     <Stack gap='2rem' maxW='800px' mx='auto'>
       <Card.Root>
-        <Card.Header display='flex' alignItems='center' gap='1rem'>
+        <Card.Header>
           <Icon as={FiUser} boxSize={6} color='teal.500' />
           <Heading size='md'>Personal Information</Heading>
           <HStack ml='auto'>
@@ -386,6 +371,19 @@ export function Profile() {
         <Card.Body>
           {isEditing ? (
             <Stack gap='1rem'>
+              <FormControl isInvalid={!!errors.email}>
+                <FormLabel>Email</FormLabel>
+                <Input
+                  value={editData.email}
+                  onChange={(event) => {
+                    onEmailChange(event.target.value);
+                  }}
+                />
+                {errors.email && (
+                  <ErrorAlert name='email' error={errors.email} />
+                )}
+              </FormControl>
+
               <FormControl isInvalid={!!errors.firstName}>
                 <FormLabel>First Name</FormLabel>
                 <Input
@@ -429,6 +427,9 @@ export function Profile() {
           ) : (
             <Stack gap='1rem'>
               <Text>
+                <strong>Email:</strong> {email}
+              </Text>
+              <Text>
                 <strong>First Name:</strong> {firstName}
               </Text>
               <Text>
@@ -458,13 +459,8 @@ export function Profile() {
                   isEditing ? (
                     <Box
                       key={address.id}
-                      p={4}
-                      borderWidth='1px'
-                      borderRadius='xl'
-                      boxShadow='sm'
-                      bg='gray.50'
                       _hover={{ boxShadow: 'md', bg: 'gray.100' }}
-                      transition='all 0.2s'
+                      {...profileBoxStyle}
                     >
                       <Stack gap={3}>
                         <FormControl
@@ -590,6 +586,7 @@ export function Profile() {
           )}
         </Card.Body>
       </Card.Root>
+      {error != null && <ErrorAlert name='error' error={error} />}
     </Stack>
   );
 }

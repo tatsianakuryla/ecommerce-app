@@ -4,6 +4,11 @@ import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { FormProperties } from '~types/types';
 import { ErrorAlert } from '../ErrorAlert/ErrorAlert';
 import { getAutocompleteValue } from '~utils/helpers';
+import {
+  formContainerStyle,
+  formIconStyle,
+  registrationButtonStyle,
+} from '~/styles/style.ts';
 
 export function Form({
   id,
@@ -22,41 +27,13 @@ export function Form({
     }));
   };
 
-  const containerStyle = loading
-    ? {
-        minWidth: 382,
-        maxWidth: 382,
-        margin: '2rem auto',
-        filter: 'blur(1px)',
-      }
-    : {
-        minWidth: 382,
-        maxWidth: 382,
-        margin: '2rem auto',
-      };
-
-  const registrationButtonStyle = {
-    width: '100%',
-    padding: '0.75rem 1rem',
-    marginTop: '1rem',
-    backgroundColor: 'teal.500',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '0.5rem',
-    fontSize: '1rem',
-    fontWeight: 600,
-    opacity: loading ? 0.6 : 1,
-    transition: 'all 0.2s ease-in-out',
-    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-  };
-
   return (
     <Box
       as='form'
-      pos='relative'
-      onSubmit={onSubmit}
-      style={containerStyle}
       id={id}
+      onSubmit={onSubmit}
+      {...formContainerStyle}
+      filter={loading ? 'blur(1px)' : 'none'}
     >
       {fields.map(
         ({ name, value, placeholder, onChange, error = '', type = 'text' }) => {
@@ -87,18 +64,15 @@ export function Form({
                 />
                 {isPasswordField && (
                   <IconButton
+                    size='sm'
+                    variant='ghost'
                     aria-label={
                       showPassword ? 'Hide password' : 'Show password'
                     }
-                    position='absolute'
-                    right='0.5rem'
-                    top='50%'
-                    transform='translateY(-50%)'
-                    size='sm'
-                    variant='ghost'
                     onClick={() => {
                       toggleShow(name);
                     }}
+                    {...formIconStyle}
                   >
                     {showPassword ? <FiEyeOff /> : <FiEye />}
                   </IconButton>
@@ -115,8 +89,9 @@ export function Form({
         type='submit'
         disabled={loading}
         data-testid='auth-submit-button'
-        cursor={loading ? 'not-allowed' : 'pointer'}
         {...registrationButtonStyle}
+        opacity={loading ? 0.6 : 1}
+        cursor={loading ? 'not-allowed' : 'pointer'}
       >
         {submitLabel}
       </Button>
