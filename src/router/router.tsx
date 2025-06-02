@@ -1,7 +1,6 @@
 import { NotFoundPage } from '~pages/Not-found-page';
 import { AboutPage } from '~pages/About-page';
 import { LoginPage } from '~pages/Login-page';
-import { MainPage } from '~pages/Main-page';
 import { RegisterPage } from '~pages/Register-page';
 import { ProfilePage } from '~pages/Profile-page';
 import { RootLayout } from '~/layouts/RootLayout';
@@ -17,9 +16,8 @@ import { ProductPage } from '~pages/Product-page';
 
 export const routes = createRoutesFromElements(
   <Route path='/' element={<RootLayout />}>
-    <Route index element={<MainPage />} />
+    <Route index element={<CatalogPage />} />
     <Route path='about' element={<AboutPage />} />
-    <Route path='catalog' element={<CatalogPage />} />
     <Route path='catalog/:productId' element={<ProductPage />} />
     <Route element={<RequireAuth />}>
       <Route path='profile' element={<ProfilePage />} />

@@ -9,7 +9,7 @@ export const generatePermissions = (
     .join(' ');
 };
 
-export function normalizeErrorMessage(message: string): string {
+export const normalizeErrorMessage = (message: string): string => {
   const parts = message.split(':');
 
   if (parts.length < 3) return message;
@@ -19,7 +19,18 @@ export function normalizeErrorMessage(message: string): string {
   const description = parts.slice(2).join(':').trim();
 
   return `${prefix}: ${field} ${description.charAt(0).toLowerCase()}${description.slice(1)}`;
-}
+};
+
+export const formatPrice = (
+  price: number,
+  currency: string,
+  locale: string,
+): string => {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency,
+  }).format(price / 100);
+};
 
 export function textToUpperCase(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1);
