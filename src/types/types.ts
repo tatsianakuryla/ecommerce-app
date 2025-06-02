@@ -61,6 +61,14 @@ export interface AuthContextValue {
     version: number,
     actions: CustomerUpdateAction[],
   ) => Promise<Customer | undefined>;
+  customer: Customer | null;
+  setCustomer: (customer: Customer | null) => void;
+  updatePassword: (
+    customerId: string,
+    version: number,
+    currentPassword: string,
+    newPassword: string,
+  ) => Promise<void>;
 }
 
 export interface MenuItem {

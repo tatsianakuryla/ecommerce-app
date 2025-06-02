@@ -3,7 +3,9 @@ import { useMakeRequest } from '~/hooks/useMakeRequest';
 import { AuthContext } from './authContext';
 import {
   authenticateUser,
+  changePasswordRequest,
   createUser,
+  fetchUserProfileRequest,
   generateAnonymousToken,
   updateCustomerRequest,
 } from '~/api/requests';
@@ -28,6 +30,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
   const [justRegistered, setJustRegistered] = useState(false);
   const { makeRequest, error, loading, setError } = useMakeRequest();
+  const [customer, setCustomer] = useState<Customer | null>(null);
 
   const fetchAnonymousToken = useCallback(async () => {
     try {
@@ -64,6 +67,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setAccessToken(response.access_token);
       localStorage.setItem('authToken', response.access_token);
       setIsAuthenticated(true);
+      const customer = await makeRequest(
+        fetchUserProfileRequest(response.access_token),
+        isCustomer,
+      );
+      if (customer) {
+        setCustomer(customer);
+      }
     } catch (error) {
       throw new Error('user login failed', { cause: error });
     }
@@ -93,6 +103,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const updatePassword = async (
+    customerId: string,
+    version: number,
+    currentPassword: string,
+    newPassword: string,
+  ): Promise<void> => {
+    if (!accessToken) {
+      throw new Error('access_token is not provided');
+    }
+
+    const response = await makeRequest(
+      changePasswordRequest(
+        customerId,
+        version,
+        currentPassword,
+        newPassword,
+        accessToken,
+      ),
+      isCustomer,
+    );
+
+    if (!response) {
+      throw new Error('Password update failed: empty response.');
+    }
+  };
+
   const updateProfile = async (
     customerId: string,
     version: number,
@@ -110,7 +146,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!response) {
         throw new Error('Empty response from the server');
       }
-
+      setCustomer(response);
       return response;
     } catch (error: unknown) {
       throw new Error('The profile was not updated', { cause: error });
@@ -122,6 +158,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       void fetchAnonymousToken();
     }
   }, [accessToken, fetchAnonymousToken]);
+
   return (
     <AuthContext.Provider
       value={{
@@ -136,6 +173,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setJustRegistered,
         setError,
         updateProfile,
+        updatePassword,
+        customer,
+        setCustomer,
       }}
     >
       {children}

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Stack, Box, Text, Button, Icon } from '@chakra-ui/react';
 import { FiPlus } from 'react-icons/fi';
-
 import { useAuthContext } from '~hooks/useAuthContext';
 import { useMakeRequest } from '~hooks/useMakeRequest';
 import { fetchUserProfileRequest } from '~api/requests';
@@ -32,6 +31,7 @@ import { profileToastifyOptions, profileBoxStyle } from '~/styles/style.ts';
 
 import { PersonalInfo } from './PersonalInfo';
 import { Addresses } from './Addresses';
+import { ChangePasswordForm } from './ChangePasswordForm';
 
 const initialAddressErrorState: AddressError = {
   streetName: '',
@@ -66,6 +66,7 @@ export function Profile() {
   const [defaultBillIndex, setDefaultBillIndex] = useState<number | undefined>(
     undefined,
   );
+  const [showPasswordForm, setShowPasswordForm] = useState(false);
 
   useEffect(() => {
     if (!profile) return;
@@ -412,7 +413,7 @@ export function Profile() {
   } = profile;
 
   return (
-    <Stack gap='2rem' maxW='800px' mx='auto' pt='2rem'>
+    <Stack gap='1rem' maxW='800px' mx='auto' pt='1rem'>
       <PersonalInfo
         isEditing={isEditing}
         editData={editData}
@@ -430,6 +431,27 @@ export function Profile() {
       />
 
       <Box>
+        {!showPasswordForm && (
+          <Button
+            size='sm'
+            variant='outline'
+            colorScheme='purple'
+            onClick={() => {
+              setShowPasswordForm(true);
+            }}
+          >
+            Change Password
+          </Button>
+        )}
+
+        {showPasswordForm && (
+          <ChangePasswordForm
+            onClose={() => {
+              setShowPasswordForm(false);
+            }}
+          />
+        )}
+
         {isEditing && (
           <Button size='sm' colorScheme='purple' onClick={onAddAddress}>
             <Icon as={FiPlus} mr={2} />

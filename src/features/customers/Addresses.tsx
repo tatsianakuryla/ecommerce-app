@@ -74,7 +74,7 @@ export function Addresses({
           </HStack>
         </Stack>
 
-        <HStack gap={2} mt={3}>
+        <HStack gap={1} mt={3}>
           {isShip && (
             <Badge colorScheme='green' px={2}>
               Shipping
@@ -104,14 +104,14 @@ export function Addresses({
           <Text>No saved addresses.</Text>
         ) : (
           <Box bg='white' borderRadius='md'>
-            <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+            <SimpleGrid columns={{ base: 1, md: 2 }} gap={2}>
               {addressEdits.map((address, index) => (
                 <Box
                   key={address.id}
                   _hover={{ boxShadow: 'md', bg: 'gray.100' }}
                   {...profileBoxStyle}
                 >
-                  <Stack gap={3}>
+                  <Stack gap={1}>
                     <FormControl
                       id={`address-${index}-street`}
                       isInvalid={!!addressErrors[index].streetName}
@@ -254,7 +254,7 @@ export function Addresses({
                       )}
                     </FormControl>
 
-                    <HStack gap={3} pt={2}>
+                    <HStack gap={1} pt={2}>
                       <Button
                         size='sm'
                         variant={
@@ -299,7 +299,7 @@ export function Addresses({
         <Text>No saved addresses.</Text>
       ) : (
         <Box bg='white' borderRadius='md'>
-          <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+          <SimpleGrid columns={{ base: 1, md: 2 }} gap={1}>
             {addresses.map((address, index) =>
               renderAddressView(address, index),
             )}
