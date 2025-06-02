@@ -1,4 +1,5 @@
 import { Button, Card, Flex, Image, Text } from '@chakra-ui/react';
+import { productCardStyles } from '~/styles/style.ts';
 
 export const ProductCard = ({
   name,
@@ -9,9 +10,9 @@ export const ProductCard = ({
   discount,
 }: Record<string, string>) => {
   return (
-    <Card.Root maxW='sm' overflow='hidden' height='100%'>
-      <Image src={img} alt={alt} h='320px' />
-      <Card.Body gap='2'>
+    <Card.Root {...productCardStyles}>
+      <Image src={img} alt={alt} h='240px' />
+      <Card.Body gap='0.2'>
         <Card.Title>{name}</Card.Title>
         <Card.Description lineClamp={2}>{description}</Card.Description>
         {discount ? (
@@ -46,7 +47,7 @@ export const ProductCard = ({
           </Text>
         )}
       </Card.Body>
-      <Card.Footer gap='2'>
+      <Card.Footer gap='0.2'>
         <Button variant='solid'>Buy now</Button>
         <Button variant='ghost'>Add to cart</Button>
       </Card.Footer>
