@@ -12,12 +12,14 @@ interface ImageSliderProperties {
   images: Array<{ url: string; alt?: string }>;
   boxHeight?: string | number;
   boxWidth?: string | number;
+  maxHeight?: string | number;
 }
 
 export const ImageSlider = ({
   images,
   boxHeight = '400px',
   boxWidth = '100%',
+  maxHeight,
 }: ImageSliderProperties) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -26,6 +28,7 @@ export const ImageSlider = ({
       <Box
         h={boxHeight}
         w={boxWidth}
+        maxH={maxHeight}
         bg='gray.100'
         borderRadius='md'
         display='flex'
@@ -39,7 +42,7 @@ export const ImageSlider = ({
 
   if (images.length === 1) {
     return (
-      <Box h={boxHeight} w={boxWidth} position='relative'>
+      <Box h={boxHeight} w={boxWidth} position='relative' maxH={maxHeight}>
         <ChakraImage
           src={images[0].url}
           alt={images[0].alt || `Image 1`}
@@ -74,6 +77,7 @@ export const ImageSlider = ({
       w={boxWidth}
       position='relative'
       overflow='hidden'
+      maxH={maxHeight}
       borderRadius='md'
     >
       <IconButton
