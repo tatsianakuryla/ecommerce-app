@@ -3,13 +3,13 @@ import {
   Heading,
   Text,
   Spinner,
-  Image as ChakraImage,
   Box,
   HStack,
   VStack,
 } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { getLocalizedString, useProduct } from '~/hooks/useProduct';
+import { ImageSlider } from '~components/ImageSlider/ImageSlider.tsx';
 
 export const ProductPage = () => {
   const { productId } = useParams<{ productId: string }>();
@@ -59,7 +59,6 @@ export const ProductPage = () => {
 
   const name = getLocalizedString(product.name);
   const description = getLocalizedString(product.description);
-
   const images = product.masterVariant.images;
 
   const firstPrice = product.masterVariant.prices[0];
@@ -77,32 +76,14 @@ export const ProductPage = () => {
 
         <HStack align='start' gap='2rem' w='100%' flexWrap='wrap'>
           <Box flex='1' minW='300px'>
-            {images.length > 0 ? (
-              images.map((image, index) => (
-                <ChakraImage
-                  key={index}
-                  src={image.url}
-                  alt={`${name} (${index + 1})`}
-                  borderRadius='md'
-                  mb='1rem'
-                  maxH='400px'
-                  objectFit='contain'
-                  w='100%'
-                />
-              ))
-            ) : (
-              <Box
-                h='400px'
-                w='100%'
-                bg='gray.100'
-                borderRadius='md'
-                display='flex'
-                alignItems='center'
-                justifyContent='center'
-              >
-                <Text color='gray.500'>Нет изображений</Text>
-              </Box>
-            )}
+            <ImageSlider
+              images={images.map((image, index) => ({
+                url: image.url,
+                alt: `${name} (${index + 1})`,
+              }))}
+              boxHeight='400px'
+              boxWidth='100%'
+            />
           </Box>
 
           <Box flex='1' minW='300px'>
