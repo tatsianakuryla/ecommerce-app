@@ -47,6 +47,7 @@ export const CLIENT_AUTH_URL = `${BASE_AUTH_URL}oauth/token`;
 export const USER_AUTH_URL = `${BASE_AUTH_URL}${USER_AUTH_TOKEN}`;
 export const PUBLISHED_PRODUCTS_URL = `${BASE_API_URL}${PROJECT_KEY}/product-projections`;
 export const CUSTOMER_CREATION_URL = `${BASE_API_URL}${PROJECT_KEY}/customers`;
+export const CATEGORIES_URL = `${BASE_API_URL}${PROJECT_KEY}/categories`;
 
 // locales
 export const locales: ILocales = {

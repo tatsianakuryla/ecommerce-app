@@ -392,3 +392,29 @@ export interface AddressesProperties {
   onSetDefaultBill: (index: number) => void;
   onDeleteAddress: (indexToDelete: number) => void;
 }
+
+export interface Category {
+  id: string;
+  version: number;
+  createdAt: string;
+  lastModifiedAt: string;
+  name: LocalizedString;
+  slug: LocalizedString;
+  ancestors: Array<{
+    typeId: 'category';
+    id: string;
+  }>;
+  parent?: {
+    typeId: 'category';
+    id: string;
+  };
+  orderHint?: string;
+}
+
+export interface CategoriesResponse {
+  limit: number;
+  offset: number;
+  count: number;
+  total: number;
+  results: Category[];
+}

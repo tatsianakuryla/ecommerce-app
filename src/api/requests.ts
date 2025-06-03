@@ -8,11 +8,14 @@ import {
   CUSTOMER_CREATION_URL,
   BASE_API_URL,
   PROJECT_KEY,
+  CATEGORIES_URL,
+  locales,
 } from '~/constants/constants';
 import {
   AddressDraft,
   CustomerDraft,
   CustomerUpdateAction,
+  ILocales,
   PermissionLevel,
   RegistrationData,
 } from '~/types/types';
@@ -163,6 +166,33 @@ export const changePasswordRequest = (
 
 export const getProductById = (productId: string, token: string): Request => {
   const url = `${BASE_API_URL}${PROJECT_KEY}/product-projections/${productId}?staged=false`;
+  return new Request(url, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
+export const getCategories = (token: string): Request => {
+  const url = `${CATEGORIES_URL}?limit=500`;
+  return new Request(url, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
+export const getProductsByCategory = (
+  categoryId: string,
+  token: string,
+  locale: ILocales[keyof ILocales] = locales.UK,
+): Request => {
+  const encodedFilter = encodeURIComponent(`categories.id:"${categoryId}"`);
+  const url = `${BASE_API_URL}${PROJECT_KEY}/product-projections/search?filter=${encodedFilter}&limit=100&localeProjection=${locale}`;
   return new Request(url, {
     method: 'GET',
     headers: {

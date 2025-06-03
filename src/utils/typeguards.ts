@@ -5,6 +5,8 @@ import {
   Customer,
   ErrorResponse,
   Product,
+  Category,
+  CategoriesResponse,
 } from '~types/types';
 
 export const isAuthResponse = (data: unknown): data is AuthResponse => {
@@ -291,5 +293,51 @@ export function isProduct(object: unknown): object is Product {
   return !(
     !hasKey(object, 'lastModifiedAt') ||
     typeof object.lastModifiedAt !== 'string'
+  );
+}
+
+export function isCategory(value: unknown): value is Category {
+  if (
+    typeof value !== 'object' ||
+    value === null ||
+    !('id' in value) ||
+    !('name' in value) ||
+    !('slug' in value)
+  ) {
+    return false;
+  }
+
+  const id = value.id;
+  const name = value.name;
+  const slug = value.slug;
+
+  return (
+    typeof id === 'string' &&
+    typeof name === 'object' &&
+    name !== null &&
+    typeof slug === 'object' &&
+    slug !== null
+  );
+}
+
+export function isCategoriesResponse(
+  value: unknown,
+): value is CategoriesResponse {
+  if (
+    typeof value !== 'object' ||
+    value === null ||
+    !('limit' in value) ||
+    !('results' in value)
+  ) {
+    return false;
+  }
+
+  const limit = value.limit;
+  const results = value.results;
+
+  return (
+    typeof limit === 'number' &&
+    Array.isArray(results) &&
+    results.every(isCategory)
   );
 }
