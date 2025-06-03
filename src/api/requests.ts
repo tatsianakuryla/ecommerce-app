@@ -44,10 +44,12 @@ export const authenticateUser = (
   });
 };
 
-export const getProducts = (token: string): Request => {
-  return new Request(PUBLISHED_PRODUCTS_URL, {
+export const getProducts = (token: string, limit = 20, offset = 0): Request => {
+  const url = `${PUBLISHED_PRODUCTS_URL}?limit=${limit}&offset=${offset}`;
+  return new Request(url, {
     headers: {
       Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
     },
   });
 };

@@ -4,6 +4,8 @@ import {
   Grid,
   GridItem,
   Heading,
+  Button,
+  HStack,
   Link as ChakraLink,
   VisuallyHidden,
 } from '@chakra-ui/react';
@@ -25,32 +27,36 @@ export const CatalogPage = () => {
   const { makeRequest } = useMakeRequest();
   const [productsResponse, setProductsResponse] = useState<ProductsResponse>();
 
+  const [page, setPage] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const PRODUCTS_PER_PAGE = 20;
+
   useEffect(() => {
-    if (accessToken == null) return;
+    if (!accessToken) return;
 
     let ignore = false;
-
     const startFetching = async () => {
-      const productsResponse = await makeRequest<ProductsResponse>(
-        getProducts(accessToken),
+      const offset = (page - 1) * PRODUCTS_PER_PAGE;
+      const resp = await makeRequest<ProductsResponse>(
+        getProducts(accessToken, PRODUCTS_PER_PAGE, offset),
         isProductsResponse,
       );
-
-      if (!ignore && productsResponse) {
-        setProductsResponse(productsResponse);
+      if (!ignore && resp) {
+        setProductsResponse(resp);
+        setTotalProducts(resp.total);
       }
     };
-
     void startFetching();
-
     return () => {
       ignore = true;
     };
-  }, [accessToken, makeRequest]);
+  }, [accessToken, makeRequest, page]);
 
   const handleCloseDialog = () => {
     setJustRegistered(false);
   };
+
+  const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
 
   return (
     <Container maxW='container.xl' py='1rem'>
@@ -110,6 +116,28 @@ export const CatalogPage = () => {
                 );
               })}
           </Grid>
+
+          <HStack justify='center' gap={4} mt='1rem'>
+            <Button
+              onClick={() => {
+                setPage((page) => Math.max(1, page - 1));
+              }}
+              disabled={page === 1}
+            >
+              Prev
+            </Button>
+            <Box as='p'>
+              Page {page} of {totalPages}
+            </Box>
+            <Button
+              onClick={() => {
+                setPage((page) => Math.min(totalPages, page + 1));
+              }}
+              disabled={page === totalPages}
+            >
+              Next
+            </Button>
+          </HStack>
         </Box>
       </Box>
 
