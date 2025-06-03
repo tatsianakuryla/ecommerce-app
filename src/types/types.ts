@@ -188,20 +188,20 @@ export interface MasterVariant {
 export interface Product {
   id: string;
   version: number;
-  productType: Reference;
+  productType: unknown;
   name: LocalizedString;
   description: LocalizedString;
-  categories: Reference[];
+  categories: unknown[];
   categoryOrderHints: Record<string, string>;
   slug: LocalizedString;
   masterVariant: MasterVariant;
   variants: unknown[];
   searchKeywords: Record<string, unknown>;
-  attributes: Attribute[];
+  attributes: unknown[];
   hasStagedChanges: boolean;
   published: boolean;
   key: string;
-  taxCategory: Reference;
+  taxCategory: unknown;
   createdAt: string;
   lastModifiedAt: string;
 }

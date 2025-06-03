@@ -160,3 +160,14 @@ export const changePasswordRequest = (
     body,
   });
 };
+
+export const getProductById = (productId: string, token: string): Request => {
+  const url = `${BASE_API_URL}${PROJECT_KEY}/product-projections/${productId}?staged=false`;
+  return new Request(url, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+};
