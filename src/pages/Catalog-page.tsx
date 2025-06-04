@@ -23,7 +23,6 @@ import { ProductsResponse } from '~/types/types';
 import { formatPrice } from '~/utils/helpers';
 import { isProductsResponse } from '~/utils/typeguards';
 import { CategorySidebar } from '~/components/CategorySidebar/CategorySidebar';
-import { FilterSidebar } from '~/components/FilterSidebar/FilterSidebar';
 
 export const CatalogPage = () => {
   const { accessToken, justRegistered, setJustRegistered } = useAuthContext();
@@ -34,10 +33,10 @@ export const CatalogPage = () => {
   const [totalProducts, setTotalProducts] = useState(0);
   const PRODUCTS_PER_PAGE = 20;
 
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [selectedColors, setSelectedColors] = useState<string[]>([]);
-  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
+  // const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  // const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  // const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+  const [priceRange] = useState<[number, number]>([0, 1000]);
 
   const [sortOption, setSortOption] = useState<string>(
     'variants.scopedPrice.value.centAmount asc',
@@ -57,24 +56,24 @@ export const CatalogPage = () => {
 
       const predicates: string[] = [];
 
-      if (selectedBrands.length > 0) {
-        const orExpr = selectedBrands
-          .map((b) => `variants.attributes.brand="${b}"`)
-          .join(' or ');
-        predicates.push(`(${orExpr})`);
-      }
-      if (selectedColors.length > 0) {
-        const orExpr = selectedColors
-          .map((c) => `variants.attributes.color="${c}"`)
-          .join(' or ');
-        predicates.push(`(${orExpr})`);
-      }
-      if (selectedSizes.length > 0) {
-        const orExpr = selectedSizes
-          .map((s) => `variants.attributes.size="${s}"`)
-          .join(' or ');
-        predicates.push(`(${orExpr})`);
-      }
+      // if (selectedBrands.length > 0) {
+      //   const orExpr = selectedBrands
+      //     .map((b) => `variants.attributes.brand="${b}"`)
+      //     .join(' or ');
+      //   predicates.push(`(${orExpr})`);
+      // }
+      // if (selectedColors.length > 0) {
+      //   const orExpr = selectedColors
+      //     .map((c) => `variants.attributes.color="${c}"`)
+      //     .join(' or ');
+      //   predicates.push(`(${orExpr})`);
+      // }
+      // if (selectedSizes.length > 0) {
+      //   const orExpr = selectedSizes
+      //     .map((s) => `variants.attributes.size="${s}"`)
+      //     .join(' or ');
+      //   predicates.push(`(${orExpr})`);
+      // }
 
       {
         const [minPrice, maxPrice] = priceRange;
@@ -113,17 +112,7 @@ export const CatalogPage = () => {
     return () => {
       ignore = true;
     };
-  }, [
-    accessToken,
-    makeRequest,
-    page,
-    selectedBrands,
-    selectedColors,
-    selectedSizes,
-    priceRange,
-    sortOption,
-    searchQuery,
-  ]);
+  }, [accessToken, makeRequest, page, priceRange, sortOption, searchQuery]);
 
   const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
 
@@ -138,18 +127,6 @@ export const CatalogPage = () => {
           <Box flex='0 0 300px' mr='1rem'>
             <Box mb='1rem'>
               <CategorySidebar token={accessToken} locale={locales.UK} />
-            </Box>
-
-            <Box>
-              <FilterSidebar
-                token={accessToken}
-                onFilterChange={({ brands, colors, sizes, priceRange }) => {
-                  setSelectedBrands(brands);
-                  setSelectedColors(colors);
-                  setSelectedSizes(sizes);
-                  setPriceRange(priceRange);
-                }}
-              />
             </Box>
           </Box>
         )}
