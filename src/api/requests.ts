@@ -220,12 +220,10 @@ export const getProducts = (
       url.searchParams.append('sort', s);
     });
   }
+
   if (search && search.trim().length > 0) {
     const realLocale = locales[localeKey];
-    url.searchParams.set(
-      `text.${realLocale}`,
-      encodeURIComponent(search.trim()),
-    );
+    url.searchParams.set(`text.${realLocale}`, search.trim());
   }
 
   if (currency) {
