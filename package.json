@@ -25,6 +25,7 @@
   "dependencies": {
     "@chakra-ui/react": "^3.19.1",
     "@chakra-ui/select": "^2.1.2",
+    "@chakra-ui/slider": "^2.1.0",
     "@emotion/react": "^11.14.0",
     "hamburger-react": "^2.5.2",
     "i18n-iso-countries": "^7.14.0",

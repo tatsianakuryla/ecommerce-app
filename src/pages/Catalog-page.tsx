@@ -8,7 +8,9 @@ import {
   HStack,
   Link as ChakraLink,
   VisuallyHidden,
+  Input,
 } from '@chakra-ui/react';
+import { Select } from '@chakra-ui/select';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getProducts } from '~/api/requests';
@@ -20,7 +22,8 @@ import { useMakeRequest } from '~/hooks/useMakeRequest';
 import { ProductsResponse } from '~/types/types';
 import { formatPrice } from '~/utils/helpers';
 import { isProductsResponse } from '~/utils/typeguards';
-import { CategorySidebar } from '~components/CategorySidebar/CategorySidebar.tsx';
+import { CategorySidebar } from '~/components/CategorySidebar/CategorySidebar';
+import { FilterSidebar } from '~/components/FilterSidebar/FilterSidebar';
 
 export const CatalogPage = () => {
   const { accessToken, justRegistered, setJustRegistered } = useAuthContext();
@@ -31,30 +34,96 @@ export const CatalogPage = () => {
   const [totalProducts, setTotalProducts] = useState(0);
   const PRODUCTS_PER_PAGE = 20;
 
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
+
+  const [sortOption, setSortOption] = useState<string>(
+    'variants.scopedPrice.value.centAmount asc',
+  );
+  const [searchQuery, setSearchQuery] = useState<string>('');
+
+  const handleCloseDialog = () => {
+    setJustRegistered(false);
+  };
+
   useEffect(() => {
     if (!accessToken) return;
-
     let ignore = false;
+
     const startFetching = async () => {
       const offset = (page - 1) * PRODUCTS_PER_PAGE;
+
+      const predicates: string[] = [];
+
+      if (selectedBrands.length > 0) {
+        const orExpr = selectedBrands
+          .map((b) => `variants.attributes.brand="${b}"`)
+          .join(' or ');
+        predicates.push(`(${orExpr})`);
+      }
+      if (selectedColors.length > 0) {
+        const orExpr = selectedColors
+          .map((c) => `variants.attributes.color="${c}"`)
+          .join(' or ');
+        predicates.push(`(${orExpr})`);
+      }
+      if (selectedSizes.length > 0) {
+        const orExpr = selectedSizes
+          .map((s) => `variants.attributes.size="${s}"`)
+          .join(' or ');
+        predicates.push(`(${orExpr})`);
+      }
+
+      {
+        const [minPrice, maxPrice] = priceRange;
+        predicates.push(
+          `variants.scopedPrice.value.centAmount >= ${minPrice * 100} and variants.scopedPrice.value.centAmount <= ${maxPrice * 100}`,
+        );
+      }
+
+      const sortArray = [sortOption];
+
+      const searchText =
+        searchQuery.trim().length > 0 ? searchQuery.trim() : undefined;
+
       const resp = await makeRequest<ProductsResponse>(
-        getProducts(accessToken, PRODUCTS_PER_PAGE, offset),
+        getProducts(
+          accessToken,
+          PRODUCTS_PER_PAGE,
+          offset,
+          predicates,
+          sortArray,
+          searchText,
+          'UK',
+          'EUR',
+          'DE',
+        ),
         isProductsResponse,
       );
+
       if (!ignore && resp) {
         setProductsResponse(resp);
         setTotalProducts(resp.total);
       }
     };
+
     void startFetching();
     return () => {
       ignore = true;
     };
-  }, [accessToken, makeRequest, page]);
-
-  const handleCloseDialog = () => {
-    setJustRegistered(false);
-  };
+  }, [
+    accessToken,
+    makeRequest,
+    page,
+    selectedBrands,
+    selectedColors,
+    selectedSizes,
+    priceRange,
+    sortOption,
+    searchQuery,
+  ]);
 
   const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
 
@@ -66,12 +135,53 @@ export const CatalogPage = () => {
 
       <Box display='flex' alignItems='flex-start'>
         {accessToken && (
-          <Box flex='0 0 250px' mr='1rem'>
-            <CategorySidebar token={accessToken} locale={locales.UK} />
+          <Box flex='0 0 300px' mr='1rem'>
+            <Box mb='1rem'>
+              <CategorySidebar token={accessToken} locale={locales.UK} />
+            </Box>
+
+            <Box>
+              <FilterSidebar
+                token={accessToken}
+                onFilterChange={({ brands, colors, sizes, priceRange }) => {
+                  setSelectedBrands(brands);
+                  setSelectedColors(colors);
+                  setSelectedSizes(sizes);
+                  setPriceRange(priceRange);
+                }}
+              />
+            </Box>
           </Box>
         )}
 
         <Box flex='1'>
+          <HStack mb='1rem' gap={4} alignItems='center'>
+            <Input
+              placeholder='Search products…'
+              value={searchQuery}
+              onChange={(event) => {
+                setSearchQuery(event.target.value);
+              }}
+              width='250px'
+            />
+            <Select
+              value={sortOption}
+              onChange={(event) => {
+                setSortOption(event.target.value);
+              }}
+              maxW='200px'
+            >
+              <option value='variants.scopedPrice.value.centAmount asc'>
+                Price: Low → High
+              </option>
+              <option value='variants.scopedPrice.value.centAmount desc'>
+                Price: High → Low
+              </option>
+              <option value='name.en-GB asc'>Name: A → Z</option>
+              <option value='name.en-GB desc'>Name: Z → A</option>
+            </Select>
+          </HStack>
+
           <Grid
             templateColumns='repeat(auto-fit, minmax(250px, 1fr))'
             gap='1rem'
@@ -120,7 +230,7 @@ export const CatalogPage = () => {
           <HStack justify='center' gap={4} mt='1rem'>
             <Button
               onClick={() => {
-                setPage((page) => Math.max(1, page - 1));
+                setPage((p) => Math.max(1, p - 1));
               }}
               disabled={page === 1}
             >
@@ -131,7 +241,7 @@ export const CatalogPage = () => {
             </Box>
             <Button
               onClick={() => {
-                setPage((page) => Math.min(totalPages, page + 1));
+                setPage((p) => Math.min(totalPages, p + 1));
               }}
               disabled={page === totalPages}
             >

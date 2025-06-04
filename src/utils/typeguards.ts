@@ -7,6 +7,7 @@ import {
   Product,
   Category,
   CategoriesResponse,
+  CTFacetResponse,
 } from '~types/types';
 
 export const isAuthResponse = (data: unknown): data is AuthResponse => {
@@ -340,4 +341,11 @@ export function isCategoriesResponse(
     Array.isArray(results) &&
     results.every(isCategory)
   );
+}
+
+export function isCTFacetResponse(body: unknown): body is CTFacetResponse {
+  if (typeof body !== 'object' || body === null) return false;
+  if (!('facets' in body)) return false;
+  const facets = body.facets;
+  return typeof facets === 'object' && facets !== null;
 }

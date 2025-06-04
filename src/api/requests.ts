@@ -44,16 +44,6 @@ export const authenticateUser = (
   });
 };
 
-export const getProducts = (token: string, limit = 20, offset = 0): Request => {
-  const url = `${PUBLISHED_PRODUCTS_URL}?limit=${limit}&offset=${offset}`;
-  return new Request(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
-};
-
 export const generateAnonymousToken = (): Request => {
   const body = new URLSearchParams({
     grant_type: 'client_credentials',
@@ -199,6 +189,81 @@ export const getProductsByCategory = (
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
+export const getProducts = (
+  token: string,
+  limit = 20,
+  offset = 0,
+  predicates?: string[],
+  sort?: string[],
+  search?: string,
+  localeKey: keyof ILocales = 'UK',
+  currency?: string,
+  country?: string,
+): Request => {
+  const url = new URL(`${PUBLISHED_PRODUCTS_URL}/search`);
+
+  url.searchParams.set('limit', String(limit));
+  url.searchParams.set('offset', String(offset));
+
+  if (predicates && predicates.length > 0) {
+    predicates.forEach((p) => {
+      url.searchParams.append('where', p);
+    });
+  }
+  if (sort && sort.length > 0) {
+    sort.forEach((s) => {
+      url.searchParams.append('sort', s);
+    });
+  }
+  if (search && search.trim().length > 0) {
+    const realLocale = locales[localeKey];
+    url.searchParams.set(
+      `text.${realLocale}`,
+      encodeURIComponent(search.trim()),
+    );
+  }
+
+  if (currency) {
+    url.searchParams.set('priceCurrency', currency);
+  }
+  if (country) {
+    url.searchParams.set('priceCountry', country);
+  }
+
+  url.searchParams.set('staged', 'false');
+
+  console.log('▶▶▶ Commercetools GET URL:', url.toString());
+
+  return new Request(url.toString(), {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
+export const getFilterValues = (
+  token: string,
+  attributeName: string,
+): Request => {
+  const url = new URL(`${PUBLISHED_PRODUCTS_URL}/search`);
+
+  url.searchParams.set('facet', `variants.attributes.${attributeName}`);
+  url.searchParams.set('limit', '0');
+  url.searchParams.set('staged', 'false');
+
+  return new Request(url.toString(), {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
       'Content-Type': 'application/json',
     },
   });
