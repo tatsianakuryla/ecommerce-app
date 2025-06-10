@@ -13,10 +13,12 @@ import { RedirectIfAuth } from '~components/Protected-route/Protected-route';
 import { RequireAuth } from '~components/Protected-route/RequireAuth';
 import { CatalogPage } from '~pages/Catalog-page';
 import { ProductPage } from '~pages/Product-page';
+import { CategoryPage } from '~pages/Category-page.tsx';
 
 export const routes = createRoutesFromElements(
   <Route path='/' element={<RootLayout />}>
     <Route index element={<CatalogPage />} />
+    <Route path='catalog/category/:categoryId' element={<CategoryPage />} />
     <Route path='about' element={<AboutPage />} />
     <Route path='catalog/:productId' element={<ProductPage />} />
     <Route element={<RequireAuth />}>
