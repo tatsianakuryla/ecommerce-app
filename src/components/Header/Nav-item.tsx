@@ -6,6 +6,7 @@ import {
   FiUserPlus,
   FiUser,
   FiBookOpen,
+  FiShoppingCart,
 } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
 
@@ -31,6 +32,8 @@ export default function NavItem({
       <FiUser />
     ) : to === '/' ? (
       <FiBookOpen />
+    ) : to === '/basket' ? (
+      <FiShoppingCart />
     ) : null;
 
   const baseLinkStyle = {
