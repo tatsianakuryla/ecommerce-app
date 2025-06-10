@@ -55,3 +55,21 @@ export const locales: ILocales = {
   EN: 'en-US',
   UK: 'en-GB',
 } as const;
+
+export const defaultAddressInfo = {
+  id: '',
+  streetName: '',
+  city: '',
+  postalCode: '',
+  country: '',
+};
+
+export const defaultUserInfo = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+  dateOfBirth: '',
+};
+
+export const defaultAddressIndex = -1;
