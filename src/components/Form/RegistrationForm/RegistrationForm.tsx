@@ -25,6 +25,11 @@ import { useAuthContext } from '~hooks/useAuthContext';
 import { AddressForm } from '~components/Form/AddressForm/AddressForm';
 import { Button } from '@chakra-ui/react';
 import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert';
+import {
+  defaultAddressIndex,
+  defaultAddressInfo,
+  defaultUserInfo,
+} from '~constants/constants.ts';
 
 export function RegistrationForm() {
   const { register, error, setError, loading } = useAuthContext();
@@ -34,29 +39,10 @@ export function RegistrationForm() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isAddedBillingAddress, setIsAddedBillingAddress] = useState(false);
   const [data, setData] = useState<RegistrationData>({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    dateOfBirth: '',
-    addresses: [
-      {
-        id: '',
-        streetName: '',
-        city: '',
-        postalCode: '',
-        country: '',
-      },
-      {
-        id: '',
-        streetName: '',
-        city: '',
-        postalCode: '',
-        country: '',
-      },
-    ],
-    defaultShippingAddress: -1,
-    defaultBillingAddress: -1,
+    ...defaultUserInfo,
+    addresses: [defaultAddressInfo, defaultAddressInfo],
+    defaultShippingAddress: defaultAddressIndex,
+    defaultBillingAddress: defaultAddressIndex,
   });
 
   useEffect(() => {
@@ -110,7 +96,7 @@ export function RegistrationForm() {
 
   const handleDefaultShippingAddress = () => {
     setData((previous) => {
-      if (previous.defaultShippingAddress === -1) {
+      if (previous.defaultShippingAddress === defaultAddressIndex) {
         return {
           ...previous,
           defaultShippingAddress: 0,
@@ -118,7 +104,7 @@ export function RegistrationForm() {
       } else {
         return {
           ...previous,
-          defaultShippingAddress: -1,
+          defaultShippingAddress: defaultAddressIndex,
         };
       }
     });
@@ -126,7 +112,7 @@ export function RegistrationForm() {
 
   const handleDefaultBillingAddress = () => {
     setData((previous) => {
-      if (previous.defaultBillingAddress === -1) {
+      if (previous.defaultBillingAddress === defaultAddressIndex) {
         return {
           ...previous,
           defaultBillingAddress: 1,
@@ -134,7 +120,7 @@ export function RegistrationForm() {
       } else {
         return {
           ...previous,
-          defaultBillingAddress: -1,
+          defaultBillingAddress: defaultAddressIndex,
         };
       }
     });

@@ -34,7 +34,8 @@ export function AddressForm({
   handleDefaultShippingAddress,
   handleDefaultBillingAddress,
 }: AddressFormProperties) {
-  const prefix = addressType === 'shipping' ? 'shipping' : 'billing';
+  const isShippingAddress = addressType === 'shipping';
+  const prefix = isShippingAddress ? 'shipping' : 'billing';
   const addressesFields: FormField[] = [
     {
       name: 'streetName',
@@ -95,10 +96,9 @@ export function AddressForm({
       error: fieldError[`${prefix}Country`],
     },
   ];
-  const handleDefaultAddress =
-    addressType === 'shipping'
-      ? handleDefaultShippingAddress
-      : handleDefaultBillingAddress;
+  const handleDefaultAddress = isShippingAddress
+    ? handleDefaultShippingAddress
+    : handleDefaultBillingAddress;
 
   return (
     <>
@@ -170,7 +170,7 @@ export function AddressForm({
         <Checkbox.HiddenInput />
         <Checkbox.Control />
         <Checkbox.Label>
-          {addressType === 'shipping'
+          {isShippingAddress
             ? 'Select the shipping address as default'
             : 'Select the billing address as default'}
         </Checkbox.Label>
