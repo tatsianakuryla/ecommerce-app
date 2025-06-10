@@ -32,10 +32,6 @@ export const CatalogPage = () => {
   const [page, setPage] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
   const PRODUCTS_PER_PAGE = 20;
-
-  // const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  // const [selectedColors, setSelectedColors] = useState<string[]>([]);
-  // const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [priceRange] = useState<[number, number]>([0, 1000]);
 
   const [sortOption, setSortOption] = useState<string>(
@@ -55,25 +51,6 @@ export const CatalogPage = () => {
       const offset = (page - 1) * PRODUCTS_PER_PAGE;
 
       const predicates: string[] = [];
-
-      // if (selectedBrands.length > 0) {
-      //   const orExpr = selectedBrands
-      //     .map((b) => `variants.attributes.brand="${b}"`)
-      //     .join(' or ');
-      //   predicates.push(`(${orExpr})`);
-      // }
-      // if (selectedColors.length > 0) {
-      //   const orExpr = selectedColors
-      //     .map((c) => `variants.attributes.color="${c}"`)
-      //     .join(' or ');
-      //   predicates.push(`(${orExpr})`);
-      // }
-      // if (selectedSizes.length > 0) {
-      //   const orExpr = selectedSizes
-      //     .map((s) => `variants.attributes.size="${s}"`)
-      //     .join(' or ');
-      //   predicates.push(`(${orExpr})`);
-      // }
 
       {
         const [minPrice, maxPrice] = priceRange;
