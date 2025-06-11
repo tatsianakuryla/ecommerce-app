@@ -7,7 +7,8 @@ import {
   Product,
   Category,
   CategoriesResponse,
-  CTFacetResponse,
+  CartItem,
+  State,
 } from '~types/types';
 
 export const isAuthResponse = (data: unknown): data is AuthResponse => {
@@ -343,9 +344,27 @@ export function isCategoriesResponse(
   );
 }
 
-export function isCTFacetResponse(body: unknown): body is CTFacetResponse {
-  if (typeof body !== 'object' || body === null) return false;
-  if (!('facets' in body)) return false;
-  const facets = body.facets;
-  return typeof facets === 'object' && facets !== null;
+function isCartItem(object: unknown): object is CartItem {
+  if (typeof object !== 'object' || object === null) {
+    return false;
+  }
+  return (
+    'id' in object &&
+    typeof object.id === 'string' &&
+    'quantity' in object &&
+    typeof object.quantity === 'number'
+  );
+}
+
+export function isState(object: unknown): object is State {
+  if (
+    typeof object !== 'object' ||
+    object === null ||
+    !('items' in object) ||
+    !Array.isArray(object.items)
+  ) {
+    return false;
+  }
+  const array = object.items;
+  return array.every(isCartItem);
 }
