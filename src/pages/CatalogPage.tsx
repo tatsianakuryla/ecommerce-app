@@ -156,9 +156,9 @@ export const CatalogPage = () => {
             </HStack>
 
             <Grid
-              templateColumns='repeat(auto-fit, minmax(250px, 1fr))'
-              gap='1rem'
-              justifyItems='center'
+              templateColumns='repeat(auto-fill, minmax(300px, 300px))'
+              gap={6}
+              justifyContent='center'
             >
               {productsResponse?.results.map((product) => {
                 const price = product.masterVariant.prices[0].value.centAmount;
@@ -183,6 +183,8 @@ export const CatalogPage = () => {
                         display='flex'
                         height='100%'
                         flexDirection='column'
+                        w='100%'
+                        maxW='300px'
                       >
                         <ProductCard
                           id={product.id}

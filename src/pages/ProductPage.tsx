@@ -11,7 +11,7 @@ import {
 import { useParams } from 'react-router-dom';
 import { getLocalizedString, useProduct } from '~/hooks/useProduct';
 import { ImageSlider } from '~/components/ImageSlider/ImageSlider';
-import { AddToCartButton } from '~components/AddToCartButton/AddToCartButton';
+import { AddRemoveItemButton } from '~components/AddRemoveItemButton/AddRemoveItemButton.tsx';
 
 export const ProductPage = () => {
   const { productId } = useParams<{ productId: string }>();
@@ -121,7 +121,7 @@ export const ProductPage = () => {
           </HStack>
 
           <HStack gap={4}>
-            <AddToCartButton productId={productId} />
+            <AddRemoveItemButton productId={productId} />
           </HStack>
         </VStack>
       </Grid>
