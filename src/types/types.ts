@@ -419,27 +419,6 @@ export interface CategoriesResponse {
   results: Category[];
 }
 
-export interface FilterSidebarProperties {
-  token: string;
-  onFilterChange: (filters: {
-    brands: string[];
-    colors: string[];
-    sizes: string[];
-    priceRange: [number, number];
-  }) => void;
-}
-
-export interface CTFacetResponse {
-  facets: {
-    [facetKey: string]: {
-      terms: Array<{
-        term: string;
-        count: number;
-      }>;
-    };
-  };
-}
-
 export type Action =
   | { type: 'ADD_ITEM'; payload: CartItem }
   | { type: 'REMOVE_ITEM'; payload: { id: string } }
