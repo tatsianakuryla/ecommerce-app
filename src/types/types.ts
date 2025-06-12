@@ -440,8 +440,6 @@ export interface CTFacetResponse {
   };
 }
 
-type CartItem = { id: string; quantity: number /* ... */ };
-export type State = { items: CartItem[] };
 export type Action =
   | { type: 'ADD_ITEM'; payload: CartItem }
   | { type: 'REMOVE_ITEM'; payload: { id: string } }
@@ -450,4 +448,26 @@ export type Action =
 export interface CartContextValue extends State {
   dispatch: React.Dispatch<Action>;
   totalCount: number;
+}
+
+export type State = { items: CartItem[] };
+
+export type CartItem = {
+  id: string;
+  quantity: number;
+};
+
+export interface AddToCartButtonProperties {
+  productId: string;
+  quantity?: number;
+}
+
+export interface ProductCardProperties {
+  id: string;
+  name: string;
+  description: string;
+  img: string;
+  alt: string;
+  price: string;
+  discount?: string;
 }

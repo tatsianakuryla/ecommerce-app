@@ -15,7 +15,7 @@ import {
   linkStyles,
   loginLinkStyle,
   registerLinkStyle,
-} from '~/styles/style.ts';
+} from '~/styles/style';
 
 export default function NavItem({
   label,

@@ -1,55 +1,40 @@
-import { Button, Card, Flex, Image, Text } from '@chakra-ui/react';
-import { productCardStyles } from '~/styles/style.ts';
+import { Card, Flex, Image, Text } from '@chakra-ui/react';
+import { productCardStyles, productCardTextStyle } from '~/styles/style';
+import { AddToCartButton } from '~components/AddToCartButton/AddToCartButton';
+import { ProductCardProperties } from '~types/types';
 
 export const ProductCard = ({
+  id,
   name,
   description,
   img,
   alt,
   price,
   discount,
-}: Record<string, string>) => {
+}: ProductCardProperties) => {
   return (
     <Card.Root {...productCardStyles}>
-      <Image src={img} alt={alt} h='240px' />
-      <Card.Body gap='0.2'>
-        <Card.Title>{name}</Card.Title>
+      <Image src={img} alt={alt} h='240px' objectFit='contain' />
+      <Card.Body flexGrow='1' gap='0.2'>
+        <Card.Title flexGrow='1'>{name}</Card.Title>
         <Card.Description lineClamp={2}>{description}</Card.Description>
         {discount ? (
           <Flex gap='3'>
-            <Text
-              textStyle='2xl'
-              fontWeight='medium'
-              letterSpacing='tight'
-              mt='2'
-              textDecor='line-through'
-            >
+            <Text {...productCardTextStyle} textDecor='line-through'>
               {price}
             </Text>
-            <Text
-              textStyle='2xl'
-              fontWeight='medium'
-              letterSpacing='tight'
-              mt='2'
-              color='red.500'
-            >
+            <Text {...productCardTextStyle} color='red.500'>
               {discount}
             </Text>
           </Flex>
         ) : (
-          <Text
-            textStyle='2xl'
-            fontWeight='medium'
-            letterSpacing='tight'
-            mt='2'
-          >
+          <Text {...productCardTextStyle} mt='2'>
             {price}
           </Text>
         )}
       </Card.Body>
-      <Card.Footer gap='0.2'>
-        <Button variant='solid'>Buy now</Button>
-        <Button variant='ghost'>Add to cart</Button>
+      <Card.Footer gap='0.2' mt='auto'>
+        <AddToCartButton productId={id} />
       </Card.Footer>
     </Card.Root>
   );

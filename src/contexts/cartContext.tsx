@@ -1,11 +1,20 @@
-import { createContext, useContext, useReducer, ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useReducer,
+  ReactNode,
+  useEffect,
+} from 'react';
 import { Action, CartContextValue, State } from '~types/types.ts';
+import { isState } from '~utils/typeguards.ts';
+
+const STORAGE_KEY = 'cart';
 
 const initialState: State = { items: [] };
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case 'ADD_ITEM':
+    case 'ADD_ITEM': {
       const exists = state.items.find(
         (index) => index.id === action.payload.id,
       );
@@ -19,6 +28,7 @@ function reducer(state: State, action: Action): State {
         };
       }
       return { items: [...state.items, action.payload] };
+    }
     case 'REMOVE_ITEM':
       return {
         items: state.items.filter((index) => index.id !== action.payload.id),
@@ -30,10 +40,38 @@ function reducer(state: State, action: Action): State {
   }
 }
 
+function init(): State {
+  if (typeof window === 'undefined') {
+    return initialState;
+  }
+
+  const stored = window.localStorage.getItem(STORAGE_KEY);
+  if (stored === null) {
+    return initialState;
+  }
+
+  try {
+    const raw: unknown = JSON.parse(stored);
+    if (isState(raw)) {
+      return raw;
+    }
+    return initialState;
+  } catch {
+    return initialState;
+  }
+}
+
 const CartContext = createContext<CartContextValue | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState, init);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+  }, [state]);
+
   const totalCount = state.items.reduce(
     (sum, index) => sum + index.quantity,
     0,

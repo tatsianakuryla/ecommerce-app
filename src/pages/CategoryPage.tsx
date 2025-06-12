@@ -155,6 +155,7 @@ export const CategoryPage = () => {
                         _hover={{ bg: 'gray.50' }}
                       >
                         <ProductCard
+                          id={product.id}
                           discount={
                             discountedPrice
                               ? formatPrice(discountedPrice, currency, locale)

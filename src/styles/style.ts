@@ -98,9 +98,13 @@ export const profileBoxStyle = {
 };
 
 export const productCardStyles = {
+  display: 'flex',
+  flexGrow: '1',
+  flexDirection: 'column',
+  height: '100%',
+  minH: '420px',
   maxW: 'sm',
   overflow: 'hidden',
-  height: '100%',
   borderRadius: '2xl',
   boxShadow: 'sm',
   transition: 'all 0.3s ease-in-out',
@@ -190,4 +194,11 @@ export const registerLinkStyle = {
   _activeLink: {
     bg: 'teal.700',
   },
+};
+
+export const productCardTextStyle = {
+  textStyle: '2xl',
+  fontWeight: 'medium',
+  letterSpacing: 'tight',
+  mt: '2',
 };

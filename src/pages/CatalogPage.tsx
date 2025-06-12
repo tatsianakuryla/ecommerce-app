@@ -64,7 +64,7 @@ export const CatalogPage = () => {
       const searchText =
         searchQuery.trim().length > 0 ? searchQuery.trim() : undefined;
 
-      const resp = await makeRequest<ProductsResponse>(
+      const response = await makeRequest<ProductsResponse>(
         getProducts(
           accessToken,
           PRODUCTS_PER_PAGE,
@@ -79,9 +79,9 @@ export const CatalogPage = () => {
         isProductsResponse,
       );
 
-      if (!ignore && resp) {
-        setProductsResponse(resp);
-        setTotalProducts(resp.total);
+      if (!ignore && response) {
+        setProductsResponse(response);
+        setTotalProducts(response.total);
       }
     };
 
@@ -161,8 +161,14 @@ export const CatalogPage = () => {
                     _hover={{ bg: 'gray.50' }}
                   >
                     <Link to={`/catalog/${product.id}`}>
-                      <GridItem>
+                      <GridItem
+                        display='flex'
+                        key={product.id}
+                        height='100%'
+                        flexDirection='column'
+                      >
                         <ProductCard
+                          id={product.id}
                           discount={
                             discountedPrice
                               ? formatPrice(discountedPrice, currency, locale)
@@ -184,7 +190,7 @@ export const CatalogPage = () => {
           <HStack justify='center' gap={4} mt='1rem'>
             <Button
               onClick={() => {
-                setPage((p) => Math.max(1, p - 1));
+                setPage((page) => Math.max(1, page - 1));
               }}
               disabled={page === 1}
             >
@@ -195,7 +201,7 @@ export const CatalogPage = () => {
             </Box>
             <Button
               onClick={() => {
-                setPage((p) => Math.min(totalPages, p + 1));
+                setPage((page) => Math.min(totalPages, page + 1));
               }}
               disabled={page === totalPages}
             >
