@@ -1,5 +1,5 @@
 import { CloseButton, Dialog, Portal } from '@chakra-ui/react';
-interface JustRegisteredDialogProps {
+interface JustRegisteredDialogProperties {
   title: string;
   description: string;
   handleCloseDialog: () => void;
@@ -9,7 +9,7 @@ export const JustRegisteredDialog = ({
   title,
   description,
   handleCloseDialog,
-}: JustRegisteredDialogProps) => {
+}: JustRegisteredDialogProperties) => {
   return (
     <Dialog.Root open={true} onOpenChange={handleCloseDialog}>
       <Portal>

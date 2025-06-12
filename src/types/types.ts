@@ -1,4 +1,4 @@
-import { permissions } from '~constants/constants';
+import { locales } from '~constants/constants';
 
 export enum PermissionLevel {
   FULL = 'all',
@@ -7,12 +7,11 @@ export enum PermissionLevel {
   GUEST = 'guest',
 }
 
-export type Permissions = typeof permissions;
-
 export interface Address {
-  street: string;
-  city: string;
+  id: string;
+  streetName: string;
   postalCode: string;
+  city: string;
   country: string;
 }
 
@@ -22,7 +21,9 @@ export interface RegistrationData {
   firstName: string;
   lastName: string;
   dateOfBirth: string;
-  address: Address;
+  addresses: Address[];
+  defaultShippingAddress?: -1 | 0;
+  defaultBillingAddress?: -1 | 1;
 }
 
 export interface AuthResponse {
@@ -55,6 +56,19 @@ export interface AuthContextValue {
   loading: boolean;
   error: string | null;
   justRegistered: boolean;
+  updateProfile: (
+    customerId: string,
+    version: number,
+    actions: CustomerUpdateAction[],
+  ) => Promise<Customer | undefined>;
+  customer: Customer | null;
+  setCustomer: (customer: Customer | null) => void;
+  updatePassword: (
+    customerId: string,
+    version: number,
+    currentPassword: string,
+    newPassword: string,
+  ) => Promise<void>;
 }
 
 export interface MenuItem {
@@ -76,22 +90,23 @@ export interface FormField {
 export type FieldKey =
   | keyof RegistrationData
   | 'confirmPassword'
-  | 'street'
-  | 'city'
-  | 'postalCode'
-  | 'country';
+  | 'billingStreet'
+  | 'billingCity'
+  | 'billingPostalCode'
+  | 'billingCountry'
+  | 'shippingStreet'
+  | 'shippingCity'
+  | 'shippingPostalCode'
+  | 'shippingCountry';
 
-export interface FormProps {
+export interface FormProperties {
   id: string;
   fields: FormField[];
-  onSubmit: (e: React.FormEvent) => void;
+  onSubmit: (event: React.FormEvent) => void;
   loading?: boolean;
   submitLabel?: string;
   nonFieldError?: string | null;
-}
-
-export interface LocalizedString {
-  [locale: string]: string;
+  children?: React.ReactNode;
 }
 
 export interface Reference {
@@ -99,17 +114,34 @@ export interface Reference {
   id: string;
 }
 
+export interface ILocales {
+  DE: 'de-DE';
+  EN: 'en-US';
+  UK: 'en-GB';
+}
+
+type LocaleKey = keyof typeof locales;
+export type Locale = ILocales[keyof ILocales];
+export type LocalizedString = Record<Locale, string>;
+
 export interface Price {
   id: string;
   value: {
-    type: string;
+    type: 'centPrecision';
     currencyCode: string;
     centAmount: number;
     fractionDigits: number;
   };
   key: string;
-  country: string;
+  country: LocaleKey;
   channel?: Reference;
+  discounted?: {
+    value: Price['value'];
+    discount: {
+      typeId: 'product-discount';
+      id: string;
+    };
+  };
 }
 
 export interface Image {
@@ -122,7 +154,7 @@ export interface Image {
 
 export interface Attribute {
   name: string;
-  value: LocalizedString | string;
+  value: Locale;
 }
 
 export interface AvailabilityChannel {
@@ -156,20 +188,20 @@ export interface MasterVariant {
 export interface Product {
   id: string;
   version: number;
-  productType: Reference;
+  productType: unknown;
   name: LocalizedString;
   description: LocalizedString;
-  categories: Reference[];
+  categories: unknown[];
   categoryOrderHints: Record<string, string>;
   slug: LocalizedString;
   masterVariant: MasterVariant;
   variants: unknown[];
   searchKeywords: Record<string, unknown>;
-  attributes: Attribute[];
+  attributes: unknown[];
   hasStagedChanges: boolean;
   published: boolean;
   key: string;
-  taxCategory: Reference;
+  taxCategory: unknown;
   createdAt: string;
   lastModifiedAt: string;
 }
@@ -182,34 +214,228 @@ export interface ProductsResponse {
   results: Product[];
 }
 
+export interface CustomFields {
+  type: Reference;
+  fields: Record<string, unknown>;
+}
+
+export interface Customer {
+  id: string;
+  version: number;
+  createdAt: string;
+  lastModifiedAt: string;
+  lastMessageSequenceNumber: number;
+  createdBy: {
+    clientId?: string;
+    isPlatformClient: boolean;
+    anonymousId?: string;
+  };
+  lastModifiedBy: {
+    clientId?: string;
+    isPlatformClient: boolean;
+    anonymousId?: string;
+  };
+
+  customerNumber: string;
+  email: string;
+  password?: never;
+  firstName?: string;
+  lastName?: string;
+  middleName?: string;
+  title?: string;
+  dateOfBirth?: string;
+  companyName?: string;
+  vatId?: string;
+  addresses: Address[];
+  defaultShippingAddressId?: string;
+  defaultBillingAddressId?: string;
+  shippingAddressIds: string[];
+  billingAddressIds: string[];
+  isEmailVerified: boolean;
+  customerGroup?: Reference;
+  customerGroupAssignments: Array<{
+    customerGroup: Reference;
+  }>;
+  stores: Reference[];
+  authenticationMode?: string;
+  locale?: string;
+  custom?: CustomFields;
+}
+
 export interface CustomerResponse {
-  customer: {
-    id: string;
-    version: number;
-    versionModifiedAt: string;
-    lastMessageSequenceNumber: number;
-    createdAt: string;
-    lastModifiedAt: string;
-    lastModifiedBy: {
-      clientId: string;
-      isPlatformClient: boolean;
-      anonymousId: string;
-    };
-    createdBy: {
-      clientId: string;
-      isPlatformClient: boolean;
-      anonymousId: string;
-    };
+  customer: Customer;
+}
+
+export interface CustomerDraft {
+  email: string;
+  password: string;
+
+  firstName?: string;
+  lastName?: string;
+  middleName?: string;
+  title?: string;
+  dateOfBirth?: string;
+  companyName?: string;
+  vatId?: string;
+
+  addresses?: AddressDraft[];
+
+  defaultShippingAddress?: number;
+  defaultBillingAddress?: number;
+
+  shippingAddressIds?: number[];
+  billingAddressIds?: number[];
+}
+
+export interface AddressDraft {
+  id?: string;
+  key?: string;
+  title?: string;
+  salutation?: string;
+  firstName?: string;
+  lastName?: string;
+
+  streetName: string;
+  additionalStreetInfo?: string;
+  postalCode?: string;
+  city: string;
+  region?: string;
+  state?: string;
+  country: string;
+
+  company?: string;
+  department?: string;
+  building?: string;
+  apartment?: string;
+  pOBox?: string;
+  phone?: string;
+  mobile?: string;
+  email?: string;
+  fax?: string;
+  externalId?: string;
+}
+
+export type CustomerUpdateAction =
+  | { action: 'setFirstName'; firstName: string }
+  | { action: 'setLastName'; lastName: string }
+  | { action: 'setDateOfBirth'; dateOfBirth: string }
+  | { action: 'changeEmail'; email: string }
+  | { action: 'changeAddress'; addressId: string; address: AddressDraft }
+  | { action: 'addAddress'; address: AddressDraft }
+  | { action: 'removeAddress'; addressId: string }
+  | { action: 'setDefaultShippingAddress'; addressId: string }
+  | { action: 'setDefaultBillingAddress'; addressId: string };
+
+type AddressType = 'shipping' | 'billing';
+
+export interface AddressFormProperties {
+  addressType: AddressType;
+  data: Address;
+  setData: (address: Address) => void;
+  fieldError: Partial<Record<FieldKey, string>>;
+  setFieldError: React.Dispatch<
+    React.SetStateAction<Partial<Record<FieldKey, string>>>
+  >;
+  handleDefaultShippingAddress?: () => void;
+  handleDefaultBillingAddress?: () => void;
+}
+
+export interface AddressError {
+  streetName: string;
+  city: string;
+  postalCode: string;
+  country: string;
+}
+
+export interface PersonalInfoProperties {
+  isEditing: boolean;
+  editData: {
     email: string;
     firstName: string;
     lastName: string;
-    password: string;
-    addresses: [];
-    shippingAddressIds: string[];
-    billingAddressIds: string[];
-    isEmailVerified: boolean;
-    customerGroupAssignments: [];
-    stores: [];
-    authenticationMode: string;
+    dateOfBirth: string;
+  };
+  errors: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+  };
+  profileData: {
+    email: string;
+    firstName?: string;
+    lastName?: string;
+    dateOfBirth?: string;
+  };
+  onEmailChange: (newValue: string) => void;
+  onFirstNameChange: (newValue: string) => void;
+  onLastNameChange: (newValue: string) => void;
+  onDateOfBirthChange: (newValue: string) => void;
+  onToggleEdit: () => void;
+  onSave: () => void;
+  hasErrors: boolean;
+}
+
+export interface AddressesProperties {
+  addresses: Address[];
+  addressEdits: Address[];
+  addressErrors: AddressError[];
+  defaultShipIndex?: number;
+  defaultBillIndex?: number;
+  isEditing: boolean;
+  onAddressFieldChange: (
+    index: number,
+    field: keyof AddressError,
+    value: string,
+  ) => void;
+  onSetDefaultShip: (index: number) => void;
+  onSetDefaultBill: (index: number) => void;
+  onDeleteAddress: (indexToDelete: number) => void;
+}
+
+export interface Category {
+  id: string;
+  version: number;
+  createdAt: string;
+  lastModifiedAt: string;
+  name: LocalizedString;
+  slug: LocalizedString;
+  ancestors: Array<{
+    typeId: 'category';
+    id: string;
+  }>;
+  parent?: {
+    typeId: 'category';
+    id: string;
+  };
+  orderHint?: string;
+}
+
+export interface CategoriesResponse {
+  limit: number;
+  offset: number;
+  count: number;
+  total: number;
+  results: Category[];
+}
+
+export interface FilterSidebarProperties {
+  token: string;
+  onFilterChange: (filters: {
+    brands: string[];
+    colors: string[];
+    sizes: string[];
+    priceRange: [number, number];
+  }) => void;
+}
+
+export interface CTFacetResponse {
+  facets: {
+    [facetKey: string]: {
+      terms: Array<{
+        term: string;
+        count: number;
+      }>;
+    };
   };
 }
