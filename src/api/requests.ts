@@ -212,7 +212,18 @@ export const getProducts = (
 
   if (predicates && predicates.length > 0) {
     predicates.forEach((p) => {
-      url.searchParams.append('where', p);
+      if (p.includes('text.') || p.includes('categories.id:')) {
+        url.searchParams.append('filter.query', p);
+      } else {
+        const m = p.match(/>=\s*(\d+).*<=\s*(\d+)/);
+        if (m) {
+          const [, min, max] = m;
+          url.searchParams.append(
+            'filter',
+            `variants.scopedPrice.value.centAmount:range(${min} to ${max})`,
+          );
+        }
+      }
     });
   }
   if (sort && sort.length > 0) {
@@ -234,8 +245,6 @@ export const getProducts = (
   }
 
   url.searchParams.set('staged', 'false');
-
-  console.log('▶▶▶ Commercetools GET URL:', url.toString());
 
   return new Request(url.toString(), {
     method: 'GET',

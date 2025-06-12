@@ -73,3 +73,4 @@ export const defaultUserInfo = {
 };
 
 export const defaultAddressIndex = -1;
+export const PRODUCTS_PER_PAGE = 8;

@@ -471,3 +471,9 @@ export interface ProductCardProperties {
   price: string;
   discount?: string;
 }
+
+export interface PaginationProperties {
+  currentPage: number;
+  totalPages: number;
+  onChange: (page: number) => void;
+}

@@ -1,20 +1,31 @@
-import { Card, Flex, Image, Text } from '@chakra-ui/react';
-import { productCardStyles, productCardTextStyle } from '~/styles/style';
-import { AddToCartButton } from '~components/AddToCartButton/AddToCartButton';
+import { Card, chakra, Flex, Text } from '@chakra-ui/react';
 import { ProductCardProperties } from '~types/types';
+import { productCardStyles, productCardTextStyle } from '~/styles/style';
+import { AddToCartButton } from '~components/AddToCartButton/AddToCartButton.tsx';
+
+const ChakraImage = chakra('img');
 
 export const ProductCard = ({
-  id,
-  name,
-  description,
   img,
   alt,
+  name,
+  description,
   price,
   discount,
+  id,
 }: ProductCardProperties) => {
+  const thumbUrl = `${img}?width=300&height=300&format=webp`;
+
   return (
     <Card.Root {...productCardStyles}>
-      <Image src={img} alt={alt} h='240px' objectFit='contain' />
+      <ChakraImage
+        src={thumbUrl}
+        alt={alt}
+        height='240px'
+        width='100%'
+        objectFit='contain'
+      />
+
       <Card.Body flexGrow='1' gap='0.2'>
         <Card.Title flexGrow='1'>{name}</Card.Title>
         <Card.Description lineClamp={2}>{description}</Card.Description>
@@ -33,6 +44,7 @@ export const ProductCard = ({
           </Text>
         )}
       </Card.Body>
+
       <Card.Footer gap='0.2' mt='auto'>
         <AddToCartButton productId={id} />
       </Card.Footer>
