@@ -1,8 +1,8 @@
-import { NotFoundPage } from '~pages/Not-found-page';
-import { AboutPage } from '~pages/About-page';
-import { LoginPage } from '~pages/Login-page';
-import { RegisterPage } from '~pages/Register-page';
-import { ProfilePage } from '~pages/Profile-page';
+import { NotFoundPage } from '~pages/NotFoundPage.tsx';
+import { AboutPage } from '~pages/AboutPage.tsx';
+import { LoginPage } from '~pages/LoginPage.tsx';
+import { RegisterPage } from '~pages/RegisterPage.tsx';
+import { ProfilePage } from '~pages/ProfilePage.tsx';
 import { RootLayout } from '~/layouts/RootLayout';
 import {
   createBrowserRouter,
@@ -11,15 +11,17 @@ import {
 } from 'react-router-dom';
 import { RedirectIfAuth } from '~components/Protected-route/Protected-route';
 import { RequireAuth } from '~components/Protected-route/RequireAuth';
-import { CatalogPage } from '~pages/Catalog-page';
-import { ProductPage } from '~pages/Product-page';
-import { CategoryPage } from '~pages/Category-page.tsx';
+import { CatalogPage } from '~pages/CatalogPage.tsx';
+import { ProductPage } from '~pages/ProductPage.tsx';
+import { CategoryPage } from '~pages/CategoryPage.tsx';
+import { BasketPage } from '~pages/BasketPage.tsx';
 
 export const routes = createRoutesFromElements(
   <Route path='/' element={<RootLayout />}>
     <Route index element={<CatalogPage />} />
     <Route path='catalog/category/:categoryId' element={<CategoryPage />} />
     <Route path='about' element={<AboutPage />} />
+    <Route path='basket' element={<BasketPage />} />
     <Route path='catalog/:productId' element={<ProductPage />} />
     <Route element={<RequireAuth />}>
       <Route path='profile' element={<ProfilePage />} />

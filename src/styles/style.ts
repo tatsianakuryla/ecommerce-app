@@ -98,9 +98,13 @@ export const profileBoxStyle = {
 };
 
 export const productCardStyles = {
-  maxW: 'sm',
-  overflow: 'hidden',
+  display: 'flex',
+  flexDirection: 'column',
   height: '100%',
+  minH: '420px',
+  maxW: '300px',
+  w: '100%',
+  overflow: 'hidden',
   borderRadius: '2xl',
   boxShadow: 'sm',
   transition: 'all 0.3s ease-in-out',
@@ -113,4 +117,88 @@ export const productCardStyles = {
     transform: 'scale(1.01)',
     boxShadow: 'md',
   },
+};
+
+export const basketBadgeStyle = {
+  position: 'absolute',
+  bottom: '0.2rem',
+  right: '0.1rem',
+  fontSize: '0.6rem',
+  color: 'teal.900',
+  borderRadius: '0.1rem',
+};
+
+const baseLinkStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '0.5rem',
+  fontSize: 'md',
+  fontWeight: 'semibold',
+  px: '1rem',
+  py: '0.5rem',
+  borderRadius: 'xl',
+  textDecoration: 'none',
+  transition: 'all 0.2s ease-in-out',
+  lineHeight: 1.2,
+  minHeight: '40px',
+  boxSizing: 'border-box',
+};
+
+export const linkStyles = {
+  ...baseLinkStyle,
+  color: 'teal.700',
+  bg: 'gray.100',
+  _hover: {
+    bg: 'gray.200',
+    textDecoration: 'none',
+  },
+  _focus: {
+    boxShadow: '0 0 0 2px teal.300',
+    outline: 'none',
+  },
+  _activeLink: {
+    bg: 'teal.100',
+    color: 'teal.800',
+  },
+};
+
+export const loginLinkStyle = {
+  ...baseLinkStyle,
+  color: 'teal.600',
+  border: '2px solid teal',
+  bg: 'transparent',
+  _hover: {
+    bg: 'teal.50',
+  },
+  _focus: {
+    boxShadow: '0 0 0 2px teal.900',
+    outline: 'none',
+  },
+  _activeLink: {
+    bg: 'teal.100',
+  },
+};
+
+export const registerLinkStyle = {
+  ...baseLinkStyle,
+  color: 'white',
+  bg: 'teal.500',
+  _hover: {
+    bg: 'teal.600',
+  },
+  _focus: {
+    boxShadow: '0 0 0 2px teal.300',
+    outline: 'none',
+  },
+  _activeLink: {
+    bg: 'teal.700',
+  },
+};
+
+export const productCardTextStyle = {
+  textStyle: '2xl',
+  fontWeight: 'medium',
+  letterSpacing: 'tight',
+  mt: '2',
 };

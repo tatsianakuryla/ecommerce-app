@@ -1,4 +1,4 @@
-import { Box, Link as ChakraLink } from '@chakra-ui/react';
+import { Badge, Box, Link as ChakraLink } from '@chakra-ui/react';
 import {
   FiHome,
   FiInfo,
@@ -6,8 +6,16 @@ import {
   FiUserPlus,
   FiUser,
   FiBookOpen,
+  FiShoppingCart,
 } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
+import { useCart } from '~/contexts/cartContext';
+import {
+  basketBadgeStyle,
+  linkStyles,
+  loginLinkStyle,
+  registerLinkStyle,
+} from '~/styles/style';
 
 export default function NavItem({
   label,
@@ -18,88 +26,40 @@ export default function NavItem({
   to: string;
   onClick?: () => void;
 }) {
-  const icon =
-    to === '/' ? (
-      <FiHome />
-    ) : to === '/about' ? (
-      <FiInfo />
-    ) : to === '/login' ? (
-      <FiLogIn />
-    ) : to === '/register' ? (
-      <FiUserPlus />
-    ) : to === '/profile' ? (
-      <FiUser />
-    ) : to === '/' ? (
-      <FiBookOpen />
-    ) : null;
+  const { totalCount } = useCart();
 
-  const baseLinkStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '0.5rem',
-    fontSize: 'md',
-    fontWeight: 'semibold',
-    px: '1rem',
-    py: '0.5rem',
-    borderRadius: 'xl',
-    textDecoration: 'none',
-    transition: 'all 0.2s ease-in-out',
-    lineHeight: 1.2,
-    minHeight: '40px',
-    boxSizing: 'border-box',
-  };
-
-  const linkStyles = {
-    ...baseLinkStyle,
-    color: 'teal.700',
-    bg: 'gray.100',
-    _hover: {
-      bg: 'gray.200',
-      textDecoration: 'none',
-    },
-    _focus: {
-      boxShadow: '0 0 0 2px teal.300',
-      outline: 'none',
-    },
-    _activeLink: {
-      bg: 'teal.100',
-      color: 'teal.800',
-    },
-  };
-
-  const loginLinkStyle = {
-    ...baseLinkStyle,
-    color: 'teal.600',
-    border: '2px solid teal',
-    bg: 'transparent',
-    _hover: {
-      bg: 'teal.50',
-    },
-    _focus: {
-      boxShadow: '0 0 0 2px teal.900',
-      outline: 'none',
-    },
-    _activeLink: {
-      bg: 'teal.100',
-    },
-  };
-
-  const registerLinkStyle = {
-    ...baseLinkStyle,
-    color: 'white',
-    bg: 'teal.500',
-    _hover: {
-      bg: 'teal.600',
-    },
-    _focus: {
-      boxShadow: '0 0 0 2px teal.300',
-      outline: 'none',
-    },
-    _activeLink: {
-      bg: 'teal.700',
-    },
-  };
+  let icon = null;
+  switch (to) {
+    case '/':
+      icon = <FiHome />;
+      break;
+    case '/about':
+      icon = <FiInfo />;
+      break;
+    case '/login':
+      icon = <FiLogIn />;
+      break;
+    case '/register':
+      icon = <FiUserPlus />;
+      break;
+    case '/profile':
+      icon = <FiUser />;
+      break;
+    case '/basket':
+      icon = (
+        <Box>
+          <FiShoppingCart size='1.2em' />
+          {totalCount >= 0 && (
+            <Badge size='xs' {...basketBadgeStyle}>
+              {totalCount}
+            </Badge>
+          )}
+        </Box>
+      );
+      break;
+    default:
+      icon = <FiBookOpen />;
+  }
 
   const style =
     to === '/login'
@@ -109,7 +69,7 @@ export default function NavItem({
         : linkStyles;
 
   return (
-    <ChakraLink asChild {...style}>
+    <ChakraLink asChild {...style} position='relative'>
       <NavLink to={to} onClick={onClick}>
         <Box as='span' display='flex' alignItems='center' gap='0.5rem'>
           {icon}

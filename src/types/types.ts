@@ -419,23 +419,40 @@ export interface CategoriesResponse {
   results: Category[];
 }
 
-export interface FilterSidebarProperties {
-  token: string;
-  onFilterChange: (filters: {
-    brands: string[];
-    colors: string[];
-    sizes: string[];
-    priceRange: [number, number];
-  }) => void;
+export type Action =
+  | { type: 'ADD_ITEM'; payload: CartItem }
+  | { type: 'REMOVE_ITEM'; payload: { id: string } }
+  | { type: 'CLEAR_CART' };
+
+export interface CartContextValue extends State {
+  dispatch: React.Dispatch<Action>;
+  totalCount: number;
 }
 
-export interface CTFacetResponse {
-  facets: {
-    [facetKey: string]: {
-      terms: Array<{
-        term: string;
-        count: number;
-      }>;
-    };
-  };
+export type State = { items: CartItem[] };
+
+export type CartItem = {
+  id: string;
+  quantity: number;
+};
+
+export interface AddToCartButtonProperties {
+  productId: string;
+  quantity?: number;
+}
+
+export interface ProductCardProperties {
+  id: string;
+  name: string;
+  description: string;
+  img: string;
+  alt: string;
+  price: string;
+  discount?: string;
+}
+
+export interface PaginationProperties {
+  currentPage: number;
+  totalPages: number;
+  onChange: (page: number) => void;
 }
