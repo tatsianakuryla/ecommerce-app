@@ -439,3 +439,15 @@ export interface CTFacetResponse {
     };
   };
 }
+
+type CartItem = { id: string; quantity: number /* ... */ };
+export type State = { items: CartItem[] };
+export type Action =
+  | { type: 'ADD_ITEM'; payload: CartItem }
+  | { type: 'REMOVE_ITEM'; payload: { id: string } }
+  | { type: 'CLEAR_CART' };
+
+export interface CartContextValue extends State {
+  dispatch: React.Dispatch<Action>;
+  totalCount: number;
+}
