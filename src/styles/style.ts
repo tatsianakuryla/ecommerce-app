@@ -99,11 +99,11 @@ export const profileBoxStyle = {
 
 export const productCardStyles = {
   display: 'flex',
-  flexGrow: '1',
   flexDirection: 'column',
   height: '100%',
   minH: '420px',
-  maxW: 'sm',
+  maxW: '300px',
+  w: '100%',
   overflow: 'hidden',
   borderRadius: '2xl',
   boxShadow: 'sm',

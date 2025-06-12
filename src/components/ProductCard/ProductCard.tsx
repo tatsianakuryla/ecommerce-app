@@ -1,7 +1,7 @@
 import { Card, chakra, Flex, Text } from '@chakra-ui/react';
 import { ProductCardProperties } from '~types/types';
 import { productCardStyles, productCardTextStyle } from '~/styles/style';
-import { AddToCartButton } from '~components/AddToCartButton/AddToCartButton.tsx';
+import { AddRemoveItemButton } from '~components/AddRemoveItemButton/AddRemoveItemButton.tsx';
 
 const ChakraImage = chakra('img');
 
@@ -46,7 +46,7 @@ export const ProductCard = ({
       </Card.Body>
 
       <Card.Footer gap='0.2' mt='auto'>
-        <AddToCartButton productId={id} />
+        <AddRemoveItemButton productId={id} />
       </Card.Footer>
     </Card.Root>
   );

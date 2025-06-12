@@ -3,6 +3,7 @@ import { FiChevronRight } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { Category, ILocales } from '~/types/types';
 import { locales } from '~/constants/constants';
+import { Fragment } from 'react/jsx-runtime';
 
 interface BreadcrumbsProperties {
   currentCategory: Category;
@@ -41,24 +42,27 @@ export const Breadcrumbs = ({
           const to = `/catalog/category/${category.id}`;
 
           return (
-            <Breadcrumb.Item key={category.id}>
-              {isLast ? (
-                <Breadcrumb.Link asChild>
-                  <span style={{ fontWeight: '600' }}>
-                    {category.name[locale]}
-                  </span>
-                </Breadcrumb.Link>
-              ) : (
-                <>
+            <Fragment key={category.id}>
+              <Breadcrumb.Item>
+                {isLast ? (
+                  <Breadcrumb.Link asChild>
+                    <span style={{ fontWeight: '600' }}>
+                      {category.name[locale]}
+                    </span>
+                  </Breadcrumb.Link>
+                ) : (
                   <Breadcrumb.Link asChild>
                     <Link to={to}>{category.name[locale]}</Link>
                   </Breadcrumb.Link>
-                  <Breadcrumb.Separator>
-                    <FiChevronRight color='gray.500' />
-                  </Breadcrumb.Separator>
-                </>
+                )}
+              </Breadcrumb.Item>
+
+              {!isLast && (
+                <Breadcrumb.Separator>
+                  <FiChevronRight color='gray.500' />
+                </Breadcrumb.Separator>
               )}
-            </Breadcrumb.Item>
+            </Fragment>
           );
         })}
       </Breadcrumb.List>
