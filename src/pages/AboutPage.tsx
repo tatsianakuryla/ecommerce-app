@@ -9,19 +9,21 @@ import {
   Flex,
   Text,
 } from '@chakra-ui/react';
+import { aboutUs } from '~/styles/style';
 import { LuExternalLink } from 'react-icons/lu';
 import Tanya from '../assets/images/Tanya.jpg';
 import Nastassya from '../assets/images/Nastassya.jpg';
 import Kirill from '../assets/images/Kirill.jpg';
-import logo from '../assets/images/images.png';
+import logo from '../assets/images/rss-logo.svg';
+
 export const AboutPage = () => {
   return (
     <Container py='1rem'>
       <VisuallyHidden>
         <Heading>About Us</Heading>
       </VisuallyHidden>
-      <Flex width='100%' justifyContent='flex-end' mb='4rem'>
-        <Text as='h1' flex='1' minWidth='0' textAlign='center' pr='4rem'>
+      <Flex {...aboutUs.containerFlex}>
+        <Text {...aboutUs.title}>
           Welcome to our eCommerce application! This application was made by the
           team known as Dev Crew #11 as part of the RS Schoool teaching course.
           Mutual assistance, discussion of current problems and solutions to
@@ -36,43 +38,34 @@ export const AboutPage = () => {
           href='https://rs.school/'
           target='_blank'
           rel='noopener noreferrer'
-          _focus={{ outline: 'none', boxShadow: 'none' }}
+          {...aboutUs.link}
         >
           <Image src={logo} height='60px' alt='Logo' />
         </Link>
       </Flex>
 
-      <Grid
-        templateRows='auto 1fr'
-        templateColumns='350px 1fr'
-        gap={4}
-        mb='2rem'
-        p='2rem'
-        background={'gray.100'}
-      >
-        <GridItem rowSpan={2} colSpan={{ base: 1, md: 2 }}>
-          <Image
-            src={Tanya}
-            objectFit='contain'
-            width='auto'
-            min-width='240px'
-            alt='Tatsiana Kuryla'
-          ></Image>
+      <Grid {...aboutUs.grid}>
+        <GridItem {...aboutUs.imageContainer}>
+          <Image src={Tanya} {...aboutUs.image} alt='Tanya'></Image>
         </GridItem>
-        <GridItem colSpan={{ base: 3, md: 3 }}>
+        <GridItem {...aboutUs.nameSection}>
           <Text color={'#125854'}>Tatsiana Kuryla</Text>
           <Text color={'green'}>Team Lead</Text>
           <Text>
             Supervised the completion of tasks at hand. Developed more than half
             of the application.
           </Text>
-          <Link href='https://github.com/tatsianakuryla'>
+          <Link
+            href='https://github.com/tatsianakuryla'
+            target='_blank'
+            rel='noopener noreferrer'
+          >
             GitHub profile
             <LuExternalLink color={'green'} />
           </Link>
         </GridItem>
 
-        <GridItem colStart={3} colSpan={3}>
+        <GridItem {...aboutUs.bioSection}>
           <Text>
             I was born in Grodno, Belarus. After finishing school, I moved to
             Minsk to study at the Belarusian State Economic University in the
@@ -104,41 +97,30 @@ export const AboutPage = () => {
         </GridItem>
       </Grid>
 
-      <Grid
-        templateRows='auto 1fr'
-        templateColumns='350px auto'
-        gap={4}
-        mb='2rem'
-        boxShadow='lg'
-        p='2rem'
-      >
-        <GridItem colSpan={{ base: 1, md: 3 }}>
+      <Grid {...aboutUs.gridRight}>
+        <GridItem {...aboutUs.infoSection}>
           <Text color={'#125854'}>Anastasiya Voroshkevich</Text>
           <Text color={'green'}>Software Developer</Text>
           <Text>Project setup. Mobile version.</Text>
-          <Link href='https://github.com/nastasiya-voroshkevich'>
+          <Link
+            href='https://github.com/nastasiya-voroshkevich'
+            target='_blank'
+            rel='noopener noreferrer'
+          >
             GitHub profile
             <LuExternalLink color={'green'} />
           </Link>
         </GridItem>
 
-        <GridItem
-          rowSpan={2}
-          colStart={{ base: 2, md: 5 }}
-          colEnd={5}
-          display='flex'
-          justifyContent='flex-end'
-        >
+        <GridItem {...aboutUs.imageContainerRight}>
           <Image
             src={Nastassya}
-            objectFit='contain'
-            width='auto'
-            minWidth='240px'
+            {...aboutUs.image}
             alt='Anastasiya Voroshkevich'
           />
         </GridItem>
 
-        <GridItem colSpan={{ base: 2, md: 2 }}>
+        <GridItem {...aboutUs.bioSectionRight}>
           <Text>
             I am from Belarus. I finished the physics and mathematics department
             of Brest State University named after A.S. Pushkin and currently
@@ -166,38 +148,29 @@ export const AboutPage = () => {
         </GridItem>
       </Grid>
 
-      <Grid
-        templateRows='auto 1fr'
-        templateColumns='350px 1fr'
-        gap={4}
-        mb='2rem'
-        p='2rem'
-        background={'gray.100'}
-      >
-        <GridItem rowSpan={2} colSpan={{ base: 1, md: 2 }}>
-          <Image
-            src={Kirill}
-            objectFit='contain'
-            width='auto'
-            min-width='240px'
-            alt='Kiryl Makhvienia'
-          ></Image>
+      <Grid {...aboutUs.grid}>
+        <GridItem {...aboutUs.imageContainer}>
+          <Image src={Kirill} {...aboutUs.image} alt='Kiryl Makhvienia'></Image>
         </GridItem>
-        <GridItem colSpan={{ base: 3, md: 3 }}>
+        <GridItem {...aboutUs.nameSection}>
           <Text color={'#125854'}>Kiryl Makhvienia</Text>
           <Text color={'green'}>Software Developer</Text>
           <Text>
             Project setup. Integrate auth service, handle errors. Registration
             api integration. Display products on the main page.{' '}
           </Text>
-          <Link href='https://github.com/mahveenya'>
+          <Link
+            href='https://github.com/mahveenya'
+            target='_blank'
+            rel='noopener noreferrer'
+          >
             {' '}
             GitHub profile
             <LuExternalLink color={'green'} />
           </Link>
         </GridItem>
 
-        <GridItem colStart={3} colSpan={3}>
+        <GridItem {...aboutUs.bioSection}>
           <Text>
             Originally from Belarus, and having finished courses there, Kiryl
             Makhvienia now lives in Lithuania, where he works as a software
