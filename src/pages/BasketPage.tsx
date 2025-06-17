@@ -3,6 +3,7 @@ import {
   Button,
   Container,
   Dialog,
+  Flex,
   Grid,
   GridItem,
   Heading,
@@ -11,7 +12,6 @@ import {
   Input,
   Link as ChakraLink,
   NumberInput,
-  Separator,
   Stack,
   Text,
   VisuallyHidden,
@@ -26,10 +26,6 @@ import { formatPrice } from '~/utils/helpers';
 
 const locale = locales.UK;
 
-/* ------------------------------------------------------------------ */
-/* вспомогалки                                                         */
-/* ------------------------------------------------------------------ */
-
 const priceStyles = { fontWeight: 'bold', fontSize: 'lg' };
 
 function showError(text: string) {
@@ -42,10 +38,6 @@ function showError(text: string) {
     style: { background: '#E53E3E', color: '#fff' },
   }).showToast();
 }
-
-/* ------------------------------------------------------------------ */
-/* карточка товара в корзине                                           */
-/* ------------------------------------------------------------------ */
 
 type BasketItemProperties = {
   id: string;
@@ -67,69 +59,94 @@ function BasketItem({
   const { updateLineItemQuantity, removeFromCart, loading } = useCart();
 
   return (
-    <GridItem p={4} borderWidth='1px' borderRadius='md' shadow='sm'>
-      <HStack align='flex-start' gap={4}>
-        <Image src={image} alt={name} boxSize='80px' objectFit='cover' />
+    <GridItem
+      p={4}
+      borderWidth='1px'
+      borderRadius='xl'
+      shadow='md'
+      bg='white'
+      _hover={{ shadow: 'lg' }}
+    >
+      <Flex
+        direction={{ base: 'column', lg: 'row' }}
+        align={{ base: 'stretch', lg: 'center' }}
+        gap={4}
+      >
+        {/* --- Image + title/price */}
+        <Box flexShrink={0} textAlign={{ base: 'left', lg: 'center' }}>
+          <Image
+            src={image}
+            alt={name}
+            boxSize={{ base: '60px', md: '80px' }}
+            objectFit='cover'
+            borderRadius='md'
+          />
+          <Flex
+            mt={2}
+            direction='column'
+            align={{ base: 'flex-start', lg: 'center' }}
+          >
+            <Text fontWeight='semibold' fontSize='md' lineClamp={2}>
+              {name}
+            </Text>
+            <Text fontSize='sm' color='gray.500'>
+              {price}
+            </Text>
+          </Flex>
+        </Box>
 
-        <Box flex='1'>
-          <Text fontWeight='semibold'>{name}</Text>
-          <Text fontSize='sm' color='gray.500'>
-            {price}
+        {/* --- Controls */}
+        <Flex
+          mt={{ base: 3, lg: 0 }}
+          align='center'
+          justify='flex-end'
+          gap={4}
+          flex='1'
+          wrap='wrap'
+        >
+          <NumberInput.Root
+            value={String(quantity)}
+            min={1}
+            size='sm'
+            disabled={loading}
+            onValueChange={({ valueAsNumber }) => {
+              if (!Number.isNaN(valueAsNumber)) {
+                updateLineItemQuantity(id, valueAsNumber).catch(() => {
+                  showError('Failed to update quantity');
+                });
+              }
+            }}
+          >
+            <NumberInput.Control w='80px' />
+            <NumberInput.Input />
+          </NumberInput.Root>
+
+          <Text fontSize='sm' color='gray.600'>
+            {price} × {quantity}
           </Text>
 
-          <HStack mt={2} gap={4}>
-            <NumberInput.Root
-              value={String(quantity)}
-              min={1}
-              maxW='90px'
-              size='sm'
-              disabled={loading}
-              onValueChange={({ valueAsNumber }) => {
-                if (!Number.isNaN(valueAsNumber)) {
-                  updateLineItemQuantity(id, valueAsNumber).catch(() => {
-                    showError('Failed to update quantity');
-                  });
-                }
-              }}
-            >
-              <NumberInput.Control>
-                <NumberInput.DecrementTrigger aria-label='decrease' />
-                <NumberInput.Input />
-                <NumberInput.IncrementTrigger aria-label='increase' />
-              </NumberInput.Control>
-            </NumberInput.Root>
+          <Text fontWeight='semibold'>{lineTotal}</Text>
 
-            <Text fontSize='sm' color='gray.500'>
-              {price} × {quantity}
-            </Text>
-            <Text fontWeight='semibold'>{lineTotal}</Text>
-
-            <Button
-              size='sm'
-              variant='ghost'
-              colorScheme='red'
-              disabled={loading}
-              onClick={() => void removeFromCart(id)}
-            >
-              Remove <FiTrash2 />
-            </Button>
-          </HStack>
-        </Box>
-      </HStack>
+          <Button
+            size='sm'
+            variant='ghost'
+            colorScheme='red'
+            disabled={loading}
+            onClick={() => void removeFromCart(id)}
+          >
+            {<FiTrash2 />}
+          </Button>
+        </Flex>
+      </Flex>
     </GridItem>
   );
 }
-
-/* ------------------------------------------------------------------ */
-/* основная страница корзины                                           */
-/* ------------------------------------------------------------------ */
 
 export function BasketPage() {
   const { cart, clearCart, applyDiscountCode, appliedCode, loading } =
     useCart();
   const [promo, setPromo] = useState('');
 
-  /* ——— пустая корзина ——— */
   if (!cart || cart.lineItems.length === 0) {
     return (
       <Container py='6'>
@@ -143,7 +160,6 @@ export function BasketPage() {
     );
   }
 
-  /* ——— расчёты ——— */
   const subTotal = cart.lineItems.reduce(
     (sum, li) => sum + li.totalPrice.centAmount,
     0,
@@ -155,7 +171,6 @@ export function BasketPage() {
   const total = subTotal - discountValue;
   const currency = cart.lineItems.at(0)?.price.value.currencyCode ?? 'EUR';
 
-  /* ——— JSX ——— */
   return (
     <Container maxW='container.lg' py='6'>
       <VisuallyHidden>
@@ -252,9 +267,6 @@ export function BasketPage() {
             </Button>
           </HStack>
 
-          <Separator />
-
-          {/* ───── одна-единственная кнопка, обёрнутая в Dialog.Trigger ───── */}
           <Dialog.Root>
             <Dialog.Trigger asChild>
               <Button

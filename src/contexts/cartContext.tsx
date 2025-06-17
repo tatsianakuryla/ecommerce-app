@@ -52,7 +52,7 @@ export function showInfo(message: string) {
     close: false,
     gravity: 'top',
     position: 'right',
-    style: { background: '#319795', color: '#fff' }, // teal-600
+    style: { background: '#319795', color: '#fff' },
   }).showToast();
 }
 
@@ -74,25 +74,20 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
 
-    // 1️⃣ создаём ref, который «переживает» перерендеры
-    const cancelled = { current: false }; // <-- или useRef(false)
+    const cancelled = { current: false };
 
-    // 2️⃣ IIFE вызываем через void, чтобы удовлетворить no-floating-promises
     void (async () => {
       try {
         const active = await makeRequest(getMyActiveCart(accessToken), isCart);
 
-        // 3️⃣ если эффект ещё актуален — кладём данные в state
         if (!cancelled.current) {
           setCart(active ?? null);
         }
       } catch {
-        // обработка/лог —  по желанию
         if (!cancelled.current) showError('We could not connect to the cart.');
       }
     })();
 
-    // 4️⃣ при размонтировании/смене accessToken помечаем эффект как «отменённый»
     return () => {
       cancelled.current = true;
     };
