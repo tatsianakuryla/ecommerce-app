@@ -10,12 +10,16 @@ import {
   PROJECT_KEY,
   CATEGORIES_URL,
   locales,
+  MY_CARTS_URL,
+  MY_ACTIVE_CART_URL,
 } from '~/constants/constants';
 import {
   AddressDraft,
+  CartUpdateAction,
   CustomerDraft,
   CustomerUpdateAction,
   ILocales,
+  MyCartDraft,
   PermissionLevel,
   RegistrationData,
 } from '~/types/types';
@@ -178,22 +182,6 @@ export const getCategories = (token: string): Request => {
   });
 };
 
-export const getProductsByCategory = (
-  categoryId: string,
-  token: string,
-  locale: ILocales[keyof ILocales] = locales.UK,
-): Request => {
-  const encodedFilter = encodeURIComponent(`categories.id:"${categoryId}"`);
-  const url = `${BASE_API_URL}${PROJECT_KEY}/product-projections/search?filter=${encodedFilter}&limit=100&localeProjection=${locale}`;
-  return new Request(url, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
-};
-
 export const getProducts = (
   token: string,
   limit = 20,
@@ -256,22 +244,56 @@ export const getProducts = (
   });
 };
 
-export const getFilterValues = (
-  token: string,
-  attributeName: string,
-): Request => {
-  const url = new URL(`${PUBLISHED_PRODUCTS_URL}/search`);
-
-  url.searchParams.set('facet', `variants.attributes.${attributeName}`);
-  url.searchParams.set('limit', '0');
-  url.searchParams.set('staged', 'false');
-
-  return new Request(url.toString(), {
+export const getMyActiveCart = (token: string): Request =>
+  new Request(MY_ACTIVE_CART_URL, {
     method: 'GET',
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+export const createMyCart = (draft: MyCartDraft, token: string): Request =>
+  new Request(MY_CARTS_URL, {
+    method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
-      Accept: 'application/json',
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify(draft),
   });
-};
+
+export const updateMyCart = (
+  cartId: string,
+  version: number,
+  actions: CartUpdateAction[],
+  token: string,
+): Request =>
+  new Request(`${MY_CARTS_URL}/${cartId}`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ version, actions }),
+  });
+
+export const addLineItemAction = (
+  productId: string,
+  variantId: number,
+  quantity = 1,
+): CartUpdateAction => ({
+  action: 'addLineItem',
+  productId,
+  variantId,
+  quantity,
+});
+
+export const getActivePromoCodes = (token: string): Request =>
+  new Request(
+    `${BASE_API_URL}${PROJECT_KEY}/discount-codes?where=isActive=true&limit=500`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    },
+  );

@@ -1,87 +1,3 @@
-export const aboutUs = {
-  containerFlex: {
-    width: '100%',
-    flexDirection: { base: 'column-reverse', md: 'row' },
-    justifyContent: 'flex-end',
-    mb: { base: '2rem', md: '4rem' },
-  },
-  title: {
-    flex: 1,
-    minWidth: '0',
-    textAlign: 'center',
-    pr: { base: '0rem', md: '4rem' },
-    lineHeight: 'tall',
-  },
-  link: {
-    _focus: { outline: 'none', boxShadow: 'none' },
-    justifyContent: { base: 'center' },
-    mb: { base: '1rem' },
-  },
-  grid: {
-    templateRows: { base: 'auto auto auto', md: 'auto 1fr' },
-    templateColumns: { base: '1fr', md: '350px 1fr' },
-    gap: 4,
-    mb: '2rem',
-    p: { base: '1rem', md: '2rem' },
-    background: 'gray.100',
-  },
-  gridRight: {
-    templateRows: { base: 'auto auto auto', md: 'auto 1fr' },
-    templateColumns: { base: '1fr', md: '1fr 350px' },
-    gap: 4,
-    mb: '2rem',
-    p: { base: '1rem', md: '2rem' },
-    boxShadow: 'lg',
-    position: 'relative',
-  },
-  infoSection: {
-    colSpan: { base: 1, md: 1 },
-    order: { base: 2, md: 1 },
-    textAlign: { base: 'center', md: 'left' },
-  },
-  imageContainer: {
-    rowSpan: { base: 1, md: 2 },
-    colSpan: { base: 1, md: 1 },
-    display: 'flex',
-    justifyContent: 'center',
-    alignSelf: 'start',
-  },
-  imageContainerRight: {
-    rowSpan: { base: 1, md: 2 },
-    colSpan: { base: 1, md: 1 },
-    display: 'flex',
-    justifyContent: { base: 'center', md: 'flex-end' },
-    order: { base: 1, md: 2 },
-    mb: { base: 4, md: 0 },
-    alignSelf: 'start',
-  },
-  image: {
-    objectFit: 'contain',
-    minWidth: '240px',
-    textAlign: { md: 'top' },
-    // maxWidth: { base: '180px', md: '100%' },
-  },
-  nameSection: {
-    colSpan: { base: 1, md: 1 },
-    textAlign: { base: 'center', md: 'left' },
-  },
-  bioSection: {
-    colStart: { base: 1, md: 2 },
-    colSpan: { base: 1, md: 1 },
-    pt: { base: 4, md: 0 },
-  },
-  bioSectionRight: {
-    colSpan: { base: 1, md: 1 },
-    order: 3,
-    pt: { base: 4, md: 0 },
-  },
-
-  text: {
-    fontSize: { base: 'sm', md: 'md' },
-    lineHeight: 'tall',
-  },
-};
-
 export const profileToastifyOptions = {
   duration: 3000,
   close: false,
@@ -205,11 +121,20 @@ export const productCardStyles = {
 
 export const basketBadgeStyle = {
   position: 'absolute',
-  bottom: '0.2rem',
-  right: '0.1rem',
-  fontSize: '0.6rem',
-  color: 'teal.900',
-  borderRadius: '0.1rem',
+  top: '-18px',
+  right: '-18px',
+  bg: 'red.500',
+  color: 'white',
+  borderRadius: 'full',
+  fontSize: 'xs',
+  lineHeight: '1',
+  px: '0.35em',
+  minW: '1.1em',
+  height: '1.1em',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  pointerEvents: 'none',
 };
 
 const baseLinkStyle = {
@@ -285,4 +210,15 @@ export const productCardTextStyle = {
   fontWeight: 'medium',
   letterSpacing: 'tight',
   mt: '2',
+};
+
+export const buttonStyle = {
+  fontWeight: 'semibold' as const,
+  fontSize: 'sm' as const,
+  borderRadius: 'md' as const,
+  px: 4,
+  py: 3,
+  display: 'flex',
+  alignItems: 'center',
+  gap: 2,
 };

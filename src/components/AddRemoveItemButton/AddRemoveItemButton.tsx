@@ -1,64 +1,45 @@
 import { HStack, Button, Text } from '@chakra-ui/react';
-import { MouseEvent } from 'react';
 import { useCart } from '~/contexts/cartContext';
 import { AddToCartButtonProperties } from '~types/types';
 import { HiPlusSm, HiMinusSm } from 'react-icons/hi';
+import { buttonStyle } from '~/styles/style.ts';
 
 export const AddRemoveItemButton = ({
   productId,
   quantity = 1,
 }: AddToCartButtonProperties) => {
-  const { items, dispatch } = useCart();
-  const inCart = items.some((item) => item.id === productId);
+  const { cart, addToCart, removeFromCart, loading } = useCart();
+  const line = cart?.lineItems.find((li) => li.productId === productId);
 
-  const handleAdd = (event: MouseEvent) => {
-    event.stopPropagation();
+  const stop = (event: React.MouseEvent) => {
     event.preventDefault();
-    if (!inCart) {
-      dispatch({ type: 'ADD_ITEM', payload: { id: productId, quantity } });
-    }
-  };
-
-  const handleRemove = (event: MouseEvent) => {
     event.stopPropagation();
-    event.preventDefault();
-    dispatch({ type: 'REMOVE_ITEM', payload: { id: productId } });
   };
 
-  const buttonStyles = {
-    fontWeight: 'semibold' as const,
-    fontSize: 'sm' as const,
-    borderRadius: 'md' as const,
-    px: 4,
-    py: 3,
-    display: 'flex',
-    alignItems: 'center',
-    gap: 2,
-  };
-
-  if (inCart) {
+  if (line) {
     return (
-      <HStack gap={2} width='100%'>
+      <HStack gap={2} w='100%'>
         <Button
           disabled
           bg='gray.300'
           color='gray.600'
-          cursor='not-allowed'
-          {...buttonStyles}
+          {...buttonStyle}
           flex={1}
         >
-          <Text>In Cart</Text>
+          <Text>In Cart ({line.quantity})</Text>
           <HiPlusSm />
         </Button>
-
         <Button
-          onClick={handleRemove}
+          loading={loading}
+          onClick={(event) => {
+            stop(event);
+            void removeFromCart(line.id);
+          }}
           bg='red.500'
           color='white'
           _hover={{ bg: 'red.600' }}
-          _active={{ bg: 'red.700' }}
-          {...buttonStyles}
           flex={1}
+          {...buttonStyle}
         >
           <Text>Remove</Text>
           <HiMinusSm />
@@ -69,14 +50,16 @@ export const AddRemoveItemButton = ({
 
   return (
     <Button
-      onClick={handleAdd}
+      w='100%'
+      loading={loading}
+      onClick={(event) => {
+        stop(event);
+        void addToCart(productId, 1, quantity);
+      }}
       bg='teal.500'
       color='white'
       _hover={{ bg: 'teal.600' }}
-      _active={{ bg: 'teal.700' }}
-      cursor='pointer'
-      {...buttonStyles}
-      width='100%'
+      {...buttonStyle}
     >
       <Text>Add to cart</Text>
       <HiPlusSm />

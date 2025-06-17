@@ -158,7 +158,7 @@ export const CategoryPage = () => {
 
   return (
     <Container maxW='container.xl' py='1rem' px={{ base: 4, md: 0 }}>
-      <VStack align='stretch' gap={4}>
+      <VStack align='stretch' gap={4} ml='1rem'>
         <Breadcrumbs
           currentCategory={currentCategory}
           allCategories={allCategories}
@@ -172,10 +172,10 @@ export const CategoryPage = () => {
         >
           {accessToken && (
             <Box
-              flex='0 0 300px'
+              flex={{ base: '0 0 250px', md: '0 0 300px' }}
               width={{ base: '100%', md: 'auto' }}
               mr={{ base: 0, md: '1rem' }}
-              mb={{ base: 4, md: 0 }}
+              mb={{ base: 2, md: 0 }}
             >
               <CategorySidebar token={accessToken} locale={locales.UK} />
             </Box>
@@ -224,13 +224,12 @@ export const CategoryPage = () => {
               <>
                 <Grid
                   templateColumns={{
-                    base: 'repeat(1, 1fr)',
-                    sm: 'repeat(2, 1fr)',
-                    md: 'repeat(3, 1fr)',
-                    lg: 'repeat(auto-fit, minmax(250px, 1fr))',
+                    base: 'repeat(200px, 1fr)',
+                    sm: 'repeat(300px, 1fr)',
+                    md: 'repeat(auto-fill,300px)',
                   }}
-                  gap='1rem'
-                  justifyItems={{ base: 'center', sm: 'stretch' }}
+                  gap={{ base: 3, md: 6 }}
+                  justifyContent='center'
                 >
                   {productsResponse.results.map((product) => {
                     const price =

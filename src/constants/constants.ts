@@ -11,8 +11,8 @@ export const BASIC_AUTH_HEADER =
 const GUEST_PERMISSIONS = {
   VIEW_PRODUCTS: 'view_products',
   VIEW_CATEGORIES: 'view_categories',
-  MANAGE_CUSTOMERS: 'manage_customers',
-  VIEW_MESSAGES: 'view_messages',
+  MANAGE_MY_ORDERS: 'manage_my_orders',
+  CREATE_ANONYMOUS_TOKEN: 'create_anonymous_token',
 } as const;
 
 const USER_PERMISSIONS = {
@@ -74,3 +74,10 @@ export const defaultUserInfo = {
 
 export const defaultAddressIndex = -1;
 export const PRODUCTS_PER_PAGE = 6;
+export const MY_CARTS_URL = `${BASE_API_URL}${PROJECT_KEY}/me/carts`;
+export const MY_ACTIVE_CART_URL = `${BASE_API_URL}${PROJECT_KEY}/me/active-cart`;
+export const promoCodes = ['SAVE10', 'WELCOME5'];
+export const PROMO_DISCOUNTS_RATE: Record<string, number> = {
+  SAVE10: 0.1,
+  WELCOME5: 0.05,
+};

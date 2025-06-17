@@ -26,6 +26,7 @@ import { CategorySidebar } from '~/components/CategorySidebar/CategorySidebar';
 import { Pagination } from '~components/Pagination/Pagination';
 import { useSearchParams } from 'react-router-dom';
 import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle.tsx';
+import PromoBanner from '~components/PromoBanner/PromoBanner.tsx';
 
 export const CatalogPage = () => {
   const { accessToken, justRegistered, setJustRegistered } = useAuthContext();
@@ -126,7 +127,7 @@ export const CatalogPage = () => {
         >
           {accessToken && (
             <Box
-              flex='0 0 300px'
+              flex={{ base: '0 0 230px', md: '0 0 300px' }}
               mr={{ base: 0, md: '1rem' }}
               width={{ base: '100%', md: 'auto' }}
             >
@@ -137,11 +138,12 @@ export const CatalogPage = () => {
           )}
 
           <Box flex='1' width='100%'>
+            <PromoBanner />
             <HStack
               mb='1rem'
               gap={4}
-              alignItems='center'
-              flexDirection={{ base: 'column', md: 'row' }}
+              flexDirection={{ base: 'column', lg: 'row' }}
+              alignItems={{ base: 'stretch', sm: 'center' }}
             >
               <Input
                 placeholder='Search products…'
@@ -171,9 +173,9 @@ export const CatalogPage = () => {
 
             <Grid
               templateColumns={{
-                base: 'repeat(1, 1fr)',
-                sm: 'repeat(2, 1fr)',
-                md: 'repeat(auto-fill, minmax(300px, 1fr))',
+                base: 'repeat(200px, 1fr)',
+                sm: 'repeat(300px, 1fr)',
+                md: 'repeat(auto-fill,300px)',
               }}
               gap={{ base: 3, md: 6 }}
               justifyContent='center'
