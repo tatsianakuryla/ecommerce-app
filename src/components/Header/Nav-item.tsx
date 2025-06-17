@@ -1,4 +1,9 @@
-import { Badge, Box, Link as ChakraLink } from '@chakra-ui/react';
+import {
+  Badge,
+  Box,
+  Link as ChakraLink,
+  type LinkProps,
+} from '@chakra-ui/react';
 import {
   FiHome,
   FiInfo,
@@ -17,18 +22,19 @@ import {
   registerLinkStyle,
 } from '~/styles/style';
 
-export default function NavItem({
-  label,
-  to,
-  onClick,
-}: {
+interface NavItemProperties {
   label: string;
   to: string;
   onClick?: () => void;
-}) {
-  const { totalCount } = useCart();
+}
 
-  let icon = null;
+export default function NavItem({ label, to, onClick }: NavItemProperties) {
+  const { cart } = useCart();
+  const totalCount =
+    cart?.lineItems.reduce((sum, li) => sum + li.quantity, 0) ?? 0;
+
+  /* 2. выбираем иконку */
+  let icon: React.ReactNode;
   switch (to) {
     case '/':
       icon = <FiHome />;
@@ -47,13 +53,9 @@ export default function NavItem({
       break;
     case '/basket':
       icon = (
-        <Box>
+        <Box position='relative' display='inline-block'>
           <FiShoppingCart size='1.2em' />
-          {totalCount >= 0 && (
-            <Badge size='xs' {...basketBadgeStyle}>
-              {totalCount}
-            </Badge>
-          )}
+          {totalCount > 0 && <Badge {...basketBadgeStyle}>{totalCount}</Badge>}
         </Box>
       );
       break;
@@ -61,7 +63,8 @@ export default function NavItem({
       icon = <FiBookOpen />;
   }
 
-  const style =
+  /* 3. выбираем стиль ссылки */
+  const style: LinkProps =
     to === '/login'
       ? loginLinkStyle
       : to === '/register'
@@ -69,7 +72,7 @@ export default function NavItem({
         : linkStyles;
 
   return (
-    <ChakraLink asChild {...style} position='relative'>
+    <ChakraLink asChild {...style}>
       <NavLink to={to} onClick={onClick}>
         <Box as='span' display='flex' alignItems='center' gap='0.5rem'>
           {icon}

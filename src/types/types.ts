@@ -69,6 +69,7 @@ export interface AuthContextValue {
     currentPassword: string,
     newPassword: string,
   ) => Promise<void>;
+  refreshToken: string | null;
 }
 
 export interface MenuItem {
@@ -476,4 +477,30 @@ export interface PaginationProperties {
   currentPage: number;
   totalPages: number;
   onChange: (page: number) => void;
+}
+
+export interface LineItem {
+  id: string;
+  productId: string;
+  variantId: number;
+  name: LocalizedString;
+  quantity: number;
+  price: Price;
+  totalPrice: Price['value'];
+}
+
+export interface Cart {
+  id: string;
+  version: number;
+  customerId?: string;
+  anonymousId?: string;
+  currency: string;
+  country?: string;
+  lineItems: LineItem[];
+  totalPrice: Price['value'];
+}
+
+export interface MyCartDraft {
+  currency: string;
+  country?: string;
 }

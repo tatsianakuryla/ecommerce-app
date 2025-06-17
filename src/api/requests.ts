@@ -10,12 +10,15 @@ import {
   PROJECT_KEY,
   CATEGORIES_URL,
   locales,
+  MY_CARTS_URL,
+  MY_ACTIVE_CART_URL,
 } from '~/constants/constants';
 import {
   AddressDraft,
   CustomerDraft,
   CustomerUpdateAction,
   ILocales,
+  MyCartDraft,
   PermissionLevel,
   RegistrationData,
 } from '~/types/types';
@@ -275,3 +278,45 @@ export const getFilterValues = (
     },
   });
 };
+
+export const getMyActiveCart = (token: string): Request =>
+  new Request(MY_ACTIVE_CART_URL, {
+    method: 'GET',
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+export const createMyCart = (draft: MyCartDraft, token: string): Request =>
+  new Request(MY_CARTS_URL, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(draft),
+  });
+
+export const updateMyCart = (
+  cartId: string,
+  version: number,
+  actions: unknown[],
+  token: string,
+): Request =>
+  new Request(`${MY_CARTS_URL}/${cartId}`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ version, actions }),
+  });
+
+export const addLineItemAction = (
+  productId: string,
+  variantId: number,
+  quantity = 1,
+) => ({
+  action: 'addLineItem',
+  productId,
+  variantId,
+  quantity,
+});

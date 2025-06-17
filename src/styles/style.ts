@@ -205,11 +205,20 @@ export const productCardStyles = {
 
 export const basketBadgeStyle = {
   position: 'absolute',
-  bottom: '0.2rem',
-  right: '0.1rem',
-  fontSize: '0.6rem',
-  color: 'teal.900',
-  borderRadius: '0.1rem',
+  top: '-18px',
+  right: '-18px',
+  bg: 'red.500',
+  color: 'white',
+  borderRadius: 'full',
+  fontSize: 'xs',
+  lineHeight: '1',
+  px: '0.35em',
+  minW: '1.1em',
+  height: '1.1em',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  pointerEvents: 'none',
 };
 
 const baseLinkStyle = {
@@ -285,4 +294,15 @@ export const productCardTextStyle = {
   fontWeight: 'medium',
   letterSpacing: 'tight',
   mt: '2',
+};
+
+export const buttonStyle = {
+  fontWeight: 'semibold' as const,
+  fontSize: 'sm' as const,
+  borderRadius: 'md' as const,
+  px: 4,
+  py: 3,
+  display: 'flex',
+  alignItems: 'center',
+  gap: 2,
 };

@@ -31,6 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [justRegistered, setJustRegistered] = useState(false);
   const { makeRequest, error, loading, setError } = useMakeRequest();
   const [customer, setCustomer] = useState<Customer | null>(null);
+  const [refreshToken, setRefreshToken] = useState<string | null>(null);
 
   const fetchAnonymousToken = useCallback(async () => {
     try {
@@ -65,6 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       setAccessToken(response.access_token);
+      setRefreshToken(response.refresh_token);
       localStorage.setItem('authToken', response.access_token);
       setIsAuthenticated(true);
       const customer = await makeRequest(
@@ -176,6 +178,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         updatePassword,
         customer,
         setCustomer,
+        refreshToken,
       }}
     >
       {children}
