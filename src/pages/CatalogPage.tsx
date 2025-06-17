@@ -26,6 +26,7 @@ import { CategorySidebar } from '~/components/CategorySidebar/CategorySidebar';
 import { Pagination } from '~components/Pagination/Pagination';
 import { useSearchParams } from 'react-router-dom';
 import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle.tsx';
+import PromoBanner from '~components/PromoBanner/PromoBanner.tsx';
 
 export const CatalogPage = () => {
   const { accessToken, justRegistered, setJustRegistered } = useAuthContext();
@@ -128,6 +129,7 @@ export const CatalogPage = () => {
           )}
 
           <Box flex='1'>
+            <PromoBanner />
             <HStack mb='1rem' gap={4} alignItems='center'>
               <Input
                 placeholder='Search products…'

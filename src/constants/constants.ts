@@ -76,3 +76,8 @@ export const defaultAddressIndex = -1;
 export const PRODUCTS_PER_PAGE = 6;
 export const MY_CARTS_URL = `${BASE_API_URL}${PROJECT_KEY}/me/carts`;
 export const MY_ACTIVE_CART_URL = `${BASE_API_URL}${PROJECT_KEY}/me/active-cart`;
+export const promoCodes = ['SAVE10', 'WELCOME5'];
+export const PROMO_DISCOUNTS_RATE: Record<string, number> = {
+  SAVE10: 0.1,
+  WELCOME5: 0.05,
+};

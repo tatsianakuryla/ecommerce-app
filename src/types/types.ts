@@ -1,4 +1,4 @@
-import { locales } from '~constants/constants';
+import { locales, promoCodes } from '~constants/constants';
 
 export enum PermissionLevel {
   FULL = 'all',
@@ -487,6 +487,9 @@ export interface LineItem {
   quantity: number;
   price: Price;
   totalPrice: Price['value'];
+  variant?: {
+    images?: Image[];
+  };
 }
 
 export interface Cart {
@@ -504,3 +507,24 @@ export interface MyCartDraft {
   currency: string;
   country?: string;
 }
+
+export interface CartUpdateAction {
+  action: string;
+  [key: string]: unknown;
+}
+
+export interface DiscountCode {
+  id: string;
+  code: string;
+  isActive: boolean;
+}
+
+export interface DiscountCodeResponse {
+  limit: number;
+  offset: number;
+  count: number;
+  total: number;
+  results: DiscountCode[];
+}
+
+export type PromoCode = (typeof promoCodes)[number];
