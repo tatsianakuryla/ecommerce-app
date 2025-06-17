@@ -9,6 +9,7 @@ import {
   CategoriesResponse,
   CartItem,
   State,
+  DiscountCodeResponse,
 } from '~types/types';
 
 export const isAuthResponse = (data: unknown): data is AuthResponse => {
@@ -368,3 +369,6 @@ export function isState(object: unknown): object is State {
   const array = object.items;
   return array.every(isCartItem);
 }
+
+export const isDiscountCodeResponse = (u: unknown): u is DiscountCodeResponse =>
+  !!u && typeof u === 'object' && 'results' in u && Array.isArray(u.results);
