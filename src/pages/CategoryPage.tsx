@@ -9,7 +9,7 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import { Select } from '@chakra-ui/select';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useMakeRequest } from '~/hooks/useMakeRequest';
 import { getCategories, getProducts } from '~/api/requests';
@@ -22,7 +22,7 @@ import { locales, PRODUCTS_PER_PAGE } from '~/constants/constants';
 import { formatPrice } from '~/utils/helpers';
 import { useAuthContext } from '~/hooks/useAuthContext';
 import { Pagination } from '~components/Pagination/Pagination';
-import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle.tsx';
+import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle';
 
 export const CategoryPage = () => {
   const { categoryId } = useParams<'categoryId'>();
@@ -49,22 +49,29 @@ export const CategoryPage = () => {
     loading: loadingCat,
     error: errorCat,
   } = useMakeRequest();
+
   useEffect(() => {
     if (!accessToken) return;
-    void (async () => {
+
+    const fetchCategories = async () => {
       try {
-        const resp = await makeCatRequest(
+        const response = await makeCatRequest(
           getCategories(accessToken),
           isCategoriesResponse,
         );
-        if (resp) {
-          setAllCategories(resp.results);
+        if (response) {
+          setAllCategories(response.results);
           setCurrentCategory(
-            resp.results.find((c) => c.id === categoryId) || null,
+            response.results.find((category) => category.id === categoryId) ||
+              null,
           );
         }
-      } catch {}
-    })();
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    void fetchCategories();
   }, [accessToken, categoryId, makeCatRequest]);
 
   const {
@@ -72,39 +79,44 @@ export const CategoryPage = () => {
     loading: loadingProduction,
     error: errorProduction,
   } = useMakeRequest();
+
   useEffect(() => {
     if (!accessToken || !currentCategory) return;
-    let ignore = false;
+    let shouldIgnore = false;
 
-    const fetch = async () => {
-      const offset = (page - 1) * PRODUCTS_PER_PAGE;
-      const predicates = [`categories.id:"${currentCategory.id}"`];
-      const searchText = searchQuery.trim() || undefined;
-      const sortArray = [sortOption];
+    const fetchProducts = async () => {
+      try {
+        const offset = (page - 1) * PRODUCTS_PER_PAGE;
+        const predicates = [`categories.id:"${currentCategory.id}"`];
+        const searchText = searchQuery.trim() || undefined;
+        const sortArray = [sortOption];
 
-      const resp = await makeProductionRequest<ProductsResponse>(
-        getProducts(
-          accessToken,
-          PRODUCTS_PER_PAGE,
-          offset,
-          predicates,
-          sortArray,
-          searchText,
-          'UK',
-          'EUR',
-          'DE',
-        ),
-        isProductsResponse,
-      );
-      if (!ignore && resp) {
-        setProductsResponse(resp);
-        setTotalProducts(resp.total);
+        const response = await makeProductionRequest<ProductsResponse>(
+          getProducts(
+            accessToken,
+            PRODUCTS_PER_PAGE,
+            offset,
+            predicates,
+            sortArray,
+            searchText,
+            'UK',
+            'EUR',
+            'DE',
+          ),
+          isProductsResponse,
+        );
+        if (!shouldIgnore && response) {
+          setProductsResponse(response);
+          setTotalProducts(response.total);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
       }
     };
 
-    void fetch();
+    void fetchProducts();
     return () => {
-      ignore = true;
+      shouldIgnore = true;
     };
   }, [
     accessToken,
@@ -117,6 +129,14 @@ export const CategoryPage = () => {
 
   const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
 
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSortChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setSortOption(event.target.value);
+  };
+
   if (loadingCat) {
     return (
       <Container py='2rem'>
@@ -127,6 +147,7 @@ export const CategoryPage = () => {
       </Container>
     );
   }
+
   if (errorCat || !currentCategory) {
     return (
       <Container py='2rem'>
@@ -136,7 +157,7 @@ export const CategoryPage = () => {
   }
 
   return (
-    <Container maxW='container.xl' py='1rem'>
+    <Container maxW='container.xl' py='1rem' px={{ base: 4, md: 0 }}>
       <VStack align='stretch' gap={4}>
         <Breadcrumbs
           currentCategory={currentCategory}
@@ -144,29 +165,39 @@ export const CategoryPage = () => {
           locale={locales.UK}
         />
 
-        <Box display='flex' alignItems='flex-start'>
+        <Box
+          display='flex'
+          flexDirection={{ base: 'column', md: 'row' }}
+          alignItems='flex-start'
+        >
           {accessToken && (
-            <Box flex='0 0 300px' mr='1rem'>
+            <Box
+              flex='0 0 300px'
+              width={{ base: '100%', md: 'auto' }}
+              mr={{ base: 0, md: '1rem' }}
+              mb={{ base: 4, md: 0 }}
+            >
               <CategorySidebar token={accessToken} locale={locales.UK} />
             </Box>
           )}
 
-          <Box flex='1' ml='1rem'>
-            <HStack mb='1rem' gap={4}>
+          <Box flex='1' ml={{ base: 0, md: '1rem' }} width='100%'>
+            <HStack
+              mb='1rem'
+              gap={4}
+              flexDirection={{ base: 'column', sm: 'row' }}
+              alignItems={{ base: 'stretch', sm: 'center' }}
+            >
               <Input
                 placeholder='Search products…'
                 value={searchQuery}
-                onChange={(event) => {
-                  setSearchQuery(event.target.value);
-                }}
-                width='250px'
+                onChange={handleSearchChange}
+                width={{ base: '100%', sm: '250px' }}
               />
               <Select
                 value={sortOption}
-                onChange={(event) => {
-                  setSortOption(event.target.value);
-                }}
-                maxW='200px'
+                onChange={handleSortChange}
+                maxW={{ base: '100%', sm: '200px' }}
               >
                 <option value='variants.scopedPrice.value.centAmount asc'>
                   Price: Low → High
@@ -187,30 +218,37 @@ export const CategoryPage = () => {
               <Text color='red.500'>
                 Error loading products: {errorProduction}
               </Text>
-            ) : !productsResponse || productsResponse.results.length === 0 ? (
+            ) : !productsResponse?.results.length ? (
               <Text>No products in this category.</Text>
             ) : (
               <>
                 <Grid
-                  templateColumns='repeat(auto-fit, minmax(250px, 1fr))'
+                  templateColumns={{
+                    base: 'repeat(1, 1fr)',
+                    sm: 'repeat(2, 1fr)',
+                    md: 'repeat(3, 1fr)',
+                    lg: 'repeat(auto-fit, minmax(250px, 1fr))',
+                  }}
                   gap='1rem'
-                  justifyItems='center'
+                  justifyItems={{ base: 'center', sm: 'stretch' }}
                 >
                   {productsResponse.results.map((product) => {
                     const price =
                       product.masterVariant.prices[0].value.centAmount;
-                    const discounted =
+                    const discountedPrice =
                       product.masterVariant.prices[0].discounted?.value
                         .centAmount;
                     const currency =
                       product.masterVariant.prices[0].value.currencyCode;
                     const locale = locales.UK;
+                    const description = product.description[locale] || '';
+                    const imageUrl = product.masterVariant.images[0]?.url || '';
 
                     return (
                       <Link to={`/catalog/${product.id}`} key={product.id}>
                         <Box
-                          p='1rem'
-                          mb='0.5rem'
+                          p={{ base: '0.75rem', md: '1rem' }}
+                          mb={{ base: '0.25rem', md: '0.5rem' }}
                           borderWidth='1px'
                           borderRadius='md'
                           _hover={{ bg: 'gray.50' }}
@@ -218,13 +256,13 @@ export const CategoryPage = () => {
                           <ProductCard
                             id={product.id}
                             discount={
-                              discounted
-                                ? formatPrice(discounted, currency, locale)
-                                : ''
+                              discountedPrice
+                                ? formatPrice(discountedPrice, currency, locale)
+                                : undefined
                             }
                             name={product.name[locale]}
-                            description={product.description[locale]}
-                            img={product.masterVariant.images[0].url}
+                            description={description}
+                            img={imageUrl}
                             alt={product.name[locale]}
                             price={formatPrice(price, currency, locale)}
                           />

@@ -146,8 +146,8 @@ export const registrationButtonStyle = {
 
 export const formContainerStyle = {
   pos: 'relative',
-  minWidth: 382,
-  maxWidth: 382,
+  minWidth: { base: 320, md: 382 },
+  maxWidth: { base: 320, md: 382 },
   margin: '2rem auto',
 };
 

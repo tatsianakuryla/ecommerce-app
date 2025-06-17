@@ -108,7 +108,7 @@ export const CatalogPage = () => {
   const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
 
   return (
-    <Container maxW='container.xl' py='1rem'>
+    <Container maxW='container.xl' py='1rem' px={{ base: '10px', md: '1rem' }}>
       <VisuallyHidden>
         <Heading>Catalog page</Heading>
       </VisuallyHidden>
@@ -118,31 +118,45 @@ export const CatalogPage = () => {
           <ProgressCircleElement />
         </Flex>
       ) : (
-        <Box display='flex' alignItems='flex-start'>
+        <Box
+          display='flex'
+          flexDirection={{ base: 'column', md: 'row' }}
+          alignItems='flex-start'
+          gap={{ base: 4, md: 0 }}
+        >
           {accessToken && (
-            <Box flex='0 0 300px' mr='1rem'>
+            <Box
+              flex='0 0 300px'
+              mr={{ base: 0, md: '1rem' }}
+              width={{ base: '100%', md: 'auto' }}
+            >
               <Box mb='1rem'>
                 <CategorySidebar token={accessToken} locale={locales.UK} />
               </Box>
             </Box>
           )}
 
-          <Box flex='1'>
-            <HStack mb='1rem' gap={4} alignItems='center'>
+          <Box flex='1' width='100%'>
+            <HStack
+              mb='1rem'
+              gap={4}
+              alignItems='center'
+              flexDirection={{ base: 'column', md: 'row' }}
+            >
               <Input
                 placeholder='Search products…'
                 value={searchQuery}
                 onChange={(event) => {
                   setSearchQuery(event.target.value);
                 }}
-                width='250px'
+                width={{ base: '100%', md: '250px' }}
               />
               <Select
                 value={sortOption}
                 onChange={(event) => {
                   setSortOption(event.target.value);
                 }}
-                maxW='200px'
+                width={{ base: '100%', md: '200px' }}
               >
                 <option value='variants.scopedPrice.value.centAmount asc'>
                   Price: Low → High
@@ -156,8 +170,12 @@ export const CatalogPage = () => {
             </HStack>
 
             <Grid
-              templateColumns='repeat(auto-fill, minmax(300px, 300px))'
-              gap={6}
+              templateColumns={{
+                base: 'repeat(1, 1fr)',
+                sm: 'repeat(2, 1fr)',
+                md: 'repeat(auto-fill, minmax(300px, 1fr))',
+              }}
+              gap={{ base: 3, md: 6 }}
               justifyContent='center'
             >
               {productsResponse?.results.map((product) => {
@@ -172,8 +190,8 @@ export const CatalogPage = () => {
                   <ChakraLink
                     key={product.id}
                     asChild
-                    p='1rem'
-                    mb='0.5rem'
+                    p={{ base: '0.5rem', md: '1rem' }}
+                    mb={{ base: '0.25rem', md: '0.5rem' }}
                     borderWidth='1px'
                     borderRadius='md'
                     _hover={{ bg: 'gray.50' }}
@@ -184,7 +202,7 @@ export const CatalogPage = () => {
                         height='100%'
                         flexDirection='column'
                         w='100%'
-                        maxW='300px'
+                        maxW='100%'
                       >
                         <ProductCard
                           id={product.id}
