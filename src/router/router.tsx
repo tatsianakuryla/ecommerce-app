@@ -14,7 +14,7 @@ import { RequireAuth } from '~components/ProtectedRoute/RequireAuth';
 import { CatalogPage } from '~pages/CatalogPage';
 import { ProductPage } from '~pages/ProductPage';
 import { CategoryPage } from '~pages/CategoryPage';
-import { BasketPage } from '~pages/BasketPage';
+import { BasketPage } from '~pages/BasketPage/BasketPage.tsx';
 
 export const routes = createRoutesFromElements(
   <Route path='/' element={<RootLayout />}>

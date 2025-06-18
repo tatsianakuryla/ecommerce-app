@@ -573,3 +573,12 @@ export interface NavItemProperties {
   to: string;
   onClick?: () => void;
 }
+
+export type BasketItemProperties = {
+  id: string;
+  name: string;
+  image: string;
+  price: string;
+  quantity: number;
+  lineTotal: string;
+};
