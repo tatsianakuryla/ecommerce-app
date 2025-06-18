@@ -30,7 +30,12 @@ export const Breadcrumbs = ({
 
   return (
     <Breadcrumb.Root mb='1rem'>
-      <Breadcrumb.List gap='8px'>
+      <Breadcrumb.List
+        gap='8px'
+        display='flex'
+        flexWrap='wrap'
+        alignItems='center'
+      >
         <Breadcrumb.Item>
           <Breadcrumb.Link asChild>
             <Link to='/'>Catalog</Link>

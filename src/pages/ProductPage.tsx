@@ -78,7 +78,7 @@ export const ProductPage = () => {
       <Grid
         templateColumns={{ base: '1fr', md: '1fr 1fr' }}
         gap={10}
-        p={6}
+        p={{ base: 2, md: 6 }}
         borderWidth='1px'
         borderRadius='lg'
         boxShadow='md'
