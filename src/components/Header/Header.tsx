@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 import logo from '../../assets/images/logo-without-bg.png';
 import Hamburger from 'hamburger-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import NavItem from '~components/Header/Nav-item';
 import { useAuthContext } from '~/hooks/useAuthContext';
 import { MenuItem } from '~types/types';
@@ -40,7 +40,19 @@ function Header() {
     { label: 'Logout', to: '/', onClick: logout },
   ];
   const itemsToRender = isAuthenticated ? authItems : guestItems;
+  useEffect(() => {
+    const handleResize = () => {
+      const isDesktop = window.innerWidth >= 768;
+      if (isDesktop) {
+        setOpen(false);
+      }
+    };
 
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   const [isOpen, setOpen] = useState(false);
   return (
     <Container {...headerContainerStyle}>
