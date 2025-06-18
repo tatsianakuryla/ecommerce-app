@@ -23,6 +23,7 @@ import { useState } from 'react';
 import { useCart } from '~/contexts/cartContext';
 import { locales, PROMO_DISCOUNTS_RATE } from '~/constants/constants';
 import { formatPrice } from '~/utils/helpers';
+import { FiX } from 'react-icons/fi';
 
 const locale = locales.UK;
 
@@ -72,7 +73,6 @@ function BasketItem({
         align={{ base: 'stretch', lg: 'center' }}
         gap={4}
       >
-        {/* --- Image + title/price */}
         <Box flexShrink={0} textAlign={{ base: 'left', lg: 'center' }}>
           <Image
             src={image}
@@ -95,7 +95,6 @@ function BasketItem({
           </Flex>
         </Box>
 
-        {/* --- Controls */}
         <Flex
           mt={{ base: 3, lg: 0 }}
           align='center'
@@ -108,6 +107,7 @@ function BasketItem({
             value={String(quantity)}
             min={1}
             size='sm'
+            w={{ base: '100px', md: '180px' }}
             disabled={loading}
             onValueChange={({ valueAsNumber }) => {
               if (!Number.isNaN(valueAsNumber)) {
@@ -117,7 +117,7 @@ function BasketItem({
               }
             }}
           >
-            <NumberInput.Control w='80px' />
+            <NumberInput.Control w='60px' />
             <NumberInput.Input />
           </NumberInput.Root>
 
@@ -178,7 +178,6 @@ export function BasketPage() {
       </VisuallyHidden>
 
       <Grid templateColumns={{ base: '1fr', md: '2fr 1fr' }} gap={8}>
-        {/* список товаров */}
         <Box>
           <Heading size='md' mb='4'>
             Items in cart
@@ -202,7 +201,6 @@ export function BasketPage() {
           </Grid>
         </Box>
 
-        {/* сводка */}
         <Stack gap={4}>
           <Heading size='md'>Summary</Heading>
 
@@ -292,7 +290,7 @@ export function BasketPage() {
                     variant='ghost'
                     aria-label='Close'
                   >
-                    ✕
+                    <FiX />
                   </Button>
                 </Dialog.CloseTrigger>
 
@@ -308,16 +306,19 @@ export function BasketPage() {
                     <Button flex='1'>Cancel</Button>
                   </Dialog.CloseTrigger>
 
-                  <Dialog.CloseTrigger asChild>
-                    <Button
-                      flex='1'
-                      colorScheme='red'
-                      loading={loading}
-                      onClick={() => void clearCart()}
-                    >
-                      Yes, clear
-                    </Button>
-                  </Dialog.CloseTrigger>
+                  <Button
+                    flex='1'
+                    colorScheme='red'
+                    loading={loading}
+                    onClick={() => {
+                      void clearCart();
+                      document.activeElement?.dispatchEvent(
+                        new MouseEvent('click', { bubbles: true }),
+                      );
+                    }}
+                  >
+                    Yes
+                  </Button>
                 </Dialog.Footer>
               </Dialog.Content>
             </Dialog.Positioner>
