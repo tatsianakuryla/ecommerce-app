@@ -5,7 +5,7 @@ import { ReactElement } from 'react';
 import {
   redirectionLinkBoxStyle,
   redirectionLoginLinkStyle,
-} from '~/styles/style.ts';
+} from '~/styles/style';
 
 function RedirectionLink({
   label,

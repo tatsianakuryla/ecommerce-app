@@ -1,7 +1,7 @@
 import { Card, chakra, Flex, Text } from '@chakra-ui/react';
 import { ProductCardProperties } from '~types/types';
 import { productCardStyles, productCardTextStyle } from '~/styles/style';
-import { AddRemoveItemButton } from '~components/AddRemoveItemButton/AddRemoveItemButton.tsx';
+import { AddRemoveItemButton } from '~components/AddRemoveItemButton/AddRemoveItemButton';
 
 const ChakraImage = chakra('img');
 

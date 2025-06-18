@@ -29,7 +29,7 @@ import {
   defaultAddressIndex,
   defaultAddressInfo,
   defaultUserInfo,
-} from '~constants/constants.ts';
+} from '~constants/constants';
 
 export function RegistrationForm() {
   const { register, error, setError, loading } = useAuthContext();

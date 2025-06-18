@@ -2,7 +2,7 @@ import { HStack, Button, Text } from '@chakra-ui/react';
 import { useCart } from '~/contexts/cartContext';
 import { AddToCartButtonProperties } from '~types/types';
 import { HiPlusSm, HiMinusSm } from 'react-icons/hi';
-import { buttonStyle } from '~/styles/style.ts';
+import { buttonStyle } from '~/styles/style';
 
 export const AddRemoveItemButton = ({
   productId,

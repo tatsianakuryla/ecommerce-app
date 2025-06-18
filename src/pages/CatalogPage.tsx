@@ -25,8 +25,8 @@ import { isProductsResponse } from '~/utils/typeguards';
 import { CategorySidebar } from '~/components/CategorySidebar/CategorySidebar';
 import { Pagination } from '~components/Pagination/Pagination';
 import { useSearchParams } from 'react-router-dom';
-import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle.tsx';
-import PromoBanner from '~components/PromoBanner/PromoBanner.tsx';
+import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle';
+import PromoBanner from '~components/PromoBanner/PromoBanner';
 
 export const CatalogPage = () => {
   const { accessToken, justRegistered, setJustRegistered } = useAuthContext();

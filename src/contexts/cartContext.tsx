@@ -14,8 +14,8 @@ import {
 } from '~/api/requests';
 import { useMakeRequest } from '~/hooks/useMakeRequest';
 import { Cart, PromoCode } from '~types/types';
-import { useAuthContext } from '~hooks/useAuthContext.ts';
-import { promoCodes } from '~constants/constants.ts';
+import { useAuthContext } from '~hooks/useAuthContext';
+import { promoCodes } from '~constants/constants';
 
 export interface CartContextShape {
   cart: Cart | null;

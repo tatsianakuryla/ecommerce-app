@@ -4,7 +4,7 @@ import {
   validateDateOfBirth,
   validateFirstName,
   validateLastName,
-} from '~components/Form/RegistrationForm/registrationFormValidation.ts';
+} from '~components/Form/RegistrationForm/registrationFormValidation';
 
 export function usePersonalInfoForm(initial: {
   firstName: string;

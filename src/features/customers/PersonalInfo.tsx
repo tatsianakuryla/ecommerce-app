@@ -10,7 +10,7 @@ import {
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { FiUser } from 'react-icons/fi';
 import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert';
-import { PersonalInfoProperties } from '~types/types.ts';
+import { PersonalInfoProperties } from '~types/types';
 
 export function PersonalInfo({
   isEditing,

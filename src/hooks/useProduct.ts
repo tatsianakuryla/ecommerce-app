@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useContext } from 'react';
-import { AuthContext } from '~/contexts/authContext.tsx';
+import { AuthContext } from '~/contexts/authContext';
 import { useMakeRequest } from '~/hooks/useMakeRequest';
 import { getProductById } from '~/api/requests';
 import { Locale, LocalizedString, Product } from '~types/types';

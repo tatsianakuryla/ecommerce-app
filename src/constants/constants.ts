@@ -1,5 +1,4 @@
-// Requests related
-import { ILocales } from '~types/types.ts';
+import { ILocales } from '~types/types';
 
 export const PROJECT_KEY = 'rssecomm';
 const CLIENT_ID = 'VSoSJL93ehdNSp2ILY62b3zG';
@@ -7,7 +6,6 @@ const CLIENT_SECRET = '9xPxdvPzFxRVhOAw4_U1Qkbcub8EcT1U';
 export const BASIC_AUTH_HEADER =
   'Basic ' + btoa(`${CLIENT_ID}:${CLIENT_SECRET}`);
 
-// Permissions
 const GUEST_PERMISSIONS = {
   VIEW_PRODUCTS: 'view_products',
   VIEW_CATEGORIES: 'view_categories',
@@ -38,7 +36,6 @@ export const permissions = {
   all: ALL_PERMISSIONS,
 } as const;
 
-// URL
 export const BASE_API_URL = 'https://api.eu-central-1.aws.commercetools.com/';
 export const BASE_AUTH_URL = 'https://auth.eu-central-1.aws.commercetools.com/';
 export const USER_AUTH_TOKEN = `oauth/${PROJECT_KEY}/customers/token`;
@@ -49,7 +46,6 @@ export const PUBLISHED_PRODUCTS_URL = `${BASE_API_URL}${PROJECT_KEY}/product-pro
 export const CUSTOMER_CREATION_URL = `${BASE_API_URL}${PROJECT_KEY}/customers`;
 export const CATEGORIES_URL = `${BASE_API_URL}${PROJECT_KEY}/categories`;
 
-// locales
 export const locales: ILocales = {
   DE: 'de-DE',
   EN: 'en-US',

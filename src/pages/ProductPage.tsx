@@ -11,7 +11,7 @@ import {
 import { useParams } from 'react-router-dom';
 import { getLocalizedString, useProduct } from '~/hooks/useProduct';
 import { ImageSlider } from '~/components/ImageSlider/ImageSlider';
-import { AddRemoveItemButton } from '~components/AddRemoveItemButton/AddRemoveItemButton.tsx';
+import { AddRemoveItemButton } from '~components/AddRemoveItemButton/AddRemoveItemButton';
 
 export const ProductPage = () => {
   const { productId } = useParams<{ productId: string }>();

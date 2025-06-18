@@ -8,7 +8,7 @@ import {
   formContainerStyle,
   formIconStyle,
   registrationButtonStyle,
-} from '~/styles/style.ts';
+} from '~/styles/style';
 
 export function Form({
   id,
