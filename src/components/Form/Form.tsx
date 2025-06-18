@@ -6,7 +6,11 @@ import { ErrorAlert } from '../ErrorAlert/ErrorAlert';
 import { getAutocompleteValue } from '~utils/helpers';
 import {
   formContainerStyle,
+  formFieldBoxStyle,
   formIconStyle,
+  formInputErrorStyle,
+  formInputStyle,
+  formPasswordToggleStyle,
   registrationButtonStyle,
 } from '~/styles/style';
 
@@ -47,7 +51,7 @@ export function Form({
             : type;
 
           return (
-            <Box key={name} mb={hasError ? 2 : 4}>
+            <Box key={name} {...formFieldBoxStyle(hasError)}>
               <Box position='relative' w='full'>
                 <Input
                   id={name}
@@ -60,12 +64,10 @@ export function Form({
                   }}
                   placeholder={placeholder}
                   pr={isPasswordField ? '2.5rem' : undefined}
-                  borderColor={hasError ? 'red' : undefined}
+                  {...(hasError ? formInputErrorStyle : formInputStyle)}
                 />
                 {isPasswordField && (
                   <IconButton
-                    size='sm'
-                    variant='ghost'
                     aria-label={
                       showPassword ? 'Hide password' : 'Show password'
                     }
@@ -73,6 +75,9 @@ export function Form({
                       toggleShow(name);
                     }}
                     {...formIconStyle}
+                    {...formPasswordToggleStyle}
+                    size='sm'
+                    variant='ghost'
                   >
                     {showPassword ? <FiEyeOff /> : <FiEye />}
                   </IconButton>

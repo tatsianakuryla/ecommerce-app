@@ -6,6 +6,12 @@ import { isCategoriesResponse } from '~/utils/typeguards';
 import { Category, ILocales } from '~/types/types';
 import { locales } from '~/constants/constants';
 import { CategoryNodeItem } from '~/components/CategorySidebar/CategoryNodeItem';
+import {
+  categorySidebarBoxStyle,
+  categorySidebarTitleStyle,
+  categorySidebarErrorStyle,
+  categorySidebarListStyle,
+} from '~/styles/style';
 
 interface CategoryNode extends Category {
   children: CategoryNode[];
@@ -60,24 +66,16 @@ export const CategorySidebar = ({
   }, [makeRequest, token]);
 
   return (
-    <Box
-      as='aside'
-      w='250px'
-      p='1rem'
-      borderWidth='1px'
-      borderRadius='md'
-      overflowY='auto'
-      maxH='80vh'
-    >
-      <Text fontSize='lg' mb='0.5rem' fontWeight='semibold'>
-        Categories
-      </Text>
+    <Box as='aside' {...categorySidebarBoxStyle}>
+      <Text {...categorySidebarTitleStyle}>Categories</Text>
+
       {loading && <Text>Loading...</Text>}
-      {error && <Text color='red.500'>Error: {error}</Text>}
+      {error && <Text {...categorySidebarErrorStyle}>Error: {error}</Text>}
       {!loading && !error && tree.length === 0 && (
         <Text>There is no categories</Text>
       )}
-      <VStack align='start' gap={1}>
+
+      <VStack {...categorySidebarListStyle}>
         {tree.map((root) => (
           <CategoryNodeItem key={root.id} node={root} locale={locale} />
         ))}

@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useCallback,
-  useEffect,
-} from 'react';
+import { useState, ReactNode, useCallback, useEffect } from 'react';
 import {
   getMyActiveCart,
   createMyCart,
@@ -16,50 +9,9 @@ import { useMakeRequest } from '~/hooks/useMakeRequest';
 import { Cart, PromoCode } from '~types/types';
 import { useAuthContext } from '~hooks/useAuthContext';
 import { promoCodes } from '~constants/constants';
-
-export interface CartContextShape {
-  cart: Cart | null;
-  loading: boolean;
-  addToCart: (
-    productId: string,
-    variantId: number,
-    qty?: number,
-  ) => Promise<void>;
-  removeFromCart: (lineItemId: string) => Promise<void>;
-  updateLineItemQuantity: (lineItemId: string, qty: number) => Promise<void>;
-  clearCart: () => Promise<void>;
-  applyDiscountCode: (code: string) => void;
-  appliedCode: PromoCode | null;
-}
-
-import Toastify from 'toastify-js';
-
-export function showError(message: string) {
-  Toastify({
-    text: message,
-    duration: 3000,
-    close: true,
-    gravity: 'top',
-    position: 'right',
-    style: { background: '#E53E3E', color: '#fff' },
-  }).showToast();
-}
-
-export function showInfo(message: string) {
-  Toastify({
-    text: message,
-    duration: 2500,
-    close: false,
-    gravity: 'top',
-    position: 'right',
-    style: { background: '#319795', color: '#fff' },
-  }).showToast();
-}
-
-export const isCart = (u: unknown): u is Cart =>
-  !!u && typeof u === 'object' && 'id' in u && 'version' in u;
-
-const CartContext = createContext<CartContextShape | undefined>(undefined);
+import { isCart } from '~utils/typeguards';
+import { CartContext } from '~hooks/useCart';
+import { showError, showInfo } from '~utils/helpers';
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const { accessToken } = useAuthContext();
@@ -234,10 +186,4 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       {children}
     </CartContext.Provider>
   );
-};
-
-export const useCart = () => {
-  const context = useContext(CartContext);
-  if (!context) throw new Error('useCart must be used within CartProvider');
-  return context;
 };

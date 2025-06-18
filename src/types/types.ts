@@ -1,8 +1,6 @@
 import { locales, promoCodes } from '~constants/constants';
 
 export enum PermissionLevel {
-  FULL = 'all',
-  API = 'api',
   USER = 'user',
   GUEST = 'guest',
 }
@@ -420,16 +418,6 @@ export interface CategoriesResponse {
   results: Category[];
 }
 
-export type Action =
-  | { type: 'ADD_ITEM'; payload: CartItem }
-  | { type: 'REMOVE_ITEM'; payload: { id: string } }
-  | { type: 'CLEAR_CART' };
-
-export interface CartContextValue extends State {
-  dispatch: React.Dispatch<Action>;
-  totalCount: number;
-}
-
 export type State = { items: CartItem[] };
 
 export type CartItem = {
@@ -457,23 +445,6 @@ export interface PaginationProperties {
   totalPages: number;
   onChange: (page: number) => void;
 }
-
-export type Action =
-  | { type: 'ADD_ITEM'; payload: CartItem }
-  | { type: 'REMOVE_ITEM'; payload: { id: string } }
-  | { type: 'CLEAR_CART' };
-
-export interface CartContextValue extends State {
-  dispatch: React.Dispatch<Action>;
-  totalCount: number;
-}
-
-export type State = { items: CartItem[] };
-
-export type CartItem = {
-  id: string;
-  quantity: number;
-};
 
 export interface AddToCartButtonProperties {
   productId: string;
@@ -526,8 +497,8 @@ export interface MyCartDraft {
 }
 
 export interface CartUpdateAction {
-  action: string;
   [key: string]: unknown;
+  action: string;
 }
 
 export interface DiscountCode {
@@ -545,3 +516,60 @@ export interface DiscountCodeResponse {
 }
 
 export type PromoCode = (typeof promoCodes)[number];
+
+export interface TeamMember {
+  img: string;
+  name: string;
+  role: string;
+  desc: string;
+  bio: string;
+  github: string;
+}
+
+interface CategoryNode extends Category {
+  children: CategoryNode[];
+}
+
+export interface Properties {
+  node: CategoryNode;
+  locale: ILocales[keyof ILocales];
+}
+
+export interface ImageSliderProperties {
+  images: Array<{ url: string; alt?: string }>;
+  boxHeight?: string | number;
+  boxWidth?: string | number;
+  maxHeight?: string | number;
+}
+
+export interface ChangePasswordDialogProperties {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export interface UseProductResult {
+  data: Product | null;
+  loading: boolean;
+  error: string | null;
+}
+
+export interface CartContextShape {
+  cart: Cart | null;
+  loading: boolean;
+  addToCart: (
+    productId: string,
+    variantId: number,
+    qty?: number,
+  ) => Promise<void>;
+  removeFromCart: (lineItemId: string) => Promise<void>;
+  updateLineItemQuantity: (lineItemId: string, qty: number) => Promise<void>;
+  clearCart: () => Promise<void>;
+  applyDiscountCode: (code: string) => void;
+  appliedCode: PromoCode | null;
+}
+
+export interface NavItemProperties {
+  label: string;
+  to: string;
+  onClick?: () => void;
+}

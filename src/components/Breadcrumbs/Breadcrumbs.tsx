@@ -4,6 +4,12 @@ import { Link } from 'react-router-dom';
 import { Category, ILocales } from '~/types/types';
 import { locales } from '~/constants/constants';
 import { Fragment } from 'react/jsx-runtime';
+import {
+  breadcrumbRootStyle,
+  breadcrumbListStyle,
+  breadcrumbLinkStyle,
+  breadcrumbCurrentStyle,
+} from '~/styles/style';
 
 interface BreadcrumbsProperties {
   currentCategory: Category;
@@ -29,16 +35,13 @@ export const Breadcrumbs = ({
   const trail = buildTrail();
 
   return (
-    <Breadcrumb.Root mb='1rem'>
-      <Breadcrumb.List
-        gap='8px'
-        display='flex'
-        flexWrap='wrap'
-        alignItems='center'
-      >
+    <Breadcrumb.Root {...breadcrumbRootStyle}>
+      <Breadcrumb.List {...breadcrumbListStyle}>
         <Breadcrumb.Item>
           <Breadcrumb.Link asChild>
-            <Link to='/'>Catalog</Link>
+            <Link to='/' {...breadcrumbLinkStyle}>
+              Catalog
+            </Link>
           </Breadcrumb.Link>
         </Breadcrumb.Item>
 
@@ -49,17 +52,17 @@ export const Breadcrumbs = ({
           return (
             <Fragment key={category.id}>
               <Breadcrumb.Item>
-                {isLast ? (
-                  <Breadcrumb.Link asChild>
-                    <span style={{ fontWeight: '600' }}>
+                <Breadcrumb.Link asChild>
+                  {isLast ? (
+                    <span {...breadcrumbCurrentStyle}>
                       {category.name[locale]}
                     </span>
-                  </Breadcrumb.Link>
-                ) : (
-                  <Breadcrumb.Link asChild>
-                    <Link to={to}>{category.name[locale]}</Link>
-                  </Breadcrumb.Link>
-                )}
+                  ) : (
+                    <Link to={to} {...breadcrumbLinkStyle}>
+                      {category.name[locale]}
+                    </Link>
+                  )}
+                </Breadcrumb.Link>
               </Breadcrumb.Item>
 
               {!isLast && (

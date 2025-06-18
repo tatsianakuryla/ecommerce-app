@@ -215,8 +215,8 @@ export const getProducts = (
     });
   }
   if (sort && sort.length > 0) {
-    sort.forEach((s) => {
-      url.searchParams.append('sort', s);
+    sort.forEach((sortItem) => {
+      url.searchParams.append('sort', sortItem);
     });
   }
 

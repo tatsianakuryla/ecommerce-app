@@ -20,13 +20,12 @@ import Toastify from 'toastify-js';
 import { FiTrash2 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import { useCart } from '~/contexts/cartContext';
 import { locales, PROMO_DISCOUNTS_RATE } from '~/constants/constants';
 import { formatPrice } from '~/utils/helpers';
 import { FiX } from 'react-icons/fi';
+import { useCart } from '~hooks/useCart.ts';
 
 const locale = locales.UK;
-
 const priceStyles = { fontWeight: 'bold', fontSize: 'lg' };
 
 function showError(text: string) {
