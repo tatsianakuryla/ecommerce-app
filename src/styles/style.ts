@@ -414,7 +414,6 @@ export const formInputErrorStyle = {
 export const formPasswordToggleStyle = {
   _hover: {
     bg: 'gray.100',
-    transform: 'scale(1.05)',
   },
   transition: 'all 0.2s ease-in-out',
 };
