@@ -14,6 +14,7 @@ const GUEST_PERMISSIONS = {
   VIEW_CATEGORIES: 'view_categories',
   MANAGE_MY_ORDERS: 'manage_my_orders',
   CREATE_ANONYMOUS_TOKEN: 'create_anonymous_token',
+  MANAGE_CUSTOMERS: 'manage_customers',
 } as const;
 
 const USER_PERMISSIONS = {
