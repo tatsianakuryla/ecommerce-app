@@ -8,6 +8,7 @@ import {
   Category,
   CategoriesResponse,
   Cart,
+  StoredToken,
 } from '~types/types';
 
 export const isAuthResponse = (data: unknown): data is AuthResponse => {
@@ -345,3 +346,14 @@ export function isCategoriesResponse(
 
 export const isCart = (cart: unknown): cart is Cart =>
   !!cart && typeof cart === 'object' && 'id' in cart && 'version' in cart;
+
+export const isStoredToken = (value: unknown): value is StoredToken => {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'token' in value &&
+    typeof value.token === 'string' &&
+    'expiresAt' in value &&
+    typeof value.expiresAt === 'number'
+  );
+};

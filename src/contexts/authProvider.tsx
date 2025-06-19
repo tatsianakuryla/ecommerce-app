@@ -21,9 +21,16 @@ import {
   RegistrationData,
 } from '~types/types';
 
+import {
+  getAnonymousId,
+  getCachedToken,
+  cacheToken,
+  clearAnonData,
+} from '~/utils/storage';
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [accessToken, setAccessToken] = useState<string | null>(() =>
-    localStorage.getItem('authToken'),
+  const [accessToken, setAccessToken] = useState<string | null>(
+    () => localStorage.getItem('authToken') || getCachedToken(),
   );
   const [isAuthenticated, setIsAuthenticated] = useState(
     () => !!localStorage.getItem('authToken'),
@@ -34,51 +41,62 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
 
   const fetchAnonymousToken = useCallback(async () => {
-    try {
-      const response = await makeRequest(
-        generateAnonymousToken(),
-        isAuthResponse,
-      );
-      if (response) setAccessToken(response.access_token);
-    } catch (error) {
-      throw new Error('anonymous token fetching failed', {
-        cause: error,
-      });
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      const anonId = getAnonymousId();
+      try {
+        const resp = await makeRequest(
+          generateAnonymousToken(anonId),
+          isAuthResponse,
+        );
+        if (!resp) throw new Error('empty auth response');
+
+        cacheToken(resp.access_token, resp.expires_in);
+        setAccessToken(resp.access_token);
+        return;
+      } catch (error_: unknown) {
+        if (
+          error_ instanceof Error &&
+          /anonymousId\s+is\s+already\s+in\s+use/i.test(error_.message)
+        ) {
+          clearAnonData();
+          continue;
+        }
+        throw error_;
+      }
     }
+    throw new Error('Unable to obtain anonymous token: all attempts failed');
   }, [makeRequest]);
 
   const logout = () => {
-    void fetchAnonymousToken();
-    setIsAuthenticated(false);
+    clearAnonData();
     localStorage.removeItem('authToken');
+    setIsAuthenticated(false);
     setAccessToken(null);
+    setCustomer(null);
+
+    void fetchAnonymousToken();
   };
 
   const login = async (email: string, password: string) => {
-    try {
-      const response = await makeRequest(
-        authenticateUser(email, password),
-        isAuthResponse,
-      );
+    const response = await makeRequest(
+      authenticateUser(email, password),
+      isAuthResponse,
+    );
+    if (!response?.access_token)
+      throw new Error('access_token was not received during login attempt');
 
-      if (!response?.access_token) {
-        throw new Error('access_token was not received during login attempt');
-      }
+    clearAnonData();
+    localStorage.setItem('authToken', response.access_token);
 
-      setAccessToken(response.access_token);
-      setRefreshToken(response.refresh_token);
-      localStorage.setItem('authToken', response.access_token);
-      setIsAuthenticated(true);
-      const customer = await makeRequest(
-        fetchUserProfileRequest(response.access_token),
-        isCustomer,
-      );
-      if (customer) {
-        setCustomer(customer);
-      }
-    } catch (error) {
-      throw new Error('user login failed', { cause: error });
-    }
+    setAccessToken(response.access_token);
+    setRefreshToken(response.refresh_token);
+    setIsAuthenticated(true);
+
+    const me = await makeRequest(
+      fetchUserProfileRequest(response.access_token),
+      isCustomer,
+    );
+    if (me) setCustomer(me);
   };
 
   const register = async (
@@ -156,9 +174,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    if (!accessToken) {
-      void fetchAnonymousToken();
-    }
+    if (!accessToken) void fetchAnonymousToken();
   }, [accessToken, fetchAnonymousToken]);
 
   return (

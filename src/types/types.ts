@@ -561,3 +561,8 @@ export type BasketItemProperties = {
   quantity: number;
   lineTotal: string;
 };
+
+export interface StoredToken {
+  token: string;
+  expiresAt: number;
+}

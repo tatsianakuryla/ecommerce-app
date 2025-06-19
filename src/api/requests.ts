@@ -1,4 +1,3 @@
-import { v4 } from 'uuid';
 import { generatePermissions } from '~utils/helpers';
 import {
   BASIC_AUTH_HEADER,
@@ -48,18 +47,16 @@ export const authenticateUser = (
   });
 };
 
-export const generateAnonymousToken = (): Request => {
+export const generateAnonymousToken = (anonId: string): Request => {
   const body = new URLSearchParams({
     grant_type: 'client_credentials',
     scope: guestPermissions,
-    anonymous_id: v4(),
+    anonymous_id: anonId,
   });
 
   return new Request(GUEST_AUTH_TOKEN_URL, {
     method: 'POST',
-    headers: {
-      Authorization: BASIC_AUTH_HEADER,
-    },
+    headers: { Authorization: BASIC_AUTH_HEADER },
     body,
   });
 };
