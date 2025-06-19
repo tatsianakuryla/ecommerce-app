@@ -7,9 +7,6 @@ import {
   Product,
   Category,
   CategoriesResponse,
-  CartItem,
-  State,
-  DiscountCodeResponse,
   Cart,
 } from '~types/types';
 
@@ -345,34 +342,6 @@ export function isCategoriesResponse(
     results.every(isCategory)
   );
 }
-
-function isCartItem(object: unknown): object is CartItem {
-  if (typeof object !== 'object' || object === null) {
-    return false;
-  }
-  return (
-    'id' in object &&
-    typeof object.id === 'string' &&
-    'quantity' in object &&
-    typeof object.quantity === 'number'
-  );
-}
-
-export function isState(object: unknown): object is State {
-  if (
-    typeof object !== 'object' ||
-    object === null ||
-    !('items' in object) ||
-    !Array.isArray(object.items)
-  ) {
-    return false;
-  }
-  const array = object.items;
-  return array.every(isCartItem);
-}
-
-export const isDiscountCodeResponse = (u: unknown): u is DiscountCodeResponse =>
-  !!u && typeof u === 'object' && 'results' in u && Array.isArray(u.results);
 
 export const isCart = (cart: unknown): cart is Cart =>
   !!cart && typeof cart === 'object' && 'id' in cart && 'version' in cart;

@@ -418,13 +418,6 @@ export interface CategoriesResponse {
   results: Category[];
 }
 
-export type State = { items: CartItem[] };
-
-export type CartItem = {
-  id: string;
-  quantity: number;
-};
-
 export interface AddToCartButtonProperties {
   productId: string;
   quantity?: number;
@@ -499,20 +492,6 @@ export interface MyCartDraft {
 export interface CartUpdateAction {
   [key: string]: unknown;
   action: string;
-}
-
-export interface DiscountCode {
-  id: string;
-  code: string;
-  isActive: boolean;
-}
-
-export interface DiscountCodeResponse {
-  limit: number;
-  offset: number;
-  count: number;
-  total: number;
-  results: DiscountCode[];
 }
 
 export type PromoCode = (typeof promoCodes)[number];

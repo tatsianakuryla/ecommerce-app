@@ -1,9 +1,5 @@
-import { createContext, useContext } from 'react';
-import { CartContextShape } from '~types/types';
-
-export const CartContext = createContext<CartContextShape | undefined>(
-  undefined,
-);
+import { useContext } from 'react';
+import { CartContext } from '~/contexts/cartContext';
 
 export const useCart = () => {
   const context = useContext(CartContext);

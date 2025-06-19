@@ -285,15 +285,3 @@ export const addLineItemAction = (
   variantId,
   quantity,
 });
-
-export const getActivePromoCodes = (token: string): Request =>
-  new Request(
-    `${BASE_API_URL}${PROJECT_KEY}/discount-codes?where=isActive=true&limit=500`,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    },
-  );
