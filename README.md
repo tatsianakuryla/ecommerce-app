@@ -4,7 +4,7 @@ This is a feature-rich eCommerce web application built with React and TypeScript
 
 This platform brings the real-life shopping experience into a digital space 🏪. It serves as a fully-featured online storefront, offering users an engaging and intuitive interface. From browsing products to completing a purchase, the app provides a smooth and enjoyable journey, encouraging user interaction and building purchase confidence 🚀.
 
-Users can explore a wide selection of products 📚👗👟, access detailed descriptions, add items to their shopping cart 🛒, and complete the checkout process 💳. Key features include account registration and login, product search, categorization, and sorting options to create a streamlined and user-friendly shopping experience.
+Users can explore a wide choice of products 📚👗👟, access detailed descriptions, add items to their shopping cart 🛒, and complete the checkout process 💳. Key features include account registration and login, product search, categorization, and sorting options to create a streamlined and user-friendly shopping experience.
 
 ---
 
@@ -134,7 +134,7 @@ npm install
 
 rename .env.example to .env
 
-add actual values to
+Add actual values to
 VITE_CLIENT_ID, VITE_CLIENT_SECRET, VITE_API_CLIENT_NAME constants.
 Values are in the [API doc](https://docs.google.com/document/d/1yTAIGZu7cwOU8YcoheYfykwRaLIkq3HAkz0m4Izi3OQ/edit?tab=t.0)
 
@@ -152,7 +152,7 @@ npm run dev
 npm install
 ```
 
-**🐶 Git Hooks Setup** - Initialize Husky (automatically creates Git hooks)
+**🐶 Git-Hooks-Setup** - Initialize Husky (automatically creates Git hooks)
 
 ```bash
 npm run prepare
@@ -164,7 +164,7 @@ npm run prepare
 npm run dev
 ```
 
-**📦 Production Build** - Build the project for production
+**📦 Production-Build** - Build the project for production
 
 ```bash
 npm run build
