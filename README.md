@@ -15,8 +15,8 @@ Users can explore a wide selection of products 📚👗👟, access detailed des
 3. [💻 Technologies](#-technologies)
 4. [🎯 Project Goals](#-project-goals)
 5. [📁 Project Structure](#-project-structure)
-6. [⚙️ Installation](#️-installation)
-7. [🚴‍♂️ Running the App Scripts](#️-running-the-app-scripts)
+6. [⚙️ Installation](#-installation)
+7. [🚴‍♂️ Running the App Scripts](#-running-the-app-scripts)
 8. [📜 Code Testing & Formatting Scripts](#-code-testing--formatting-scripts)
 
 ---
