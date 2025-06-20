@@ -9,8 +9,8 @@ import {
   createRoutesFromElements,
   Route,
 } from 'react-router-dom';
-import { RedirectIfAuth } from '~components/ProtectedRoute/ProtectedRoute.tsx';
-import { RequireAuth } from '~components/ProtectedRoute/RequireAuth';
+import { RedirectIfAuth } from '~router/ProtectedRoute/ProtectedRoute.tsx';
+import { RequireAuth } from '~router/ProtectedRoute/RequireAuth';
 import { CatalogPage } from '~pages/CatalogPage';
 import { ProductPage } from '~pages/ProductPage';
 import { CategoryPage } from '~pages/CategoryPage';
