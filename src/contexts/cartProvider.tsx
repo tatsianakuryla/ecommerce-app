@@ -97,6 +97,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         isCart,
       );
       if (updated) setCart(updated);
+      setAppliedCode(null);
     } finally {
       setLoading(false);
     }
