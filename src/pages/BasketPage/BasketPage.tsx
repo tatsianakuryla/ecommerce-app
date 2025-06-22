@@ -20,6 +20,7 @@ import { locales, PROMO_DISCOUNTS_RATE } from '~constants/constants';
 import { formatPrice } from '~utils/helpers';
 import { useCart } from '~hooks/useCart';
 import { BasketItem } from './BasketItem';
+import { Toaster } from '~/components/ui/toaster';
 
 const locale = locales.UK;
 const priceStyles = { fontWeight: 'bold', fontSize: 'lg' };
@@ -41,7 +42,6 @@ export function BasketPage() {
       </Container>
     );
   }
-
   const subTotal = cart.lineItems.reduce(
     (sum, li) => sum + li.totalPrice.centAmount,
     0,
@@ -189,6 +189,7 @@ export function BasketPage() {
           </Dialog.Root>
         </Stack>
       </Grid>
+      <Toaster />
     </Container>
   );
 }

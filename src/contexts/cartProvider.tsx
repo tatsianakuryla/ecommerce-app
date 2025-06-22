@@ -10,8 +10,8 @@ import { Cart, PromoCode } from '~types/types';
 import { useAuthContext } from '~hooks/useAuthContext';
 import { promoCodes } from '~constants/constants';
 import { isCart } from '~utils/typeguards';
-import { showError, showInfo } from '~utils/helpers';
 import { CartContext } from '~/contexts/cartContext';
+import { toaster } from '~components/ui/toaster';
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const { accessToken } = useAuthContext();
@@ -36,7 +36,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           setCart(active ?? null);
         }
       } catch {
-        if (!cancelled.current) showError('We could not connect to the cart.');
+        if (!cancelled.current) {
+          toaster.error({
+            description: 'We could not connect to the cart',
+            type: 'info',
+            closable: true,
+          });
+        }
       }
     })();
 
@@ -72,14 +78,22 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const applyDiscountCode = useCallback(
     (code: string) => {
       if (!promoCodes.includes(code)) {
-        showError('Invalid promo code');
+        toaster.error({
+          description: 'Invalid promo code',
+          type: 'info',
+          closable: true,
+        });
         return;
       }
 
       if (appliedCode === code) return;
 
       setAppliedCode(code);
-      showInfo(`Promo code ${code} applied! 🎉`);
+      toaster.success({
+        description: `Promo code ${code} applied! 🎉`,
+        type: 'info',
+        closable: true,
+      });
     },
     [appliedCode],
   );
