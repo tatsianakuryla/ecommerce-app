@@ -7,13 +7,13 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-import { ImageSliderProperties } from '~types/types.ts';
+import { ImageSliderProperties } from '~types/types';
 import {
   imageSliderBoxStyle,
   sliderIconStyle,
   sliderImageStyle,
   sliderWrapper,
-} from '~/styles/style.ts';
+} from '~/styles/style';
 
 export const ImageSlider = ({
   images,
@@ -73,6 +73,7 @@ export const ImageSlider = ({
         size='sm'
         aria-label='Previous image'
         onClick={showPrevious}
+        left={2}
       >
         <FiChevronLeft color='black' size='24px' />
       </IconButton>
@@ -88,6 +89,7 @@ export const ImageSlider = ({
         aria-label='Next image'
         size='sm'
         {...sliderIconStyle}
+        right={2}
       >
         <FiChevronRight color='black' size='24px' />
       </IconButton>

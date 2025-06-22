@@ -521,7 +521,6 @@ export const sliderImageStyle = {
 export const sliderIconStyle = {
   position: 'absolute',
   top: '50%',
-  left: '2',
   transform: 'translateY(-50%)',
   zIndex: '2',
   bg: 'rgba(255,255,255,0.7)',
