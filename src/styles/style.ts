@@ -68,6 +68,23 @@ const baseLinkStyle = {
   boxSizing: 'border-box',
 };
 
+export const basketGridImenStyle = {
+  p: '4',
+  borderRadius: 'xl',
+  shadow: 'md',
+  bg: 'white',
+  _hover: { shadow: 'lg' },
+};
+
+export const basketFlexBoxStyle = {
+  mt: { base: 3, lg: 0 },
+  align: 'center',
+  justify: 'flex-end',
+  gap: '4',
+  flex: '1',
+  wrap: 'wrap',
+};
+
 export const linkStyles = {
   ...baseLinkStyle,
   color: 'teal.700',

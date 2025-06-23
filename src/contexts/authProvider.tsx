@@ -92,11 +92,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setRefreshToken(response.refresh_token);
     setIsAuthenticated(true);
 
-    const me = await makeRequest(
+    const userProfile = await makeRequest(
       fetchUserProfileRequest(response.access_token),
       isCustomer,
     );
-    if (me) setCustomer(me);
+    if (userProfile) setCustomer(userProfile);
   };
 
   const register = async (

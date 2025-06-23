@@ -44,7 +44,7 @@ Users can explore a wide choice of products 📚👗👟, access detailed descri
 
 - React
 - TypeScript
-- CSS Modules
+- CSS
 - Vite
 - Vitest
 - ESLint

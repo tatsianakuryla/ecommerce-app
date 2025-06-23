@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { FiTrash2 } from 'react-icons/fi';
 import Toastify from 'toastify-js';
+import { basketFlexBoxStyle, basketGridImenStyle } from '~/styles/style.ts';
 
 function showError(text: string) {
   Toastify({
@@ -34,14 +35,7 @@ export function BasketItem({
   const { updateLineItemQuantity, removeFromCart, loading } = useCart();
 
   return (
-    <GridItem
-      p={4}
-      borderWidth='1px'
-      borderRadius='xl'
-      shadow='md'
-      bg='white'
-      _hover={{ shadow: 'lg' }}
-    >
+    <GridItem {...basketGridImenStyle}>
       <Flex
         direction={{ base: 'column', lg: 'row' }}
         align={{ base: 'stretch', lg: 'center' }}
@@ -69,14 +63,7 @@ export function BasketItem({
           </Flex>
         </Box>
 
-        <Flex
-          mt={{ base: 3, lg: 0 }}
-          align='center'
-          justify='flex-end'
-          gap={4}
-          flex='1'
-          wrap='wrap'
-        >
+        <Flex {...basketFlexBoxStyle}>
           <NumberInput.Root
             value={String(quantity)}
             min={1}
