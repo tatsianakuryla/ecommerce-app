@@ -22,7 +22,7 @@ import { locales, PRODUCTS_PER_PAGE } from '~/constants/constants';
 import { formatPrice } from '~/utils/helpers';
 import { useAuthContext } from '~/hooks/useAuthContext';
 import { Pagination } from '~components/Pagination/Pagination';
-import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle';
+import { ProgressCircleElement } from '~components/ProgressCircle/ProgressCircle.tsx';
 
 export const CategoryPage = () => {
   const { categoryId } = useParams<'categoryId'>();

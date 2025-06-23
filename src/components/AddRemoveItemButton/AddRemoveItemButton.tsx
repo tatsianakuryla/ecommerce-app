@@ -1,8 +1,12 @@
 import { HStack, Button, Text } from '@chakra-ui/react';
-import { useCart } from '~/contexts/cartContext';
 import { AddToCartButtonProperties } from '~types/types';
 import { HiPlusSm, HiMinusSm } from 'react-icons/hi';
-import { buttonStyle } from '~/styles/style';
+import {
+  addButtonStyle,
+  addRemoveButtonStyle,
+  removeButtonStyle,
+} from '~/styles/style';
+import { useCart } from '~hooks/useCart';
 
 export const AddRemoveItemButton = ({
   productId,
@@ -19,13 +23,7 @@ export const AddRemoveItemButton = ({
   if (line) {
     return (
       <HStack gap={2} w='100%'>
-        <Button
-          disabled
-          bg='gray.300'
-          color='gray.600'
-          {...buttonStyle}
-          flex={1}
-        >
+        <Button disabled {...addRemoveButtonStyle}>
           <Text>In Cart ({line.quantity})</Text>
           <HiPlusSm />
         </Button>
@@ -35,11 +33,8 @@ export const AddRemoveItemButton = ({
             stop(event);
             void removeFromCart(line.id);
           }}
-          bg='red.500'
-          color='white'
-          _hover={{ bg: 'red.600' }}
-          flex={1}
-          {...buttonStyle}
+          {...addRemoveButtonStyle}
+          {...removeButtonStyle}
         >
           <Text>Remove</Text>
           <HiMinusSm />
@@ -56,10 +51,8 @@ export const AddRemoveItemButton = ({
         stop(event);
         void addToCart(productId, 1, quantity);
       }}
-      bg='teal.500'
-      color='white'
-      _hover={{ bg: 'teal.600' }}
-      {...buttonStyle}
+      {...addRemoveButtonStyle}
+      {...addButtonStyle}
     >
       <Text>Add to cart</Text>
       <HiPlusSm />

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuthContext } from '~hooks/useAuthContext';
 import { Form } from '~components/Form/Form';
 import { normalizeErrorMessage } from '~utils/helpers';
-import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle';
+import { ProgressCircleElement } from '~components/ProgressCircle/ProgressCircle.tsx';
 import RedirectionLink from '~components/RedirectionLink/RedirectionLink';
 import { FiUserPlus } from 'react-icons/fi';
 import { Flex } from '@chakra-ui/react';
@@ -11,6 +11,7 @@ import {
   validateEmail,
   validatePassword,
 } from '~components/Form/LoginForm/loginFormValidation';
+import { loginFormWrapperStyle } from '~/styles/style.ts';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
@@ -75,12 +76,7 @@ export function LoginForm() {
   ];
 
   return (
-    <Flex
-      flexDirection='column'
-      alignItems='center'
-      justifyContent='center'
-      py='1rem'
-    >
+    <Flex {...loginFormWrapperStyle}>
       <Form
         id='registration-form'
         fields={fields}

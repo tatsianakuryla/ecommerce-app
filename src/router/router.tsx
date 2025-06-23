@@ -9,12 +9,12 @@ import {
   createRoutesFromElements,
   Route,
 } from 'react-router-dom';
-import { RedirectIfAuth } from '~components/Protected-route/Protected-route';
-import { RequireAuth } from '~components/Protected-route/RequireAuth';
+import { RedirectIfAuth } from '~router/ProtectedRoute/ProtectedRoute';
+import { RequireAuth } from '~router/ProtectedRoute/RequireAuth';
 import { CatalogPage } from '~pages/CatalogPage';
 import { ProductPage } from '~pages/ProductPage';
 import { CategoryPage } from '~pages/CategoryPage';
-import { BasketPage } from '~pages/BasketPage';
+import { BasketPage } from '~pages/BasketPage/BasketPage';
 
 export const routes = createRoutesFromElements(
   <Route path='/' element={<RootLayout />}>

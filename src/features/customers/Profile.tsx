@@ -26,26 +26,16 @@ import {
   validateEmail,
 } from '~components/Form/RegistrationForm/registrationFormValidation';
 
-import { ProgressCircleElement } from '~components/Progress-circle/Progress-circle.tsx';
-import { profileToastifyOptions, profileBoxStyle } from '~/styles/style.ts';
+import { ProgressCircleElement } from '~components/ProgressCircle/ProgressCircle.tsx';
+import { profileBoxStyle, createProfileToastOptions } from '~/styles/style.ts';
 
 import { PersonalInfo } from './PersonalInfo';
 import { Addresses } from './Addresses';
 import { ChangePasswordDialog } from './ChangePasswordForm';
-
-const initialAddressErrorState: AddressError = {
-  streetName: '',
-  city: '',
-  postalCode: '',
-  country: '',
-};
-
-const initialProfileState = {
-  firstName: '',
-  lastName: '',
-  dateOfBirth: '',
-  email: '',
-};
+import {
+  initialAddressState,
+  initialProfileState,
+} from '~constants/constants.ts';
 
 export function Profile() {
   const { accessToken, error, updateProfile } = useAuthContext();
@@ -80,9 +70,7 @@ export function Profile() {
     setErrors(initialProfileState);
 
     setAddressEdits(profile.addresses);
-    setAddressErrors(
-      profile.addresses.map(() => ({ ...initialAddressErrorState })),
-    );
+    setAddressErrors(profile.addresses.map(() => ({ ...initialAddressState })));
 
     const shipIndex = profile.addresses.findIndex(
       (address) => address.id === profile.defaultShippingAddressId,
@@ -188,16 +176,10 @@ export function Profile() {
     const temporaryId = `temp-${Date.now()}`;
     const newAddress: Address = {
       id: temporaryId,
-      streetName: '',
-      city: '',
-      postalCode: '',
-      country: '',
+      ...initialAddressState,
     };
     setAddressEdits((previous) => [...previous, newAddress]);
-    setAddressErrors((previous) => [
-      ...previous,
-      { ...initialAddressErrorState },
-    ]);
+    setAddressErrors((previous) => [...previous, { ...initialAddressState }]);
     setDefaultShipIndex(newIndex);
     setDefaultBillIndex(newIndex);
   };
@@ -236,16 +218,14 @@ export function Profile() {
         .then((updatedCustomer) => {
           if (!updatedCustomer) return;
           setProfile(updatedCustomer);
-          Toastify({
-            ...profileToastifyOptions,
-            text: 'Address deleted successfully',
-          }).showToast();
+          Toastify(
+            createProfileToastOptions('Address deleted successfully'),
+          ).showToast();
         })
         .catch(() => {
-          Toastify({
-            ...profileToastifyOptions,
-            text: 'Error deleting address',
-          }).showToast();
+          Toastify(
+            createProfileToastOptions('Error deleting address'),
+          ).showToast();
         });
     }
   };
@@ -362,10 +342,7 @@ export function Profile() {
     const addressesCountChanged = originalCount !== editedCount;
 
     if (actions.length === 0 && !addressesCountChanged) {
-      Toastify({
-        ...profileToastifyOptions,
-        text: 'No changes to save',
-      }).showToast();
+      Toastify(createProfileToastOptions('No changes to save')).showToast();
       return;
     }
 
@@ -377,19 +354,16 @@ export function Profile() {
       );
       if (updatedCustomer) {
         setProfile(updatedCustomer);
-        Toastify({
-          ...profileToastifyOptions,
-          text: 'Profile saved successfully',
-        }).showToast();
+        Toastify(
+          createProfileToastOptions('Profile saved successfully'),
+        ).showToast();
         setIsEditing(false);
       }
     } catch {
-      Toastify({
-        ...profileToastifyOptions,
-        text: error
-          ? `Failed to save profile. ${error}`
-          : 'Failed to save profile.',
-      }).showToast();
+      const text = error
+        ? `Failed to save profile. ${error}`
+        : 'Failed to save profile.';
+      Toastify(createProfileToastOptions(text)).showToast();
     }
   };
 

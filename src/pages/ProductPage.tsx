@@ -9,9 +9,10 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
-import { getLocalizedString, useProduct } from '~/hooks/useProduct';
+import { useProduct } from '~/hooks/useProduct';
 import { ImageSlider } from '~/components/ImageSlider/ImageSlider';
 import { AddRemoveItemButton } from '~components/AddRemoveItemButton/AddRemoveItemButton';
+import { getLocalizedString } from '~utils/helpers';
 
 export const ProductPage = () => {
   const { productId } = useParams<{ productId: string }>();

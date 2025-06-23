@@ -14,26 +14,20 @@ import {
   FiShoppingCart,
 } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
-import { useCart } from '~/contexts/cartContext';
 import {
   basketBadgeStyle,
   linkStyles,
   loginLinkStyle,
   registerLinkStyle,
 } from '~/styles/style';
-
-interface NavItemProperties {
-  label: string;
-  to: string;
-  onClick?: () => void;
-}
+import { useCart } from '~hooks/useCart';
+import { NavItemProperties } from '~types/types';
 
 export default function NavItem({ label, to, onClick }: NavItemProperties) {
   const { cart } = useCart();
   const totalCount =
     cart?.lineItems.reduce((sum, li) => sum + li.quantity, 0) ?? 0;
 
-  /* 2. выбираем иконку */
   let icon: React.ReactNode;
   switch (to) {
     case '/':
@@ -63,7 +57,6 @@ export default function NavItem({ label, to, onClick }: NavItemProperties) {
       icon = <FiBookOpen />;
   }
 
-  /* 3. выбираем стиль ссылки */
   const style: LinkProps =
     to === '/login'
       ? loginLinkStyle
