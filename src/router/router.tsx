@@ -1,20 +1,20 @@
-import { NotFoundPage } from '~pages/NotFoundPage.tsx';
-import { AboutPage } from '~pages/AboutPage.tsx';
-import { LoginPage } from '~pages/LoginPage.tsx';
-import { RegisterPage } from '~pages/RegisterPage.tsx';
-import { ProfilePage } from '~pages/ProfilePage.tsx';
+import { NotFoundPage } from '~pages/NotFoundPage';
+import { AboutPage } from '~pages/AboutPage';
+import { LoginPage } from '~pages/LoginPage';
+import { RegisterPage } from '~pages/RegisterPage';
+import { ProfilePage } from '~pages/ProfilePage';
 import { RootLayout } from '~/layouts/RootLayout';
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
 } from 'react-router-dom';
-import { RedirectIfAuth } from '~components/Protected-route/Protected-route';
-import { RequireAuth } from '~components/Protected-route/RequireAuth';
-import { CatalogPage } from '~pages/CatalogPage.tsx';
-import { ProductPage } from '~pages/ProductPage.tsx';
-import { CategoryPage } from '~pages/CategoryPage.tsx';
-import { BasketPage } from '~pages/BasketPage.tsx';
+import { RedirectIfAuth } from '~router/ProtectedRoute/ProtectedRoute';
+import { RequireAuth } from '~router/ProtectedRoute/RequireAuth';
+import { CatalogPage } from '~pages/CatalogPage';
+import { ProductPage } from '~pages/ProductPage';
+import { CategoryPage } from '~pages/CategoryPage';
+import { BasketPage } from '~pages/BasketPage/BasketPage';
 
 export const routes = createRoutesFromElements(
   <Route path='/' element={<RootLayout />}>

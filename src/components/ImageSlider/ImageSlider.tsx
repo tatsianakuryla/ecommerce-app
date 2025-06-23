@@ -7,13 +7,13 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-
-interface ImageSliderProperties {
-  images: Array<{ url: string; alt?: string }>;
-  boxHeight?: string | number;
-  boxWidth?: string | number;
-  maxHeight?: string | number;
-}
+import { ImageSliderProperties } from '~types/types';
+import {
+  imageSliderBoxStyle,
+  sliderIconStyle,
+  sliderImageStyle,
+  sliderWrapper,
+} from '~/styles/style';
 
 export const ImageSlider = ({
   images,
@@ -25,17 +25,8 @@ export const ImageSlider = ({
 
   if (images.length === 0) {
     return (
-      <Box
-        h={boxHeight}
-        w={boxWidth}
-        maxH={maxHeight}
-        bg='gray.100'
-        borderRadius='md'
-        display='flex'
-        alignItems='center'
-        justifyContent='center'
-      >
-        Нет изображений
+      <Box h={boxHeight} w={boxWidth} maxH={maxHeight} {...imageSliderBoxStyle}>
+        There is no images yet.
       </Box>
     );
   }
@@ -46,10 +37,7 @@ export const ImageSlider = ({
         <ChakraImage
           src={images[0].url}
           alt={images[0].alt || `Image 1`}
-          objectFit='contain'
-          h='100%'
-          w='100%'
-          borderRadius='md'
+          {...sliderImageStyle}
         />
       </Box>
     );
@@ -75,22 +63,17 @@ export const ImageSlider = ({
     <Box
       h={boxHeight}
       w={boxWidth}
+      maxH={maxHeight}
       position='relative'
       overflow='hidden'
-      maxH={maxHeight}
       borderRadius='md'
     >
       <IconButton
-        aria-label='Previous image'
-        position='absolute'
-        top='50%'
-        left='2'
-        transform='translateY(-50%)'
-        zIndex={2}
+        {...sliderIconStyle}
         size='sm'
-        bg='rgba(255,255,255,0.7)'
-        _hover={{ bg: 'rgba(255,255,255,0.9)' }}
+        aria-label='Previous image'
         onClick={showPrevious}
+        left={2}
       >
         <FiChevronLeft color='black' size='24px' />
       </IconButton>
@@ -98,33 +81,20 @@ export const ImageSlider = ({
       <ChakraImage
         src={images[currentIndex].url}
         alt={images[currentIndex].alt || `Image ${currentIndex + 1}`}
-        objectFit='contain'
-        h='100%'
-        w='100%'
+        {...sliderImageStyle}
       />
 
       <IconButton
-        aria-label='Next image'
-        position='absolute'
-        top='50%'
-        right='2'
-        transform='translateY(-50%)'
-        zIndex={2}
-        size='sm'
-        bg='rgba(255,255,255,0.7)'
-        _hover={{ bg: 'rgba(255,255,255,0.9)' }}
         onClick={showNext}
+        aria-label='Next image'
+        size='sm'
+        {...sliderIconStyle}
+        right={2}
       >
         <FiChevronRight color='black' size='24px' />
       </IconButton>
 
-      <Flex
-        position='absolute'
-        bottom='2'
-        left='50%'
-        transform='translateX(-50%)'
-        gap='2'
-      >
+      <Flex {...sliderWrapper}>
         {images.map((_, index) => (
           <Circle
             key={index}

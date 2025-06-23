@@ -7,8 +7,8 @@ import {
   Product,
   Category,
   CategoriesResponse,
-  CartItem,
-  State,
+  Cart,
+  StoredToken,
 } from '~types/types';
 
 export const isAuthResponse = (data: unknown): data is AuthResponse => {
@@ -344,27 +344,16 @@ export function isCategoriesResponse(
   );
 }
 
-function isCartItem(object: unknown): object is CartItem {
-  if (typeof object !== 'object' || object === null) {
-    return false;
-  }
-  return (
-    'id' in object &&
-    typeof object.id === 'string' &&
-    'quantity' in object &&
-    typeof object.quantity === 'number'
-  );
-}
+export const isCart = (cart: unknown): cart is Cart =>
+  !!cart && typeof cart === 'object' && 'id' in cart && 'version' in cart;
 
-export function isState(object: unknown): object is State {
-  if (
-    typeof object !== 'object' ||
-    object === null ||
-    !('items' in object) ||
-    !Array.isArray(object.items)
-  ) {
-    return false;
-  }
-  const array = object.items;
-  return array.every(isCartItem);
-}
+export const isStoredToken = (value: unknown): value is StoredToken => {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'token' in value &&
+    typeof value.token === 'string' &&
+    'expiresAt' in value &&
+    typeof value.expiresAt === 'number'
+  );
+};

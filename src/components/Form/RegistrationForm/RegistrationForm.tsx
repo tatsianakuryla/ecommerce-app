@@ -29,7 +29,8 @@ import {
   defaultAddressIndex,
   defaultAddressInfo,
   defaultUserInfo,
-} from '~constants/constants.ts';
+} from '~constants/constants';
+import { registrationAddAddressButtonStyle } from '~/styles/style';
 
 export function RegistrationForm() {
   const { register, error, setError, loading } = useAuthContext();
@@ -212,19 +213,6 @@ export function RegistrationForm() {
     },
   ];
 
-  const addAddressButtonStyle = {
-    background: 'none',
-    color: 'teal.600',
-    padding: '0',
-    height: 'auto',
-    _hover: { textDecoration: 'underline', background: 'none' },
-    _active: { background: 'none' },
-    _focus: { boxShadow: 'none' },
-    transition: 'all 0.2s ease',
-    mb: '1rem',
-    mt: '1rem',
-  };
-
   return (
     <>
       <Form
@@ -251,7 +239,7 @@ export function RegistrationForm() {
         />
 
         <Button
-          {...addAddressButtonStyle}
+          {...registrationAddAddressButtonStyle}
           onClick={() => {
             setIsAddedBillingAddress((previous) => !previous);
           }}

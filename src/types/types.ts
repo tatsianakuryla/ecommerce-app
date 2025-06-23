@@ -1,8 +1,6 @@
-import { locales } from '~constants/constants';
+import { locales, promoCodes } from '~constants/constants';
 
 export enum PermissionLevel {
-  FULL = 'all',
-  API = 'api',
   USER = 'user',
   GUEST = 'guest',
 }
@@ -69,6 +67,7 @@ export interface AuthContextValue {
     currentPassword: string,
     newPassword: string,
   ) => Promise<void>;
+  refreshToken: string | null;
 }
 
 export interface MenuItem {
@@ -419,22 +418,26 @@ export interface CategoriesResponse {
   results: Category[];
 }
 
-export type Action =
-  | { type: 'ADD_ITEM'; payload: CartItem }
-  | { type: 'REMOVE_ITEM'; payload: { id: string } }
-  | { type: 'CLEAR_CART' };
-
-export interface CartContextValue extends State {
-  dispatch: React.Dispatch<Action>;
-  totalCount: number;
+export interface AddToCartButtonProperties {
+  productId: string;
+  quantity?: number;
 }
 
-export type State = { items: CartItem[] };
-
-export type CartItem = {
+export interface ProductCardProperties {
   id: string;
-  quantity: number;
-};
+  name: string;
+  description: string;
+  img: string;
+  alt: string;
+  price: string;
+  discount?: string;
+}
+
+export interface PaginationProperties {
+  currentPage: number;
+  totalPages: number;
+  onChange: (page: number) => void;
+}
 
 export interface AddToCartButtonProperties {
   productId: string;
@@ -455,4 +458,111 @@ export interface PaginationProperties {
   currentPage: number;
   totalPages: number;
   onChange: (page: number) => void;
+}
+
+export interface LineItem {
+  id: string;
+  productId: string;
+  variantId: number;
+  name: LocalizedString;
+  quantity: number;
+  price: Price;
+  totalPrice: Price['value'];
+  variant?: {
+    images?: Image[];
+  };
+}
+
+export interface Cart {
+  id: string;
+  version: number;
+  customerId?: string;
+  anonymousId?: string;
+  currency: string;
+  country?: string;
+  lineItems: LineItem[];
+  totalPrice: Price['value'];
+}
+
+export interface MyCartDraft {
+  currency: string;
+  country?: string;
+}
+
+export interface CartUpdateAction {
+  [key: string]: unknown;
+  action: string;
+}
+
+export type PromoCode = (typeof promoCodes)[number];
+
+export interface TeamMember {
+  img: string;
+  name: string;
+  role: string;
+  desc: string;
+  bio: string;
+  github: string;
+}
+
+interface CategoryNode extends Category {
+  children: CategoryNode[];
+}
+
+export interface Properties {
+  node: CategoryNode;
+  locale: ILocales[keyof ILocales];
+}
+
+export interface ImageSliderProperties {
+  images: Array<{ url: string; alt?: string }>;
+  boxHeight?: string | number;
+  boxWidth?: string | number;
+  maxHeight?: string | number;
+}
+
+export interface ChangePasswordDialogProperties {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export interface UseProductResult {
+  data: Product | null;
+  loading: boolean;
+  error: string | null;
+}
+
+export interface CartContextShape {
+  cart: Cart | null;
+  loading: boolean;
+  addToCart: (
+    productId: string,
+    variantId: number,
+    qty?: number,
+  ) => Promise<void>;
+  removeFromCart: (lineItemId: string) => Promise<void>;
+  updateLineItemQuantity: (lineItemId: string, qty: number) => Promise<void>;
+  clearCart: () => Promise<void>;
+  applyDiscountCode: (code: string) => void;
+  appliedCode: PromoCode | null;
+}
+
+export interface NavItemProperties {
+  label: string;
+  to: string;
+  onClick?: () => void;
+}
+
+export type BasketItemProperties = {
+  id: string;
+  name: string;
+  image: string;
+  price: string;
+  quantity: number;
+  lineTotal: string;
+};
+
+export interface StoredToken {
+  token: string;
+  expiresAt: number;
 }

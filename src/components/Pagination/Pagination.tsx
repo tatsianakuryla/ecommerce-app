@@ -1,5 +1,5 @@
 import { HStack, Button, Text } from '@chakra-ui/react';
-import { PaginationProperties } from '~types/types.ts';
+import { PaginationProperties } from '~types/types';
 export const Pagination: React.FC<PaginationProperties> = ({
   currentPage,
   totalPages,

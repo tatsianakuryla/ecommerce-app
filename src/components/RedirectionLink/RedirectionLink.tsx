@@ -4,8 +4,9 @@ import { Box } from '@chakra-ui/react';
 import { ReactElement } from 'react';
 import {
   redirectionLinkBoxStyle,
+  redirectionLinkWrapperStyle,
   redirectionLoginLinkStyle,
-} from '~/styles/style.ts';
+} from '~/styles/style';
 
 function RedirectionLink({
   label,
@@ -22,13 +23,7 @@ function RedirectionLink({
     <Box display='flex' justifyContent='center' alignItems='center'>
       <ChakraLink asChild {...redirectionLoginLinkStyle}>
         <NavLink to={to}>
-          <Box
-            as='span'
-            display='flex'
-            alignItems='center'
-            gap='0.5rem'
-            fontSize='md'
-          >
+          <Box as='span' {...redirectionLinkWrapperStyle}>
             {label}
             <Box as='span' {...redirectionLinkBoxStyle}>
               {link}

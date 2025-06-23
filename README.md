@@ -4,7 +4,7 @@ This is a feature-rich eCommerce web application built with React and TypeScript
 
 This platform brings the real-life shopping experience into a digital space 🏪. It serves as a fully-featured online storefront, offering users an engaging and intuitive interface. From browsing products to completing a purchase, the app provides a smooth and enjoyable journey, encouraging user interaction and building purchase confidence 🚀.
 
-Users can explore a wide selection of products 📚👗👟, access detailed descriptions, add items to their shopping cart 🛒, and complete the checkout process 💳. Key features include account registration and login, product search, categorization, and sorting options to create a streamlined and user-friendly shopping experience.
+Users can explore a wide choice of products 📚👗👟, access detailed descriptions, add items to their shopping cart 🛒, and complete the checkout process 💳. Key features include account registration and login, product search, categorization, and sorting options to create a streamlined and user-friendly shopping experience.
 
 ---
 
@@ -15,8 +15,8 @@ Users can explore a wide selection of products 📚👗👟, access detailed des
 3. [💻 Technologies](#-technologies)
 4. [🎯 Project Goals](#-project-goals)
 5. [📁 Project Structure](#-project-structure)
-6. [⚙️ Installation](#️-installation)
-7. [🚴‍♂️ Running the App Scripts](#️-running-the-app-scripts)
+6. [⚙️ Installation](#-installation)
+7. [🚴‍♂️ Running the App Scripts](#-running-the-app-scripts)
 8. [📜 Code Testing & Formatting Scripts](#-code-testing--formatting-scripts)
 
 ---
@@ -30,7 +30,7 @@ Users can explore a wide selection of products 📚👗👟, access detailed des
 ## 🔥 Features
 
 - 📝 **Authentication & Authorization**: Sign up, login
-- 🛍 **Product Catalog**: Browse, search, filter, and view detailed product pages
+- 🛍 **Product Catalog**: Browse, search, and view detailed product pages
 - 🛒 **Shopping Cart**: Add/remove items, adjust quantities, and persist cart in local storage
 - 🔒 **Protected Routes**: Secure user profile
 - 🌐 **Responsive Design**: Optimized for mobile, tablet, and desktop
@@ -43,9 +43,8 @@ Users can explore a wide selection of products 📚👗👟, access detailed des
 ## 💻 Technologies
 
 - React
-- Zustand
 - TypeScript
-- CSS Modules
+- CSS
 - Vite
 - Vitest
 - ESLint
@@ -71,26 +70,46 @@ E-COMMERCE-APP/
 │   │   ├── fonts/
 │   │   └── images/
 │   ├── components/
-│   |   └── component/
-│   |       └──tests/
-│   |── constants
+│   |   ├── AddRemoveItemButton/
+│   |   ├── Breadcrumbs/
+│   |   ├── CategorySidebar/
+│   |   ├── ErrorAlert/
+│   |   ├── Form/
+|   |   |   ├──AddressForm/
+|   |   |   ├──LoginForm/
+|   |   |   ├──RegistrationForm/
+|   |   |   └──Form.tsx
+│   |   ├── Header/
+│   |   ├── ImageSlider/
+│   |   ├── JustRegisteredDialog/
+│   |   ├── Pagination/
+│   |   ├── ProductCard/
+│   |   ├── ProgressCircle/
+│   |   ├── PromoBanner/
+│   |   └── RedirectionLink/
+│   ├── constants
+│   ├── contexts
 │   ├── features/
-│   │   ├── categories/
-|   |   |   └──tests/
-│   │   ├── customers/
-│   │   ├── discounts/
-│   │   ├── orders/
-│   │   ├── prices/
-│   │   └── products/
-│   |── fixtures
-│   |── mocks
+│   |   └── customers/
+│   ├── fixtures/
 │   ├── hooks/
 │   ├── layouts/
+│   │   └── RootLayout.tsx
+│   ├── mocks
 │   ├── pages/
+│   │   ├── BasketPage
+│   │   ├── AboutPage
+│   │   ├── CatalogPage
+│   │   ├── CategoryPage
+│   │   ├── LoginPage
+│   │   ├── NotFoundPage
+│   │   ├── ProductPage
+│   │   ├── ProfilePage
+│   │   ├── RegisterPage
 │   ├── router/
 │   ├── styles/
-│   ├── types/
 │   ├── tests/
+│   ├── types/
 │   ├── utils/
 │   ├── App.tsx
 │   └── index.tsx
@@ -115,9 +134,9 @@ npm install
 
 rename .env.example to .env
 
-add actual values to
+Add actual values to
 VITE_CLIENT_ID, VITE_CLIENT_SECRET, VITE_API_CLIENT_NAME constants.
-Values are in the API doc
+Values are in the [API doc](https://docs.google.com/document/d/1yTAIGZu7cwOU8YcoheYfykwRaLIkq3HAkz0m4Izi3OQ/edit?tab=t.0)
 
 ```bash
 npm run dev
@@ -133,7 +152,7 @@ npm run dev
 npm install
 ```
 
-**🐶 Git Hooks Setup** - Initialize Husky (automatically creates Git hooks)
+**🐶 Git-Hooks-Setup** - Initialize Husky (automatically creates Git hooks)
 
 ```bash
 npm run prepare
@@ -145,7 +164,7 @@ npm run prepare
 npm run dev
 ```
 
-**📦 Production Build** - Build the project for production
+**📦 Production-Build** - Build the project for production
 
 ```bash
 npm run build

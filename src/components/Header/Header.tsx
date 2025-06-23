@@ -9,10 +9,15 @@ import {
 } from '@chakra-ui/react';
 import logo from '../../assets/images/logo-without-bg.png';
 import Hamburger from 'hamburger-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import NavItem from '~components/Header/Nav-item';
 import { useAuthContext } from '~/hooks/useAuthContext';
 import { MenuItem } from '~types/types';
+import {
+  hamburgerWrapperStyle,
+  headerContainerStyle,
+  headerListStyle,
+} from '~/styles/style.ts';
 
 const navItems: MenuItem[] = [
   { label: 'About', to: '/about' },
@@ -35,32 +40,22 @@ function Header() {
     { label: 'Logout', to: '/', onClick: logout },
   ];
   const itemsToRender = isAuthenticated ? authItems : guestItems;
+  useEffect(() => {
+    const handleResize = () => {
+      const isDesktop = window.innerWidth >= 768;
+      if (isDesktop) {
+        setOpen(false);
+      }
+    };
 
-  const containerStyles = {
-    maxW: 'container.xl',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    py: '0.5rem',
-    px: '2rem',
-    boxShadow: 'sm',
-    bg: 'white',
-    position: 'sticky',
-    top: '0',
-    zIndex: '1000',
-  };
-
-  const listStyles = {
-    display: 'flex',
-    flexDirection: 'row',
-    gap: { base: '0.5rem', md: '1rem' },
-    listStyleType: 'none',
-  };
-
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   const [isOpen, setOpen] = useState(false);
   return (
-    <Container {...containerStyles}>
+    <Container {...headerContainerStyle}>
       <VisuallyHidden>
         <Heading as='h1'>E-commerce. Shop smart. Live better.</Heading>
       </VisuallyHidden>
@@ -79,9 +74,9 @@ function Header() {
         as='nav'
         aria-label='Main navigation'
         display={{ base: 'none', md: 'flex' }}
-        gap={{ base: '0.5rem', md: '1rem' }}
+        gap='0.5'
       >
-        <List.Root {...listStyles}>
+        <List.Root {...headerListStyle}>
           {itemsToRender.map(({ label, to, onClick }) => (
             <List.Item key={`${label}-${to}`}>
               <NavItem label={label} to={to} onClick={onClick} />
@@ -89,7 +84,7 @@ function Header() {
           ))}
         </List.Root>
       </Box>
-      <Box display={{ base: 'block', md: 'none' }} position='relative'>
+      <Box {...hamburgerWrapperStyle}>
         <Hamburger toggled={isOpen} toggle={setOpen} size={20} />
 
         {isOpen && (

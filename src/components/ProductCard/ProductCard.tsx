@@ -1,7 +1,11 @@
 import { Card, chakra, Flex, Text } from '@chakra-ui/react';
 import { ProductCardProperties } from '~types/types';
-import { productCardStyles, productCardTextStyle } from '~/styles/style';
-import { AddRemoveItemButton } from '~components/AddRemoveItemButton/AddRemoveItemButton.tsx';
+import {
+  productCardImageStyle,
+  productCardStyles,
+  productCardTextStyle,
+} from '~/styles/style';
+import { AddRemoveItemButton } from '~components/AddRemoveItemButton/AddRemoveItemButton';
 
 const ChakraImage = chakra('img');
 
@@ -18,13 +22,7 @@ export const ProductCard = ({
 
   return (
     <Card.Root {...productCardStyles}>
-      <ChakraImage
-        src={thumbUrl}
-        alt={alt}
-        height='240px'
-        width='100%'
-        objectFit='contain'
-      />
+      <ChakraImage src={thumbUrl} alt={alt} {...productCardImageStyle} />
 
       <Card.Body flexGrow='1' gap='0.2'>
         <Card.Title flexGrow='1'>{name}</Card.Title>

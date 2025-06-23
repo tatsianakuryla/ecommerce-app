@@ -1,5 +1,6 @@
 import { permissions, PROJECT_KEY } from '~constants/constants';
-import { PermissionLevel } from '~types/types';
+import { Locale, LocalizedString, PermissionLevel } from '~types/types';
+import Toastify from 'toastify-js';
 
 export const generatePermissions = (
   level: PermissionLevel = PermissionLevel.GUEST,
@@ -32,10 +33,6 @@ export const formatPrice = (
   }).format(price / 100);
 };
 
-export function textToUpperCase(text: string): string {
-  return text.charAt(0).toUpperCase() + text.slice(1);
-}
-
 export const getAutocompleteValue = (name: string): string => {
   const map: Record<string, string> = {
     firstName: 'given-name',
@@ -48,3 +45,37 @@ export const getAutocompleteValue = (name: string): string => {
 
   return map[name] ?? 'off';
 };
+
+const DEFAULT_LOCALE: Locale = 'en-US';
+
+export function getLocalizedString(localized: LocalizedString): string {
+  if (localized[DEFAULT_LOCALE]) {
+    return localized[DEFAULT_LOCALE];
+  }
+
+  const locales: Locale[] = ['en-US', 'de-DE', 'en-GB'];
+  const firstKey = locales.find((key) => localized[key]) || locales[0];
+  return localized[firstKey] || '';
+}
+
+export function showError(message: string) {
+  Toastify({
+    text: message,
+    duration: 3000,
+    close: true,
+    gravity: 'top',
+    position: 'right',
+    style: { background: '#E53E3E', color: '#fff' },
+  }).showToast();
+}
+
+export function showInfo(message: string) {
+  Toastify({
+    text: message,
+    duration: 2500,
+    close: false,
+    gravity: 'top',
+    position: 'right',
+    style: { background: '#319795', color: '#fff' },
+  }).showToast();
+}

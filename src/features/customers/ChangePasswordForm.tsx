@@ -8,13 +8,9 @@ import {
   validatePassword,
   validateConfirmPassword,
 } from '~components/Form/RegistrationForm/registrationFormValidation';
-import { profileToastifyOptions } from '~/styles/style';
+import { createProfileToastOptions } from '~/styles/style';
 import { ErrorAlert } from '~components/ErrorAlert/ErrorAlert';
-
-interface ChangePasswordDialogProperties {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import { ChangePasswordDialogProperties } from '~types/types.ts';
 
 export function ChangePasswordDialog({
   isOpen,
@@ -60,10 +56,9 @@ export function ChangePasswordDialog({
         newPassword,
       );
 
-      Toastify({
-        ...profileToastifyOptions,
-        text: 'Password changed successfully',
-      }).showToast();
+      Toastify(
+        createProfileToastOptions('Password changed successfully'),
+      ).showToast();
 
       setCurrentPassword('');
       setNewPassword('');

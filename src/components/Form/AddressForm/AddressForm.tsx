@@ -119,7 +119,23 @@ export function AddressForm({
 
           return (
             <Box key={name} mb={hasError ? 2 : 4}>
-              <Box position='relative' w='full'>
+              <Box
+                position='relative'
+                width={{ base: '320px', md: '382px' }}
+                maxW='100%'
+                css={{
+                  'select, select:focus, select:hover, select option': {
+                    maxWidth: '100% !important',
+                    width: '100% !important',
+                  },
+
+                  select: {
+                    '&:-internal-list-box': {
+                      maxWidth: '320px !important',
+                    },
+                  },
+                }}
+              >
                 {type === 'select' ? (
                   <Select
                     id={prefix + name}
@@ -139,6 +155,19 @@ export function AddressForm({
                     borderRadius='md'
                     _hover={{ borderColor: hasError ? 'red.500' : 'gray.400' }}
                     size='md'
+                    sx={{
+                      '&': {
+                        width: '100% !important',
+                        maxWidth: '100% !important',
+                      },
+                      '& > option': {
+                        maxWidth: '300px !important',
+                        width: '300px !important',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      },
+                    }}
                   >
                     {options?.map((option) => (
                       <option key={option.value} value={option.value}>

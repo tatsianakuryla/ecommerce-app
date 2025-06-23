@@ -9,9 +9,10 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
-import { getLocalizedString, useProduct } from '~/hooks/useProduct';
+import { useProduct } from '~/hooks/useProduct';
 import { ImageSlider } from '~/components/ImageSlider/ImageSlider';
-import { AddRemoveItemButton } from '~components/AddRemoveItemButton/AddRemoveItemButton.tsx';
+import { AddRemoveItemButton } from '~components/AddRemoveItemButton/AddRemoveItemButton';
+import { getLocalizedString } from '~utils/helpers';
 
 export const ProductPage = () => {
   const { productId } = useParams<{ productId: string }>();
@@ -78,7 +79,7 @@ export const ProductPage = () => {
       <Grid
         templateColumns={{ base: '1fr', md: '1fr 1fr' }}
         gap={10}
-        p={6}
+        p={{ base: 2, md: 6 }}
         borderWidth='1px'
         borderRadius='lg'
         boxShadow='md'

@@ -1,15 +1,9 @@
 import { useRef, useState, useEffect, useContext } from 'react';
-import { AuthContext } from '~/contexts/authContext.tsx';
+import { AuthContext } from '~/contexts/authContext';
 import { useMakeRequest } from '~/hooks/useMakeRequest';
 import { getProductById } from '~/api/requests';
-import { Locale, LocalizedString, Product } from '~types/types';
+import { Product, UseProductResult } from '~types/types';
 import { isProduct } from '~/utils/typeguards';
-
-interface UseProductResult {
-  data: Product | null;
-  loading: boolean;
-  error: string | null;
-}
 
 export function useProduct(productId: string | undefined): UseProductResult {
   const auth = useContext(AuthContext);
@@ -65,16 +59,4 @@ export function useProduct(productId: string | undefined): UseProductResult {
   }, [requestError]);
 
   return { data, loading, error };
-}
-
-const DEFAULT_LOCALE: Locale = 'en-US';
-
-export function getLocalizedString(localized: LocalizedString): string {
-  if (localized[DEFAULT_LOCALE]) {
-    return localized[DEFAULT_LOCALE];
-  }
-
-  const locales: Locale[] = ['en-US', 'de-DE', 'en-GB'];
-  const firstKey = locales.find((key) => localized[key]) || locales[0];
-  return localized[firstKey] || '';
 }
