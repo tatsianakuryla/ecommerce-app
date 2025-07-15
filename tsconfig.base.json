@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "baseUrl": "./",
+    "paths": {
+      "~/*": ["src/*"],
+      "~components/*": ["src/components/*"],
+      "~features/*": ["src/features/*"],
+      "~hooks/*": ["src/hooks/*"],
+      "~types/*": ["src/types/*"],
+      "~constants/*": ["src/constants/*"],
+      "~router/*": ["src/router/*"],
+      "~api/*": ["src/api/*"],
+      "~pages/*": ["src/pages/*"],
+      "~layouts/*": ["src/layouts/*"],
+      "~mocks/*": ["src/mocks/*"],
+      "~fixtures/*": ["src/fixtures/*"],
+      "~routes/*": ["src/routes/*"],
+      "~utils/*": ["src/utils/*"]
+    }
+  }
+}

@@ -39,6 +39,7 @@ build/
 # dotenv environment files
 .env
 .env.*
+!.env.example
 
 # npm config
 .npmrc
