@@ -3,9 +3,9 @@ import Tanya from '~/assets/images/tanya.jpg';
 import Nastassya from '~/assets/images/nastassya.jpg';
 import Kirill from '~/assets/images/kirill.jpg';
 
-export const PROJECT_KEY = 'rssecomm';
-const CLIENT_ID = 'VSoSJL93ehdNSp2ILY62b3zG';
-const CLIENT_SECRET = '9xPxdvPzFxRVhOAw4_U1Qkbcub8EcT1U';
+export const PROJECT_KEY = 'e-commerce-rs';
+const CLIENT_ID = 'DiZ89s4gNpm_TBRdUSzqONq4';
+const CLIENT_SECRET = 'ZLVQ2_DPHFZ1XjC439uCfvAEu2B5Iy_H';
 export const BASIC_AUTH_HEADER =
   'Basic ' + btoa(`${CLIENT_ID}:${CLIENT_SECRET}`);
 
