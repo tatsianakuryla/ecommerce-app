@@ -79,18 +79,23 @@ export const AboutPage = () => {
       <Box {...aboutPageTextContainer}>
         <Text mb={4}>Welcome to our eCommerce application!</Text>
         <Text mb={4}>
-          This project was developed by Dev Crew #11 as part of the RS School
-          educational program. Throughout the development process, our team
-          focused on collaboration, open discussion of challenges and solutions
-          (including regular Discord calls), and effective task management using
-          a shared board. These efforts resulted in the creation of a
-          well-structured and functional product.
+          This eCommerce web application was developed as the final team project
+          during the RS School educational program. Our objective was to build a
+          fully functional online store that includes user authentication,
+          product search, category management, shopping cart functionality, and
+          address management. The application features responsive design,
+          accessibility, and clean code practices, using technologies such as
+          React, TypeScript, and the commercetools API. It reflects our ability
+          to collaborate effectively, solve real-world problems, and deliver a
+          polished user experience.
         </Text>
         <Text>
-          Special recognition goes to Tatsiana, our dedicated team lead, who
-          contributed the majority of the work and ensured steady progress
-          despite limited participation from other team members due to their
-          time constraints.
+          Tatsiana coordinated the project as team lead, actively contributing
+          to all key parts of the application—from layout and business logic to
+          integration and testing. Her leadership helped keep the team aligned
+          and ensured consistent progress, even when challenges arose with
+          scheduling and availability. Thanks to this structured approach, the
+          team delivered a functional and well-organized final product.
         </Text>
       </Box>
 

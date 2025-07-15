@@ -100,7 +100,7 @@ export const teamMembers: TeamMember[] = [
     img: Tanya,
     name: 'Tatsiana Kuryla',
     role: 'Team Lead',
-    desc: 'Supervised the completion of tasks at hand. Developed more than half of the application.',
+    desc: 'Coordinated team efforts and personally implemented a substantial part of the application, ensuring alignment with project goals and deadlines.',
     bio: `I was born in Grodno, Belarus. After finishing school, I moved to Minsk to study at the Belarusian State Economic University in the faculty of Marketing and Logistics. My specialty is Logistics.
 
 Professional Background
@@ -109,10 +109,10 @@ My professional career began during the fourth year of study at the university i
 My interest in the IT sphere started unexpectedly—during a casual gathering with my developer friends. They were discussing work-related topics, and to my surprise (and to their surprise), I was able to follow the conversation intuitively. They encouraged me to try programming, convinced that I had the right mindset for it. This is how I first started thinking about IT courses. I started with three-month courses in HTML and CSS in 2022, and eventually decided to focus on Frontend Development.
 
 However, juggling between full-time work and studying was a difficult task for me. The turning point came when I decided to move to another country in 2023. Since my company didn’t support remote work, I resigned. This gave me the perfect opportunity to fully dedicate myself to programming. Now, I am deeply engaged in learning Frontend technologies. I have completed courses in:
-- HTML  
-- CSS  
-- JavaScript  
-- TypeScript  
+- HTML
+- CSS
+- JavaScript
+- TypeScript
 
 And I am currently studying ReactJS. The more I learn, the more passionate I become. I love the logical challenges that frontend development offers, and I feel really happy when I see the result of my work, when my project works well.`,
     github: 'https://github.com/tatsianakuryla',
