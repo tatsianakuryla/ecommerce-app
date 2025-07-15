@@ -132,11 +132,11 @@ cd ecommerce-app
 npm install
 ```
 
-rename .env.example to .env
+It is necessary to rename .env.example to .env
 
-Add actual values to
+And add actual values to
 VITE_CLIENT_ID, VITE_CLIENT_SECRET, VITE_API_CLIENT_NAME constants.
-Values are in the [API doc](https://docs.google.com/document/d/1yTAIGZu7cwOU8YcoheYfykwRaLIkq3HAkz0m4Izi3OQ/edit?tab=t.0)
+Values are available in the [API doc](https://docs.google.com/document/d/1xF_sYJX5cPSFW6xlVNwaP11ko7JsymVFJQfbdGyIJlQ/edit?tab=t.0)
 
 ```bash
 npm run dev
